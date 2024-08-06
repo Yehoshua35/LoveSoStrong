@@ -1,7 +1,7 @@
+import json
 import gzip
 import bz2
 import lzma
-import os
 from io import StringIO
 
 def open_compressed_file(filename):
@@ -374,3 +374,11 @@ def display_services(services):
                 print(f"    {message['Author']} ({message['Time']}): [{message['Type']}] Post ID: {message['Post']} Nested: {message['Nested']}")
                 print(f"    {message['Message'].strip()}")
             print("")
+
+def to_json(services):
+    """ Convert the services data structure to JSON """
+    return json.dumps(services, indent=2)
+
+def from_json(json_str):
+    """ Convert a JSON string back to the services data structure """
+    return json.loads(json_str)
