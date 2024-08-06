@@ -32,11 +32,27 @@ Hello it's just me Kazuki. :P
 
 --- End User List ---
 
+--- Start Categorization List ---
+Categories: Fourm, SubFourm
+
+--- Start Category List ---
+Kind: Fourm
+ID: 1
+InSub: 0
+Title: General Discussion
+Description:
+--- Start Description Body ---
+Just talk about anything.
+--- End Description Body ---
+--- End Category List ---
+--- End Categorization List ---
+
 --- Start Message List ---
 Interactions: Post, Reply
 
 --- Start Message Thread ---
 Thread: 1
+Category: General Discussion
 Title: Hello, World!
 
 --- Start Message Post ---

@@ -72,11 +72,16 @@ def parse_lines(lines, validate_only=False, verbose=False):
     in_include_service = False
     in_include_users = False
     in_include_messages = False
+    in_category_list = False
+    in_description_body = False
+    in_include_categories = False
+    in_categorization_list = False
     include_files = []
     user_id = None
     current_bio = None
     current_message = None
     current_thread = None
+    current_category = None
     post_id = 1
 
     def parse_include_files(file_list):
@@ -100,6 +105,14 @@ def parse_lines(lines, validate_only=False, verbose=False):
             for service in included_messages:
                 messages.extend(service['MessageThreads'])
         return messages
+
+    def parse_include_categories(file_list):
+        categories = []
+        for include_file in file_list:
+            included_categories = parse_file(include_file, validate_only, verbose)
+            for service in included_categories:
+                categories.extend(service['Categories'])
+        return categories
 
     try:
         for line_number, line in enumerate(lines, 1):
@@ -157,8 +170,26 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 if verbose:
                     print(f"Line {line_number}: {line} (Including file for messages)")
                 continue
+            elif line == "--- Include Categories Start ---":
+                in_include_categories = True
+                include_files = []
+                if verbose:
+                    print(f"Line {line_number}: {line} (Starting include categories section)")
+                continue
+            elif line == "--- Include Categories End ---":
+                in_include_categories = False
+                if verbose:
+                    print(f"Line {line_number}: {line} (Ending include categories section)")
+                if current_service:
+                    current_service['Categories'].extend(parse_include_categories(include_files))
+                continue
+            elif in_include_categories:
+                include_files.append(line)
+                if verbose:
+                    print(f"Line {line_number}: {line} (Including file for categories)")
+                continue
             elif line == "--- Start Archive Service ---":
-                current_service = {'Users': {}, 'MessageThreads': [], 'Interactions': []}
+                current_service = {'Users': {}, 'MessageThreads': [], 'Categories': [], 'Interactions': []}
                 if verbose:
                     print(f"Line {line_number}: {line} (Starting new archive service)")
                 continue
@@ -182,12 +213,54 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 if verbose:
                     print(f"Line {line_number}: {line} (Comment)")
                 continue
+            elif line == "--- Start Category List ---":
+                in_category_list = True
+                current_category = {}
+                if verbose:
+                    print(f"Line {line_number}: {line} (Starting category list)")
+                continue
+            elif line == "--- End Category List ---":
+                in_category_list = False
+                if current_category:
+                    current_service['Categories'].append(current_category)
+                current_category = None
+                if verbose:
+                    print(f"Line {line_number}: {line} (Ending category list)")
+                continue
+            elif line == "--- Start Categorization List ---":
+                in_categorization_list = True
+                current_service['Categorization'] = []
+                if verbose:
+                    print(f"Line {line_number}: {line} (Starting categorization list)")
+                continue
+            elif line == "--- End Categorization List ---":
+                in_categorization_list = False
+                if verbose:
+                    print(f"Line {line_number}: {line} (Ending categorization list)")
+                continue
+            elif line == "--- Start Description Body ---":
+                in_description_body = True
+                current_category['Description'] = []
+                if verbose:
+                    print(f"Line {line_number}: {line} (Starting description body)")
+                continue
+            elif line == "--- End Description Body ---":
+                in_description_body = False
+                if current_category and 'Description' in current_category:
+                    current_category['Description'] = "\n".join(current_category['Description'])
+                if verbose:
+                    print(f"Line {line_number}: {line} (Ending description body)")
+                continue
             elif current_service is not None:
                 key, value = parse_line(line)
                 if key == "Entry":
                     current_service['Entry'] = validate_non_negative_integer(value, "Entry", line_number)
                 elif key == "Service":
                     current_service['Service'] = value
+                elif key == "Categories":
+                    current_service['Categorization'] = [category.strip() for category in value.split(",")]
+                    if verbose:
+                        print(f"Line {line_number}: Categorization set to {current_service['Categorization']}")
                 elif line == "--- Start User List ---":
                     in_user_list = True
                     if verbose:
@@ -305,6 +378,10 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         current_thread['Thread'] = validate_non_negative_integer(value, "Thread", line_number)
                         if verbose:
                             print(f"Line {line_number}: Thread ID set to {value}")
+                    elif key == "Category":
+                        current_thread['Category'] = value
+                        if verbose:
+                            print(f"Line {line_number}: Category set to {value}")
                     elif key == "Title":
                         current_thread['Title'] = value
                         if verbose:
@@ -377,6 +454,16 @@ def display_services(services):
         print(f"Service Entry: {service['Entry']}")
         print(f"Service: {service['Service']}")
         print(f"Interactions: {', '.join(service['Interactions'])}")
+        if 'Categorization' in service:
+            print(f"Categorization: {', '.join(service['Categorization'])}")
+        print("Category List:")
+        for category in service['Categories']:
+            print(f"  Kind: {category['Kind']}")
+            print(f"  ID: {category['ID']}")
+            print(f"  InSub: {category['InSub']}")
+            print(f"  Label: {category['Label']}")
+            print(f"  Description: {category['Description'].strip()}")
+            print("")
         print("User List:")
         for user_id, user_info in service['Users'].items():
             print(f"  User ID: {user_id}")
@@ -392,6 +479,8 @@ def display_services(services):
             print(f"  --- Message Thread {idx+1} ---")
             if thread['Title']:
                 print(f"    Title: {thread['Title']}")
+            if thread.get('Category'):
+                print(f"    Category: {thread['Category']}")
             for message in thread['Messages']:
                 print(f"    {message['Author']} ({message['Time']} on {message['Date']}): [{message['Type']}] Post ID: {message['Post']} Nested: {message['Nested']}")
                 print(f"    {message['Message'].strip()}")
