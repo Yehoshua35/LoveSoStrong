@@ -15,6 +15,21 @@ def open_compressed_file(filename):
     else:
         return open(filename, 'r', encoding='utf-8')
 
+def save_compressed_file(data, filename):
+    """ Save data to a file, using various compression methods if specified. """
+    if filename.endswith('.gz'):
+        with gzip.open(filename, 'wt', encoding='utf-8') as file:
+            file.write(data)
+    elif filename.endswith('.bz2'):
+        with bz2.open(filename, 'wt', encoding='utf-8') as file:
+            file.write(data)
+    elif filename.endswith('.xz') or filename.endswith('.lzma'):
+        with lzma.open(filename, 'wt', encoding='utf-8') as file:
+            file.write(data)
+    else:
+        with open(filename, 'w', encoding='utf-8') as file:
+            file.write(data)
+
 def parse_line(line):
     """ Parse a line in the format 'var: value' and return the key and value. """
     parts = line.split(":", 1)
@@ -24,12 +39,15 @@ def parse_line(line):
         return key, value
     return None, None
 
-def validate_integer(value, variable_name, line_number):
-    """ Validate and convert a value to an integer. """
+def validate_non_negative_integer(value, variable_name, line_number):
+    """ Validate and convert a value to a non-negative integer. """
     try:
-        return int(value)
+        int_value = int(value)
+        if int_value < 0:
+            raise ValueError
+        return int_value
     except ValueError:
-        raise ValueError(f"{variable_name} on line {line_number} should be an integer, but got '{value}'.")
+        raise ValueError(f"{variable_name} on line {line_number} should be a non-negative integer, but got '{value}'.")
 
 def parse_file(filename, validate_only=False, verbose=False):
     with open_compressed_file(filename) as file:
@@ -167,7 +185,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
             elif current_service is not None:
                 key, value = parse_line(line)
                 if key == "Entry":
-                    current_service['Entry'] = validate_integer(value, "Entry", line_number)
+                    current_service['Entry'] = validate_non_negative_integer(value, "Entry", line_number)
                 elif key == "Service":
                     current_service['Service'] = value
                 elif line == "--- Start User List ---":
@@ -236,7 +254,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
 
                 if in_user_list and in_user_info:
                     if key == "User":
-                        user_id = validate_integer(value, "User", line_number)
+                        user_id = validate_non_negative_integer(value, "User", line_number)
                         current_service['Users'][user_id] = {'Bio': ""}
                         if verbose:
                             print(f"Line {line_number}: User ID set to {user_id}")
@@ -284,7 +302,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                             print(f"Line {line_number}: Adding to bio body: {line}")
                 elif in_message_list and in_message_thread:
                     if key == "Thread":
-                        current_thread['Thread'] = validate_integer(value, "Thread", line_number)
+                        current_thread['Thread'] = validate_non_negative_integer(value, "Thread", line_number)
                         if verbose:
                             print(f"Line {line_number}: Thread ID set to {value}")
                     elif key == "Title":
@@ -299,6 +317,10 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         current_message['Time'] = value
                         if verbose:
                             print(f"Line {line_number}: Time set to {value}")
+                    elif key == "Date":
+                        current_message['Date'] = value
+                        if verbose:
+                            print(f"Line {line_number}: Date set to {value}")
                     elif key == "Type":
                         message_type = value
                         if message_type not in current_service['Interactions']:
@@ -307,7 +329,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         if verbose:
                             print(f"Line {line_number}: Type set to {message_type}")
                     elif key == "Post":
-                        post_value = validate_integer(value, "Post", line_number)
+                        post_value = validate_non_negative_integer(value, "Post", line_number)
                         current_message['Post'] = post_value
                         if 'post_ids' not in current_thread:
                             current_thread['post_ids'] = set()
@@ -315,7 +337,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         if verbose:
                             print(f"Line {line_number}: Post ID set to {post_value}")
                     elif key == "Nested":
-                        nested_value = validate_integer(value, "Nested", line_number)
+                        nested_value = validate_non_negative_integer(value, "Nested", line_number)
                         if nested_value != 0 and nested_value not in current_thread.get('post_ids', set()):
                             raise ValueError(
                                 f"Nested value '{nested_value}' on line {line_number} does not match any existing Post values in the current thread. Existing Post IDs: {list(current_thread.get('post_ids', set()))}"
@@ -371,7 +393,7 @@ def display_services(services):
             if thread['Title']:
                 print(f"    Title: {thread['Title']}")
             for message in thread['Messages']:
-                print(f"    {message['Author']} ({message['Time']}): [{message['Type']}] Post ID: {message['Post']} Nested: {message['Nested']}")
+                print(f"    {message['Author']} ({message['Time']} on {message['Date']}): [{message['Type']}] Post ID: {message['Post']} Nested: {message['Nested']}")
                 print(f"    {message['Message'].strip()}")
             print("")
 
@@ -382,3 +404,13 @@ def to_json(services):
 def from_json(json_str):
     """ Convert a JSON string back to the services data structure """
     return json.loads(json_str)
+
+def load_from_json_file(json_filename):
+    """ Load the services data structure from a JSON file """
+    with open_compressed_file(json_filename) as file:
+        return json.load(file)
+
+def save_to_json_file(services, json_filename):
+    """ Save the services data structure to a JSON file """
+    json_data = json.dumps(services, indent=2)
+    save_compressed_file(json_data, json_filename)
