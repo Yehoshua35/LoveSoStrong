@@ -31,6 +31,15 @@ def validate_integer(value, variable_name, line_number):
     except ValueError:
         raise ValueError(f"{variable_name} on line {line_number} should be an integer, but got '{value}'.")
 
+def parse_file(filename, validate_only=False, verbose=False):
+    with open_compressed_file(filename) as file:
+        lines = file.readlines()
+    return parse_lines(lines, validate_only, verbose)
+
+def parse_string(data, validate_only=False, verbose=False):
+    lines = StringIO(data).readlines()
+    return parse_lines(lines, validate_only, verbose)
+
 def parse_lines(lines, validate_only=False, verbose=False):
     services = []
     current_service = None
@@ -42,16 +51,95 @@ def parse_lines(lines, validate_only=False, verbose=False):
     in_bio_body = False
     in_message_body = False
     in_comment_section = False
+    in_include_service = False
+    in_include_users = False
+    in_include_messages = False
+    include_files = []
     user_id = None
     current_bio = None
     current_message = None
     current_thread = None
     post_id = 1
 
+    def parse_include_files(file_list):
+        included_services = []
+        for include_file in file_list:
+            included_services.extend(parse_file(include_file, validate_only, verbose))
+        return included_services
+
+    def parse_include_users(file_list):
+        users = {}
+        for include_file in file_list:
+            included_users = parse_file(include_file, validate_only, verbose)
+            for service in included_users:
+                users.update(service['Users'])
+        return users
+
+    def parse_include_messages(file_list):
+        messages = []
+        for include_file in file_list:
+            included_messages = parse_file(include_file, validate_only, verbose)
+            for service in included_messages:
+                messages.extend(service['MessageThreads'])
+        return messages
+
     try:
         for line_number, line in enumerate(lines, 1):
             line = line.strip()
-            if line == "--- Start Archive Service ---":
+            if line == "--- Include Service Start ---":
+                in_include_service = True
+                include_files = []
+                if verbose:
+                    print(f"Line {line_number}: {line} (Starting include service section)")
+                continue
+            elif line == "--- Include Service End ---":
+                in_include_service = False
+                if verbose:
+                    print(f"Line {line_number}: {line} (Ending include service section)")
+                services.extend(parse_include_files(include_files))
+                continue
+            elif in_include_service:
+                include_files.append(line)
+                if verbose:
+                    print(f"Line {line_number}: {line} (Including file for service)")
+                continue
+            elif line == "--- Include Users Start ---":
+                in_include_users = True
+                include_files = []
+                if verbose:
+                    print(f"Line {line_number}: {line} (Starting include users section)")
+                continue
+            elif line == "--- Include Users End ---":
+                in_include_users = False
+                if verbose:
+                    print(f"Line {line_number}: {line} (Ending include users section)")
+                if current_service:
+                    current_service['Users'].update(parse_include_users(include_files))
+                continue
+            elif in_include_users:
+                include_files.append(line)
+                if verbose:
+                    print(f"Line {line_number}: {line} (Including file for users)")
+                continue
+            elif line == "--- Include Messages Start ---":
+                in_include_messages = True
+                include_files = []
+                if verbose:
+                    print(f"Line {line_number}: {line} (Starting include messages section)")
+                continue
+            elif line == "--- Include Messages End ---":
+                in_include_messages = False
+                if verbose:
+                    print(f"Line {line_number}: {line} (Ending include messages section)")
+                if current_service:
+                    current_service['MessageThreads'].extend(parse_include_messages(include_files))
+                continue
+            elif in_include_messages:
+                include_files.append(line)
+                if verbose:
+                    print(f"Line {line_number}: {line} (Including file for messages)")
+                continue
+            elif line == "--- Start Archive Service ---":
                 current_service = {'Users': {}, 'MessageThreads': [], 'Interactions': []}
                 if verbose:
                     print(f"Line {line_number}: {line} (Starting new archive service)")
@@ -261,15 +349,6 @@ def parse_lines(lines, validate_only=False, verbose=False):
         return True, "", ""
 
     return services
-
-def parse_file(filename, validate_only=False, verbose=False):
-    with open_compressed_file(filename) as file:
-        lines = file.readlines()
-    return parse_lines(lines, validate_only, verbose)
-
-def parse_string(data, validate_only=False, verbose=False):
-    lines = StringIO(data).readlines()
-    return parse_lines(lines, validate_only, verbose)
 
 def display_services(services):
     for service in services:
