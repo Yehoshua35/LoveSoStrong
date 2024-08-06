@@ -82,6 +82,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
     current_message = None
     current_thread = None
     current_category = None
+    categorization_values = []
     post_id = 1
 
     def parse_include_files(file_list):
@@ -189,7 +190,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print(f"Line {line_number}: {line} (Including file for categories)")
                 continue
             elif line == "--- Start Archive Service ---":
-                current_service = {'Users': {}, 'MessageThreads': [], 'Categories': [], 'Interactions': []}
+                current_service = {'Users': {}, 'MessageThreads': [], 'Categories': [], 'Interactions': [], 'Categorization': []}
                 if verbose:
                     print(f"Line {line_number}: {line} (Starting new archive service)")
                 continue
@@ -222,6 +223,8 @@ def parse_lines(lines, validate_only=False, verbose=False):
             elif line == "--- End Category List ---":
                 in_category_list = False
                 if current_category:
+                    if 'Kind' in current_category and categorization_values and current_category['Kind'] not in categorization_values:
+                        raise ValueError(f"Invalid 'Kind' value '{current_category['Kind']}' on line {line_number}. Expected one of {categorization_values}.")
                     current_service['Categories'].append(current_category)
                 current_category = None
                 if verbose:
@@ -237,6 +240,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 in_categorization_list = False
                 if verbose:
                     print(f"Line {line_number}: {line} (Ending categorization list)")
+                categorization_values = current_service['Categorization']
                 continue
             elif line == "--- Start Description Body ---":
                 in_description_body = True
@@ -454,11 +458,11 @@ def display_services(services):
         print(f"Service Entry: {service['Entry']}")
         print(f"Service: {service['Service']}")
         print(f"Interactions: {', '.join(service['Interactions'])}")
-        if 'Categorization' in service:
+        if 'Categorization' in service and service['Categorization']:
             print(f"Categorization: {', '.join(service['Categorization'])}")
         print("Category List:")
         for category in service['Categories']:
-            print(f"  Kind: {category['Kind']}")
+            print(f"  Kind: {category.get('Kind', '')}")
             print(f"  ID: {category['ID']}")
             print(f"  InSub: {category['InSub']}")
             print(f"  Label: {category['Label']}")
