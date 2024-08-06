@@ -1,0 +1,94 @@
+--- Start Archive Service ---
+Entry: 1
+Service: Message Board
+
+--- Start User List ---
+
+--- Start User Info ---
+User: 1
+Name: Cool Dude 2k
+Handle: @cooldude2k
+Location: Somewhere
+Joined: Jul 1, 2024
+Birthday: Jul 1, 1987
+Bio:
+--- Start Bio Body ---
+I'm just a very cool dude! ^_^
+--- End Bio Body ---
+--- End User Info ---
+
+--- Start User Info ---
+User: 2
+Name: Kazuki Suzuki
+Handle: @kazuki.suzuki
+Location: Anywhere
+Joined: Jul 1, 2024
+Birthday: Jun 1, 1987
+Bio:
+--- Start Bio Body ---
+Hello it's just me Kazuki. :P
+--- End Bio Body ---
+--- End User Info ---
+
+--- End User List ---
+
+--- Start Message List ---
+Interactions: Post, Reply
+
+--- Start Message Thread ---
+Thread: 1
+Title: Hello, World!
+
+--- Start Message Post ---
+Author: @kazuki.suzuki
+Time: 8:00 AM · Jul 1, 2024
+Type: Post
+Post: 1
+Nested: 0
+Message:
+--- Start Message Body ---
+Hello, World! ^_^
+--- End Message Body ---
+--- End Message Post ---
+
+--- Start Message Post ---
+Author: @cooldude2k
+Time: 10:00 AM · Jul 1, 2024
+Type: Reply
+Post: 2
+Nested: 1
+Message:
+--- Start Message Body ---
+Why did you say "Hello, World!" O_o
+--- End Message Body ---
+--- End Message Post ---
+
+--- Start Message Post ---
+Author: @kazuki.suzuki
+Time: 12:00 PM · Jul 1, 2024
+Type: Reply
+Post: 3
+Nested: 2
+Message:
+--- Start Message Body ---
+I don't know.
+I thought it would be cool. ^_^
+--- End Message Body ---
+--- End Message Post ---
+
+--- Start Message Post ---
+Author: @cooldude2k
+Time: 2:00 PM · Jul 1, 2024
+Type: Reply
+Post: 4
+Nested: 3
+Message:
+--- Start Message Body ---
+What ever dude! <_<
+--- End Message Body ---
+--- End Message Post ---
+--- End Message Thread ---
+
+--- End Message List ---
+
+--- End Archive Service ---
