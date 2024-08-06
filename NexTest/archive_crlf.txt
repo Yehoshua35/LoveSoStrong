@@ -41,7 +41,8 @@ Title: Hello, World!
 
 --- Start Message Post ---
 Author: @kazuki.suzuki
-Time: 8:00 AM · Jul 1, 2024
+Time: 8:00 AM
+Date: Jul 1, 2024
 Type: Post
 Post: 1
 Nested: 0
@@ -53,7 +54,8 @@ Hello, World! ^_^
 
 --- Start Message Post ---
 Author: @cooldude2k
-Time: 10:00 AM · Jul 1, 2024
+Time: 10:00 AM
+Date: Jul 1, 2024
 Type: Reply
 Post: 2
 Nested: 1
@@ -65,7 +67,8 @@ Why did you say "Hello, World!" O_o
 
 --- Start Message Post ---
 Author: @kazuki.suzuki
-Time: 12:00 PM · Jul 1, 2024
+Time: 12:00 PM
+Date: Jul 1, 2024
 Type: Reply
 Post: 3
 Nested: 2
@@ -78,7 +81,8 @@ I thought it would be cool. ^_^
 
 --- Start Message Post ---
 Author: @cooldude2k
-Time: 2:00 PM · Jul 1, 2024
+Time: 2:00 PM
+Date: Jul 1, 2024
 Type: Reply
 Post: 4
 Nested: 3
