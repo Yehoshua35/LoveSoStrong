@@ -107,7 +107,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
     current_message = None
     current_thread = None
     current_category = None
-    categorization_values = []
+    categorization_values = {}
     category_ids = {'Categories': set(), 'Forums': set()}
     post_id = 1
 
@@ -218,7 +218,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print("Line {0}: {1} (Including file for categories)".format(line_number, line))
                 continue
             elif line == "--- Start Archive Service ---":
-                current_service = {'Users': {}, 'MessageThreads': [], 'Categories': [], 'Interactions': [], 'Categorization': []}
+                current_service = {'Users': {}, 'MessageThreads': [], 'Categories': [], 'Interactions': [], 'Categorization': {}}
                 if verbose:
                     print("Line {0}: {1} (Starting new archive service)".format(line_number, line))
                 continue
