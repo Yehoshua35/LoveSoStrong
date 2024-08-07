@@ -633,3 +633,100 @@ def save_services_to_file(services, filename, line_ending="lf"):
     """ Save the services data structure to a file in the original text format """
     data = services_to_string(services, line_ending)
     save_compressed_file(data, filename)
+
+def init_empty_service(entry, service_name):
+    """ Initialize an empty service structure """
+    return {
+        'Entry': entry,
+        'Service': service_name,
+        'Users': {},
+        'MessageThreads': [],
+        'Categories': [],
+        'Interactions': [],
+        'Categorization': {}
+    }
+
+def add_user(service, user_id, name, handle, location='', joined='', birthday='', bio=''):
+    """ Add a user to the service """
+    service['Users'][user_id] = {
+        'Name': name,
+        'Handle': handle,
+        'Location': location,
+        'Joined': joined,
+        'Birthday': birthday,
+        'Bio': bio
+    }
+
+def remove_user(service, user_id):
+    """ Remove a user from the service """
+    if user_id in service['Users']:
+        del service['Users'][user_id]
+
+def add_category(service, kind, category_type, category_level, category_id, insub, headline, description):
+    """ Add a category to the service """
+    category = {
+        'Kind': '{0}, {1}'.format(kind, category_level),
+        'ID': category_id,
+        'InSub': insub,
+        'Headline': headline,
+        'Description': description
+    }
+    service['Categories'].append(category)
+    if category_type not in service['Categorization']:
+        service['Categorization'][category_type] = []
+    if category_level not in service['Categorization'][category_type]:
+        service['Categorization'][category_type].append(category_level)
+
+def remove_category(service, category_id):
+    """ Remove a category from the service """
+    service['Categories'] = [category for category in service['Categories'] if category['ID'] != category_id]
+
+def add_message_thread(service, thread_id, title='', category='', forum=''):
+    """ Add a message thread to the service """
+    thread = {
+        'Thread': thread_id,
+        'Title': title,
+        'Category': category.split(',') if category else [],
+        'Forum': forum.split(',') if forum else [],
+        'Messages': []
+    }
+    service['MessageThreads'].append(thread)
+
+def remove_message_thread(service, thread_id):
+    """ Remove a message thread from the service """
+    service['MessageThreads'] = [thread for thread in service['MessageThreads'] if thread['Thread'] != thread_id]
+
+def add_message_post(service, thread_id, author, time, date, msg_type, post_id, nested, message):
+    """ Add a message post to a thread in the service """
+    for thread in service['MessageThreads']:
+        if thread['Thread'] == thread_id:
+            post = {
+                'Author': author,
+                'Time': time,
+                'Date': date,
+                'Type': msg_type,
+                'Post': post_id,
+                'Nested': nested,
+                'Message': message
+            }
+            thread['Messages'].append(post)
+            return
+    raise ValueError("Thread ID {0} not found in service".format(thread_id))
+
+def remove_message_post(service, thread_id, post_id):
+    """ Remove a message post from a thread in the service """
+    for thread in service['MessageThreads']:
+        if thread['Thread'] == thread_id:
+            thread['Messages'] = [post for post in thread['Messages'] if post['Post'] != post_id]
+            return
+    raise ValueError("Thread ID {0} not found in service".format(thread_id))
+
+def add_service(services, entry, service_name):
+    """ Add a new service to the list of services """
+    new_service = init_empty_service(entry, service_name)
+    services.append(new_service)
+    return new_service
+
+def remove_service(services, entry):
+    """ Remove an existing service from the list of services """
+    services[:] = [service for service in services if service['Entry'] != entry]
