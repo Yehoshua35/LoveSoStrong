@@ -33,13 +33,25 @@ Hello it's just me Kazuki. :P
 --- End User List ---
 
 --- Start Categorization List ---
-Categories: Fourm, SubFourm
+Categories: Category
+Forums: Fourm, SubFourm
 
 --- Start Category List ---
-Kind: Fourm
+Kind: Categories, Category
 ID: 1
 InSub: 0
-Title: General Discussion
+Headline: Game Maker 2k
+Description:
+--- Start Description Body ---
+Just talk about anything.
+--- End Description Body ---
+--- End Category List ---
+
+--- Start Category List ---
+Kind: Forums, Fourm
+ID: 1
+InSub: 0
+Headline: General Discussion
 Description:
 --- Start Description Body ---
 Just talk about anything.
@@ -52,8 +64,9 @@ Interactions: Post, Reply
 
 --- Start Message Thread ---
 Thread: 1
-Category: General Discussion
 Title: Hello, World!
+Category: Game Maker 2k
+Forum: General Discussion
 
 --- Start Message Post ---
 Author: @kazuki.suzuki
