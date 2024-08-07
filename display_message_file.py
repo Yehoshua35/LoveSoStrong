@@ -1,3 +1,4 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
 import argparse
 import sys
 from parse_message_file import (
@@ -15,6 +16,7 @@ def main():
     parser.add_argument("--from-json", "-J", help="Load the services data structure from a JSON file")
     parser.add_argument("--json-string", "-s", type=str, help="JSON string to parse if --from-json is specified")
     parser.add_argument("--to-original", "-o", help="Convert the parsed data back to the original format and save to a file")
+    parser.add_argument("--line-ending", "-l", choices=["lf", "cr", "crlf"], default="lf", help="Specify the line ending format for the output file")
     
     args = parser.parse_args()
 
@@ -29,24 +31,24 @@ def main():
             if args.validate_only:
                 is_valid, error_message, error_line = parse_file(args.filename, validate_only=True, verbose=args.verbose)
                 if is_valid:
-                    print(f"The file '{args.filename}' is valid.")
+                    print("The file '{0}' is valid.".format(args.filename))
                 else:
-                    print(f"Validation Error: {error_message}")
-                    print(f"Line: {error_line.strip()}")
+                    print("Validation Error: {0}".format(error_message))
+                    print("Line: {0}".format(error_line.strip()))
             else:
                 services = parse_file(args.filename, verbose=args.verbose)
                 if args.debug:
                     import pdb; pdb.set_trace()
                 if args.to_json:
                     save_to_json_file(services, args.to_json)
-                    print(f"Saved JSON to {args.to_json}")
+                    print("Saved JSON to {0}".format(args.to_json))
                 elif args.to_original:
-                    save_services_to_file(services, args.to_original)
-                    print(f"Saved original format to {args.to_original}")
+                    save_services_to_file(services, args.to_original, line_ending=args.line_ending)
+                    print("Saved original format to {0}".format(args.to_original))
                 else:
                     display_services(services)
     except Exception as e:
-        print(f"An error occurred: {e}", file=sys.stderr)
+        print("An error occurred: {0}".format(e), file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":

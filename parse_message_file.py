@@ -1,8 +1,23 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
 import json
 import gzip
 import bz2
-import lzma
-from io import StringIO
+
+try:
+    import lzma
+except ImportError:
+    try:
+        from backports import lzma
+    except ImportError:
+        lzma = None
+
+try:
+    from io import StringIO
+except ImportError:
+    try:
+        from cStringIO import StringIO
+    except ImportError:
+        from StringIO import StringIO
 
 def open_compressed_file(filename):
     """ Open a file, trying various compression methods if available. """
@@ -11,7 +26,10 @@ def open_compressed_file(filename):
     elif filename.endswith('.bz2'):
         return bz2.open(filename, 'rt', encoding='utf-8')
     elif filename.endswith('.xz') or filename.endswith('.lzma'):
-        return lzma.open(filename, 'rt', encoding='utf-8')
+        if lzma:
+            return lzma.open(filename, 'rt', encoding='utf-8')
+        else:
+            raise ImportError("lzma module is not available")
     else:
         return open(filename, 'r', encoding='utf-8')
 
@@ -24,8 +42,11 @@ def save_compressed_file(data, filename):
         with bz2.open(filename, 'wt', encoding='utf-8') as file:
             file.write(data)
     elif filename.endswith('.xz') or filename.endswith('.lzma'):
-        with lzma.open(filename, 'wt', encoding='utf-8') as file:
-            file.write(data)
+        if lzma:
+            with lzma.open(filename, 'wt', encoding='utf-8') as file:
+                file.write(data)
+        else:
+            raise ImportError("lzma module is not available")
     else:
         with open(filename, 'w', encoding='utf-8') as file:
             file.write(data)
@@ -47,7 +68,7 @@ def validate_non_negative_integer(value, variable_name, line_number):
             raise ValueError
         return int_value
     except ValueError:
-        raise ValueError(f"{variable_name} on line {line_number} should be a non-negative integer, but got '{value}'.")
+        raise ValueError("{0} on line {1} should be a non-negative integer, but got '{2}'.".format(variable_name, line_number, value))
 
 def parse_file(filename, validate_only=False, verbose=False):
     with open_compressed_file(filename) as file:
@@ -123,65 +144,65 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 in_include_service = True
                 include_files = []
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting include service section)")
+                    print("Line {0}: {1} (Starting include service section)".format(line_number, line))
                 continue
             elif line == "--- Include Service End ---":
                 in_include_service = False
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending include service section)")
+                    print("Line {0}: {1} (Ending include service section)".format(line_number, line))
                 services.extend(parse_include_files(include_files))
                 continue
             elif in_include_service:
                 include_files.append(line)
                 if verbose:
-                    print(f"Line {line_number}: {line} (Including file for service)")
+                    print("Line {0}: {1} (Including file for service)".format(line_number, line))
                 continue
             elif line == "--- Include Users Start ---":
                 in_include_users = True
                 include_files = []
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting include users section)")
+                    print("Line {0}: {1} (Starting include users section)".format(line_number, line))
                 continue
             elif line == "--- Include Users End ---":
                 in_include_users = False
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending include users section)")
+                    print("Line {0}: {1} (Ending include users section)".format(line_number, line))
                 if current_service:
                     current_service['Users'].update(parse_include_users(include_files))
                 continue
             elif in_include_users:
                 include_files.append(line)
                 if verbose:
-                    print(f"Line {line_number}: {line} (Including file for users)")
+                    print("Line {0}: {1} (Including file for users)".format(line_number, line))
                 continue
             elif line == "--- Include Messages Start ---":
                 in_include_messages = True
                 include_files = []
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting include messages section)")
+                    print("Line {0}: {1} (Starting include messages section)".format(line_number, line))
                 continue
             elif line == "--- Include Messages End ---":
                 in_include_messages = False
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending include messages section)")
+                    print("Line {0}: {1} (Ending include messages section)".format(line_number, line))
                 if current_service:
                     current_service['MessageThreads'].extend(parse_include_messages(include_files))
                 continue
             elif in_include_messages:
                 include_files.append(line)
                 if verbose:
-                    print(f"Line {line_number}: {line} (Including file for messages)")
+                    print("Line {0}: {1} (Including file for messages)".format(line_number, line))
                 continue
             elif line == "--- Include Categories Start ---":
                 in_include_categories = True
                 include_files = []
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting include categories section)")
+                    print("Line {0}: {1} (Starting include categories section)".format(line_number, line))
                 continue
             elif line == "--- Include Categories End ---":
                 in_include_categories = False
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending include categories section)")
+                    print("Line {0}: {1} (Ending include categories section)".format(line_number, line))
                 if current_service:
                     current_service['Categories'].extend(parse_include_categories(include_files))
                     for category in current_service['Categories']:
@@ -190,76 +211,76 @@ def parse_lines(lines, validate_only=False, verbose=False):
             elif in_include_categories:
                 include_files.append(line)
                 if verbose:
-                    print(f"Line {line_number}: {line} (Including file for categories)")
+                    print("Line {0}: {1} (Including file for categories)".format(line_number, line))
                 continue
             elif line == "--- Start Archive Service ---":
                 current_service = {'Users': {}, 'MessageThreads': [], 'Categories': [], 'Interactions': [], 'Categorization': []}
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting new archive service)")
+                    print("Line {0}: {1} (Starting new archive service)".format(line_number, line))
                 continue
             elif line == "--- End Archive Service ---":
                 services.append(current_service)
                 current_service = None
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending archive service)")
+                    print("Line {0}: {1} (Ending archive service)".format(line_number, line))
                 continue
             elif line == "--- Start Comment Section ---":
                 in_comment_section = True
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting comment section)")
+                    print("Line {0}: {1} (Starting comment section)".format(line_number, line))
                 continue
             elif line == "--- End Comment Section ---":
                 in_comment_section = False
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending comment section)")
+                    print("Line {0}: {1} (Ending comment section)".format(line_number, line))
                 continue
             elif in_comment_section:
                 if verbose:
-                    print(f"Line {line_number}: {line} (Comment)")
+                    print("Line {0}: {1} (Comment)".format(line_number, line))
                 continue
             elif line == "--- Start Category List ---":
                 in_category_list = True
                 current_category = {}
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting category list)")
+                    print("Line {0}: {1} (Starting category list)".format(line_number, line))
                 continue
             elif line == "--- End Category List ---":
                 in_category_list = False
                 if current_category:
                     if 'Kind' in current_category and categorization_values and current_category['Kind'] not in categorization_values:
-                        raise ValueError(f"Invalid 'Kind' value '{current_category['Kind']}' on line {line_number}. Expected one of {categorization_values}.")
+                        raise ValueError("Invalid 'Kind' value '{0}' on line {1}. Expected one of {2}.".format(current_category['Kind'], line_number, categorization_values))
                     if current_category.get('InSub', 0) != 0 and current_category['InSub'] not in category_ids:
-                        raise ValueError(f"InSub value '{current_category['InSub']}' on line {line_number} does not match any existing ID values.")
+                        raise ValueError("InSub value '{0}' on line {1} does not match any existing ID values.".format(current_category['InSub'], line_number))
                     current_service['Categories'].append(current_category)
                     category_ids.add(current_category['ID'])
                 current_category = None
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending category list)")
+                    print("Line {0}: {1} (Ending category list)".format(line_number, line))
                 continue
             elif line == "--- Start Categorization List ---":
                 in_categorization_list = True
                 current_service['Categorization'] = []
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting categorization list)")
+                    print("Line {0}: {1} (Starting categorization list)".format(line_number, line))
                 continue
             elif line == "--- End Categorization List ---":
                 in_categorization_list = False
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending categorization list)")
+                    print("Line {0}: {1} (Ending categorization list)".format(line_number, line))
                 categorization_values = current_service['Categorization']
                 continue
             elif line == "--- Start Description Body ---":
                 in_description_body = True
                 current_category['Description'] = []
                 if verbose:
-                    print(f"Line {line_number}: {line} (Starting description body)")
+                    print("Line {0}: {1} (Starting description body)".format(line_number, line))
                 continue
             elif line == "--- End Description Body ---":
                 in_description_body = False
                 if current_category and 'Description' in current_category:
                     current_category['Description'] = "\n".join(current_category['Description'])
                 if verbose:
-                    print(f"Line {line_number}: {line} (Ending description body)")
+                    print("Line {0}: {1} (Ending description body)".format(line_number, line))
                 continue
             elif current_service is not None:
                 key, value = parse_line(line)
@@ -270,7 +291,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 elif key == "Categories":
                     current_service['Categorization'] = [category.strip() for category in value.split(",")]
                     if verbose:
-                        print(f"Line {line_number}: Categorization set to {current_service['Categorization']}")
+                        print("Line {0}: Categorization set to {1}".format(line_number, current_service['Categorization']))
                 elif in_category_list:
                     if key == "Kind":
                         current_category['Kind'] = value
@@ -285,53 +306,53 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 elif line == "--- Start User List ---":
                     in_user_list = True
                     if verbose:
-                        print(f"Line {line_number}: {line} (Starting user list)")
+                        print("Line {0}: {1} (Starting user list)".format(line_number, line))
                     continue
                 elif line == "--- End User List ---":
                     in_user_list = False
                     if verbose:
-                        print(f"Line {line_number}: {line} (Ending user list)")
+                        print("Line {0}: {1} (Ending user list)".format(line_number, line))
                     continue
                 elif line == "--- Start User Info ---":
                     in_user_info = True
                     if verbose:
-                        print(f"Line {line_number}: {line} (Starting user info)")
+                        print("Line {0}: {1} (Starting user info)".format(line_number, line))
                     continue
                 elif line == "--- End User Info ---":
                     in_user_info = False
                     user_id = None
                     if verbose:
-                        print(f"Line {line_number}: {line} (Ending user info)")
+                        print("Line {0}: {1} (Ending user info)".format(line_number, line))
                     continue
                 elif line == "--- Start Message List ---":
                     in_message_list = True
                     if verbose:
-                        print(f"Line {line_number}: {line} (Starting message list)")
+                        print("Line {0}: {1} (Starting message list)".format(line_number, line))
                     continue
                 elif line == "--- End Message List ---":
                     in_message_list = False
                     if verbose:
-                        print(f"Line {line_number}: {line} (Ending message list)")
+                        print("Line {0}: {1} (Ending message list)".format(line_number, line))
                     continue
                 elif line == "--- Start Message Thread ---":
                     in_message_thread = True
                     current_thread = {'Title': '', 'Messages': []}
                     post_id = 1
                     if verbose:
-                        print(f"Line {line_number}: {line} (Starting message thread)")
+                        print("Line {0}: {1} (Starting message thread)".format(line_number, line))
                     continue
                 elif line == "--- End Message Thread ---":
                     in_message_thread = False
                     current_service['MessageThreads'].append(current_thread)
                     current_thread = None
                     if verbose:
-                        print(f"Line {line_number}: {line} (Ending message thread)")
+                        print("Line {0}: {1} (Ending message thread)".format(line_number, line))
                     continue
                 elif line == "--- Start Message Post ---":
                     in_message_post = True
                     current_message = {}
                     if verbose:
-                        print(f"Line {line_number}: {line} (Starting message post)")
+                        print("Line {0}: {1} (Starting message post)".format(line_number, line))
                     continue
                 elif line == "--- End Message Post ---":
                     in_message_post = False
@@ -339,93 +360,93 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         current_thread['Messages'].append(current_message)
                     current_message = None
                     if verbose:
-                        print(f"Line {line_number}: {line} (Ending message post)")
+                        print("Line {0}: {1} (Ending message post)".format(line_number, line))
                     continue
                 elif in_message_list and key == "Interactions":
                     current_service['Interactions'] = [interaction.strip() for interaction in value.split(",")]
                     if verbose:
-                        print(f"Line {line_number}: Interactions set to {current_service['Interactions']}")
+                        print("Line {0}: Interactions set to {1}".format(line_number, current_service['Interactions']))
 
                 if in_user_list and in_user_info:
                     if key == "User":
                         user_id = validate_non_negative_integer(value, "User", line_number)
                         current_service['Users'][user_id] = {'Bio': ""}
                         if verbose:
-                            print(f"Line {line_number}: User ID set to {user_id}")
+                            print("Line {0}: User ID set to {1}".format(line_number, user_id))
                     elif key == "Name":
                         if user_id is not None:
                             current_service['Users'][user_id]['Name'] = value
                             if verbose:
-                                print(f"Line {line_number}: Name set to {value}")
+                                print("Line {0}: Name set to {1}".format(line_number, value))
                     elif key == "Handle":
                         if user_id is not None:
                             current_service['Users'][user_id]['Handle'] = value
                             if verbose:
-                                print(f"Line {line_number}: Handle set to {value}")
+                                print("Line {0}: Handle set to {1}".format(line_number, value))
                     elif key == "Location":
                         if user_id is not None:
                             current_service['Users'][user_id]['Location'] = value
                             if verbose:
-                                print(f"Line {line_number}: Location set to {value}")
+                                print("Line {0}: Location set to {1}".format(line_number, value))
                     elif key == "Joined":
                         if user_id is not None:
                             current_service['Users'][user_id]['Joined'] = value
                             if verbose:
-                                print(f"Line {line_number}: Joined date set to {value}")
+                                print("Line {0}: Joined date set to {1}".format(line_number, value))
                     elif key == "Birthday":
                         if user_id is not None:
                             current_service['Users'][user_id]['Birthday'] = value
                             if verbose:
-                                print(f"Line {line_number}: Birthday set to {value}")
+                                print("Line {0}: Birthday set to {1}".format(line_number, value))
                     elif line == "--- Start Bio Body ---":
                         if user_id is not None:
                             current_bio = []
                             in_bio_body = True
                             if verbose:
-                                print(f"Line {line_number}: Starting bio body")
+                                print("Line {0}: Starting bio body".format(line_number))
                     elif line == "--- End Bio Body ---":
                         if user_id is not None and current_bio is not None:
                             current_service['Users'][user_id]['Bio'] = "\n".join(current_bio)
                             current_bio = None
                             in_bio_body = False
                             if verbose:
-                                print(f"Line {line_number}: Ending bio body")
+                                print("Line {0}: Ending bio body".format(line_number))
                     elif in_bio_body and current_bio is not None:
                         current_bio.append(line)
                         if verbose:
-                            print(f"Line {line_number}: Adding to bio body: {line}")
+                            print("Line {0}: Adding to bio body: {1}".format(line_number, line))
                 elif in_message_list and in_message_thread:
                     if key == "Thread":
                         current_thread['Thread'] = validate_non_negative_integer(value, "Thread", line_number)
                         if verbose:
-                            print(f"Line {line_number}: Thread ID set to {value}")
+                            print("Line {0}: Thread ID set to {1}".format(line_number, value))
                     elif key == "Category":
                         current_thread['Category'] = value
                         if verbose:
-                            print(f"Line {line_number}: Category set to {value}")
+                            print("Line {0}: Category set to {1}".format(line_number, value))
                     elif key == "Title":
                         current_thread['Title'] = value
                         if verbose:
-                            print(f"Line {line_number}: Title set to {value}")
+                            print("Line {0}: Title set to {1}".format(line_number, value))
                     elif key == "Author":
                         current_message['Author'] = value
                         if verbose:
-                            print(f"Line {line_number}: Author set to {value}")
+                            print("Line {0}: Author set to {1}".format(line_number, value))
                     elif key == "Time":
                         current_message['Time'] = value
                         if verbose:
-                            print(f"Line {line_number}: Time set to {value}")
+                            print("Line {0}: Time set to {1}".format(line_number, value))
                     elif key == "Date":
                         current_message['Date'] = value
                         if verbose:
-                            print(f"Line {line_number}: Date set to {value}")
+                            print("Line {0}: Date set to {1}".format(line_number, value))
                     elif key == "Type":
                         message_type = value
                         if message_type not in current_service['Interactions']:
-                            raise ValueError(f"Unexpected message type '{message_type}' found on line {line_number}. Expected one of {current_service['Interactions']}")
+                            raise ValueError("Unexpected message type '{0}' found on line {1}. Expected one of {2}".format(message_type, line_number, current_service['Interactions']))
                         current_message['Type'] = message_type
                         if verbose:
-                            print(f"Line {line_number}: Type set to {message_type}")
+                            print("Line {0}: Type set to {1}".format(line_number, message_type))
                     elif key == "Post":
                         post_value = validate_non_negative_integer(value, "Post", line_number)
                         current_message['Post'] = post_value
@@ -433,35 +454,36 @@ def parse_lines(lines, validate_only=False, verbose=False):
                             current_thread['post_ids'] = set()
                         current_thread['post_ids'].add(post_value)
                         if verbose:
-                            print(f"Line {line_number}: Post ID set to {post_value}")
+                            print("Line {0}: Post ID set to {1}".format(line_number, post_value))
                     elif key == "Nested":
                         nested_value = validate_non_negative_integer(value, "Nested", line_number)
                         if nested_value != 0 and nested_value not in current_thread.get('post_ids', set()):
                             raise ValueError(
-                                f"Nested value '{nested_value}' on line {line_number} does not match any existing Post values in the current thread. Existing Post IDs: {list(current_thread.get('post_ids', set()))}"
+                                "Nested value '{0}' on line {1} does not match any existing Post values in the current thread. Existing Post IDs: {2}".format(
+                                    nested_value, line_number, list(current_thread.get('post_ids', set())))
                             )
                         current_message['Nested'] = nested_value
                         if verbose:
-                            print(f"Line {line_number}: Nested set to {nested_value}")
+                            print("Line {0}: Nested set to {1}".format(line_number, nested_value))
                     elif line == "--- Start Message Body ---":
                         if current_message is not None:
                             current_message['Message'] = []
                             in_message_body = True
                             if verbose:
-                                print(f"Line {line_number}: Starting message body")
+                                print("Line {0}: Starting message body".format(line_number))
                     elif line == "--- End Message Body ---":
                         if current_message is not None and 'Message' in current_message:
                             current_message['Message'] = "\n".join(current_message['Message'])
                             in_message_body = False
                             if verbose:
-                                print(f"Line {line_number}: Ending message body")
+                                print("Line {0}: Ending message body".format(line_number))
                     elif in_message_body and current_message is not None and 'Message' in current_message:
                         current_message['Message'].append(line)
                         if verbose:
-                            print(f"Line {line_number}: Adding to message body: {line}")
+                            print("Line {0}: Adding to message body: {1}".format(line_number, line))
     except Exception as e:
         if validate_only:
-            return False, f"Error: {str(e)}", lines[line_number - 1]
+            return False, "Error: {0}".format(str(e)), lines[line_number - 1]
         else:
             raise
 
@@ -472,39 +494,40 @@ def parse_lines(lines, validate_only=False, verbose=False):
 
 def display_services(services):
     for service in services:
-        print(f"Service Entry: {service['Entry']}")
-        print(f"Service: {service['Service']}")
-        print(f"Interactions: {', '.join(service['Interactions'])}")
+        print("Service Entry: {0}".format(service['Entry']))
+        print("Service: {0}".format(service['Service']))
+        print("Interactions: {0}".format(', '.join(service['Interactions'])))
         if 'Categorization' in service and service['Categorization']:
-            print(f"Categorization: {', '.join(service['Categorization'])}")
+            print("Categorization: {0}".format(', '.join(service['Categorization'])))
         print("Category List:")
         for category in service['Categories']:
-            print(f"  Kind: {category.get('Kind', '')}")
-            print(f"  ID: {category['ID']}")
-            print(f"  InSub: {category['InSub']}")
-            print(f"  Title: {category.get('Title', '')}")
-            print(f"  Description: {category.get('Description', '').strip()}")
+            print("  Kind: {0}".format(category.get('Kind', '')))
+            print("  ID: {0}".format(category['ID']))
+            print("  InSub: {0}".format(category['InSub']))
+            print("  Title: {0}".format(category.get('Title', '')))
+            print("  Description: {0}".format(category.get('Description', '').strip()))
             print("")
         print("User List:")
         for user_id, user_info in service['Users'].items():
-            print(f"  User ID: {user_id}")
-            print(f"    Name: {user_info['Name']}")
-            print(f"    Handle: {user_info['Handle']}")
-            print(f"    Location: {user_info.get('Location', '')}")
-            print(f"    Joined: {user_info.get('Joined', '')}")
-            print(f"    Birthday: {user_info.get('Birthday', '')}")
-            print(f"    Bio: {user_info.get('Bio', '').strip()}")
+            print("  User ID: {0}".format(user_id))
+            print("    Name: {0}".format(user_info['Name']))
+            print("    Handle: {0}".format(user_info['Handle']))
+            print("    Location: {0}".format(user_info.get('Location', '')))
+            print("    Joined: {0}".format(user_info.get('Joined', '')))
+            print("    Birthday: {0}".format(user_info.get('Birthday', '')))
+            print("    Bio: {0}".format(user_info.get('Bio', '').strip()))
             print("")
         print("Message Threads:")
         for idx, thread in enumerate(service['MessageThreads']):
-            print(f"  --- Message Thread {idx+1} ---")
+            print("  --- Message Thread {0} ---".format(idx+1))
             if thread['Title']:
-                print(f"    Title: {thread['Title']}")
+                print("    Title: {0}".format(thread['Title']))
             if thread.get('Category'):
-                print(f"    Category: {thread['Category']}")
+                print("    Category: {0}".format(thread['Category']))
             for message in thread['Messages']:
-                print(f"    {message['Author']} ({message['Time']} on {message['Date']}): [{message['Type']}] Post ID: {message['Post']} Nested: {message['Nested']}")
-                print(f"    {message['Message'].strip()}")
+                print("    {0} ({1} on {2}): [{3}] Post ID: {4} Nested: {5}".format(
+                    message['Author'], message['Time'], message['Date'], message['Type'], message['Post'], message['Nested']))
+                print("    {0}".format(message['Message'].strip()))
             print("")
 
 def to_json(services):
@@ -525,26 +548,26 @@ def save_to_json_file(services, json_filename):
     json_data = json.dumps(services, indent=2)
     save_compressed_file(json_data, json_filename)
 
-def services_to_string(services):
+def services_to_string(services, line_ending="lf"):
     """ Convert the services data structure back to the original text format """
     lines = []
     for service in services:
         lines.append("--- Start Archive Service ---")
-        lines.append(f"Entry: {service['Entry']}")
-        lines.append(f"Service: {service['Service']}")
+        lines.append("Entry: {0}".format(service['Entry']))
+        lines.append("Service: {0}".format(service['Service']))
         
         lines.append("--- Start User List ---")
         for user_id, user_info in service['Users'].items():
             lines.append("--- Start User Info ---")
-            lines.append(f"User: {user_id}")
-            lines.append(f"Name: {user_info['Name']}")
-            lines.append(f"Handle: {user_info['Handle']}")
+            lines.append("User: {0}".format(user_id))
+            lines.append("Name: {0}".format(user_info['Name']))
+            lines.append("Handle: {0}".format(user_info['Handle']))
             if 'Location' in user_info:
-                lines.append(f"Location: {user_info['Location']}")
+                lines.append("Location: {0}".format(user_info['Location']))
             if 'Joined' in user_info:
-                lines.append(f"Joined: {user_info['Joined']}")
+                lines.append("Joined: {0}".format(user_info['Joined']))
             if 'Birthday' in user_info:
-                lines.append(f"Birthday: {user_info['Birthday']}")
+                lines.append("Birthday: {0}".format(user_info['Birthday']))
             if 'Bio' in user_info:
                 lines.append("Bio:")
                 lines.append("--- Start Bio Body ---")
@@ -555,39 +578,39 @@ def services_to_string(services):
         
         if 'Categorization' in service and service['Categorization']:
             lines.append("--- Start Categorization List ---")
-            lines.append(f"Categories: {', '.join(service['Categorization'])}")
+            lines.append("Categories: {0}".format(', '.join(service['Categorization'])))
             lines.append("--- End Categorization List ---")
         
         if 'Categories' in service and service['Categories']:
             for category in service['Categories']:
                 lines.append("--- Start Category List ---")
                 if 'Kind' in category:
-                    lines.append(f"Kind: {category['Kind']}")
-                lines.append(f"ID: {category['ID']}")
-                lines.append(f"InSub: {category['InSub']}")
+                    lines.append("Kind: {0}".format(category['Kind']))
+                lines.append("ID: {0}".format(category['ID']))
+                lines.append("InSub: {0}".format(category['InSub']))
                 if 'Title' in category:
-                    lines.append(f"Title: {category['Title']}")
+                    lines.append("Title: {0}".format(category['Title']))
                 if 'Description' in category:
-                    lines.append(f"Description: {category['Description']}")
+                    lines.append("Description: {0}".format(category['Description']))
                 lines.append("--- End Category List ---")
         
         lines.append("--- Start Message List ---")
-        lines.append(f"Interactions: {', '.join(service['Interactions'])}")
+        lines.append("Interactions: {0}".format(', '.join(service['Interactions'])))
         for thread in service['MessageThreads']:
             lines.append("--- Start Message Thread ---")
-            lines.append(f"Thread: {thread['Thread']}")
+            lines.append("Thread: {0}".format(thread['Thread']))
             if 'Category' in thread:
-                lines.append(f"Category: {thread['Category']}")
+                lines.append("Category: {0}".format(thread['Category']))
             if 'Title' in thread:
-                lines.append(f"Title: {thread['Title']}")
+                lines.append("Title: {0}".format(thread['Title']))
             for message in thread['Messages']:
                 lines.append("--- Start Message Post ---")
-                lines.append(f"Author: {message['Author']}")
-                lines.append(f"Time: {message['Time']}")
-                lines.append(f"Date: {message['Date']}")
-                lines.append(f"Type: {message['Type']}")
-                lines.append(f"Post: {message['Post']}")
-                lines.append(f"Nested: {message['Nested']}")
+                lines.append("Author: {0}".format(message['Author']))
+                lines.append("Time: {0}".format(message['Time']))
+                lines.append("Date: {0}".format(message['Date']))
+                lines.append("Type: {0}".format(message['Type']))
+                lines.append("Post: {0}".format(message['Post']))
+                lines.append("Nested: {0}".format(message['Nested']))
                 lines.append("Message:")
                 lines.append("--- Start Message Body ---")
                 lines.extend(message['Message'].split("\n"))
@@ -597,9 +620,11 @@ def services_to_string(services):
         lines.append("--- End Message List ---")
         
         lines.append("--- End Archive Service ---")
-    return "\n".join(lines)
+    
+    line_sep = {"lf": "\n", "cr": "\r", "crlf": "\r\n"}
+    return line_sep.get(line_ending, "\n").join(lines)
 
-def save_services_to_file(services, filename):
+def save_services_to_file(services, filename, line_ending="lf"):
     """ Save the services data structure to a file in the original text format """
-    data = services_to_string(services)
+    data = services_to_string(services, line_ending)
     save_compressed_file(data, filename)
