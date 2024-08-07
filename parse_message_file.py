@@ -274,7 +274,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 in_categorization_list = False
                 if verbose:
                     print("Line {0}: {1} (Ending categorization list)".format(line_number, line))
-                categorization_values = set(current_service['Categorization'].keys())
+                categorization_values = current_service['Categorization']
                 continue
             elif current_service is not None:
                 key, value = parse_line(line)
@@ -501,7 +501,7 @@ def display_services(services):
         print("Interactions: {0}".format(', '.join(service['Interactions'])))
         if 'Categorization' in service and service['Categorization']:
             for category_type, category_levels in service['Categorization'].items():
-                print("{0}: {0}".format(category_type, ', '.join(category_levels)))
+                print("{0}: {1}".format(category_type, ', '.join(category_levels)))
         print("Category List:")
         for category in service['Categories']:
             print("  Type: {0}, Level: {1}".format(category['Type'], category['Level']))
