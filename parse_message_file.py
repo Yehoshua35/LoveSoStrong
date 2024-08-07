@@ -210,6 +210,9 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 if current_service:
                     current_service['Categories'].extend(parse_include_categories(include_files))
                     for category in current_service['Categories']:
+                        kind_split = category.get('Kind', '').split(",")
+                        category['Type'] = kind_split[0].strip()
+                        category['Level'] = kind_split[1].strip()
                         category_ids[category['Type']].add(category['ID'])
                 continue
             elif in_include_categories:
