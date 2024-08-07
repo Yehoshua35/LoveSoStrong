@@ -108,7 +108,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
     current_thread = None
     current_category = None
     categorization_values = []
-    category_ids = set()
+    category_ids = {'Categories': set(), 'Forums': set()}
     post_id = 1
 
     def parse_include_files(file_list):
@@ -210,7 +210,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 if current_service:
                     current_service['Categories'].extend(parse_include_categories(include_files))
                     for category in current_service['Categories']:
-                        category_ids.add(category['ID'])
+                        category_ids[category['Type']].add(category['ID'])
                 continue
             elif in_include_categories:
                 include_files.append(line)
@@ -251,19 +251,22 @@ def parse_lines(lines, validate_only=False, verbose=False):
             elif line == "--- End Category List ---":
                 in_category_list = False
                 if current_category:
-                    if 'Kind' in current_category and categorization_values and current_category['Kind'] not in categorization_values:
-                        raise ValueError("Invalid 'Kind' value '{0}' on line {1}. Expected one of {2}.".format(current_category['Kind'], line_number, categorization_values))
-                    if current_category.get('InSub', 0) != 0 and current_category['InSub'] not in category_ids:
+                    kind_split = current_category.get('Kind', '').split(",")
+                    current_category['Type'] = kind_split[0].strip()
+                    current_category['Level'] = kind_split[1].strip()
+                    if current_category['Type'] not in categorization_values:
+                        raise ValueError("Invalid 'Type' value '{0}' on line {1}. Expected one of {2}.".format(current_category['Type'], line_number, categorization_values))
+                    if current_category['InSub'] != 0 and current_category['InSub'] not in category_ids[current_category['Type']]:
                         raise ValueError("InSub value '{0}' on line {1} does not match any existing ID values.".format(current_category['InSub'], line_number))
                     current_service['Categories'].append(current_category)
-                    category_ids.add(current_category['ID'])
+                    category_ids[current_category['Type']].add(current_category['ID'])
                 current_category = None
                 if verbose:
                     print("Line {0}: {1} (Ending category list)".format(line_number, line))
                 continue
             elif line == "--- Start Categorization List ---":
                 in_categorization_list = True
-                current_service['Categorization'] = []
+                current_service['Categorization'] = {}
                 if verbose:
                     print("Line {0}: {1} (Starting categorization list)".format(line_number, line))
                 continue
@@ -271,20 +274,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 in_categorization_list = False
                 if verbose:
                     print("Line {0}: {1} (Ending categorization list)".format(line_number, line))
-                categorization_values = current_service['Categorization']
-                continue
-            elif line == "--- Start Description Body ---":
-                in_description_body = True
-                current_category['Description'] = []
-                if verbose:
-                    print("Line {0}: {1} (Starting description body)".format(line_number, line))
-                continue
-            elif line == "--- End Description Body ---":
-                in_description_body = False
-                if current_category and 'Description' in current_category:
-                    current_category['Description'] = "\n".join(current_category['Description'])
-                if verbose:
-                    print("Line {0}: {1} (Ending description body)".format(line_number, line))
+                categorization_values = set(current_service['Categorization'].keys())
                 continue
             elif current_service is not None:
                 key, value = parse_line(line)
@@ -293,9 +283,13 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 elif key == "Service":
                     current_service['Service'] = value
                 elif key == "Categories":
-                    current_service['Categorization'] = [category.strip() for category in value.split(",")]
+                    current_service['Categorization']['Categories'] = [category.strip() for category in value.split(",")]
                     if verbose:
-                        print("Line {0}: Categorization set to {1}".format(line_number, current_service['Categorization']))
+                        print("Line {0}: Categories set to {1}".format(line_number, current_service['Categorization']['Categories']))
+                elif key == "Forums":
+                    current_service['Categorization']['Forums'] = [forum.strip() for forum in value.split(",")]
+                    if verbose:
+                        print("Line {0}: Forums set to {1}".format(line_number, current_service['Categorization']['Forums']))
                 elif in_category_list:
                     if key == "Kind":
                         current_category['Kind'] = value
@@ -303,8 +297,8 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         current_category['ID'] = validate_non_negative_integer(value, "ID", line_number)
                     elif key == "InSub":
                         current_category['InSub'] = validate_non_negative_integer(value, "InSub", line_number)
-                    elif key == "Title":
-                        current_category['Title'] = value
+                    elif key == "Headline":
+                        current_category['Headline'] = value
                     elif key == "Description":
                         current_category['Description'] = value
                 elif line == "--- Start User List ---":
@@ -425,9 +419,13 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         if verbose:
                             print("Line {0}: Thread ID set to {1}".format(line_number, value))
                     elif key == "Category":
-                        current_thread['Category'] = value
+                        current_thread['Category'] = [category.strip() for category in value.split(",")]
                         if verbose:
-                            print("Line {0}: Category set to {1}".format(line_number, value))
+                            print("Line {0}: Category set to {1}".format(line_number, current_thread['Category']))
+                    elif key == "Forum":
+                        current_thread['Forum'] = [forum.strip() for forum in value.split(",")]
+                        if verbose:
+                            print("Line {0}: Forum set to {1}".format(line_number, current_thread['Forum']))
                     elif key == "Title":
                         current_thread['Title'] = value
                         if verbose:
@@ -502,14 +500,15 @@ def display_services(services):
         print("Service: {0}".format(service['Service']))
         print("Interactions: {0}".format(', '.join(service['Interactions'])))
         if 'Categorization' in service and service['Categorization']:
-            print("Categorization: {0}".format(', '.join(service['Categorization'])))
+            for category_type, category_levels in service['Categorization'].items():
+                print("{0}: {0}".format(category_type, ', '.join(category_levels)))
         print("Category List:")
         for category in service['Categories']:
-            print("  Kind: {0}".format(category.get('Kind', '')))
+            print("  Type: {0}, Level: {1}".format(category['Type'], category['Level']))
             print("  ID: {0}".format(category['ID']))
             print("  InSub: {0}".format(category['InSub']))
-            print("  Title: {0}".format(category.get('Title', '')))
-            print("  Description: {0}".format(category.get('Description', '').strip()))
+            print("  Headline: {0}".format(category['Headline']))
+            print("  Description: {0}".format(category['Description'].strip()))
             print("")
         print("User List:")
         for user_id, user_info in service['Users'].items():
@@ -526,8 +525,10 @@ def display_services(services):
             print("  --- Message Thread {0} ---".format(idx+1))
             if thread['Title']:
                 print("    Title: {0}".format(thread['Title']))
-            if thread.get('Category'):
-                print("    Category: {0}".format(thread['Category']))
+            if 'Category' in thread:
+                print("    Category: {0}".format(', '.join(thread['Category'])))
+            if 'Forum' in thread:
+                print("    Forum: {0}".format(', '.join(thread['Forum'])))
             for message in thread['Messages']:
                 print("    {0} ({1} on {2}): [{3}] Post ID: {4} Nested: {5}".format(
                     message['Author'], message['Time'], message['Date'], message['Type'], message['Post'], message['Nested']))
@@ -582,20 +583,18 @@ def services_to_string(services, line_ending="lf"):
         
         if 'Categorization' in service and service['Categorization']:
             lines.append("--- Start Categorization List ---")
-            lines.append("Categories: {0}".format(', '.join(service['Categorization'])))
+            for category_type, category_levels in service['Categorization'].items():
+                lines.append("{0}: {1}".format(category_type, ', '.join(category_levels)))
             lines.append("--- End Categorization List ---")
         
         if 'Categories' in service and service['Categories']:
             for category in service['Categories']:
                 lines.append("--- Start Category List ---")
-                if 'Kind' in category:
-                    lines.append("Kind: {0}".format(category['Kind']))
+                lines.append("Kind: {0}, {1}".format(category['Type'], category['Level']))
                 lines.append("ID: {0}".format(category['ID']))
                 lines.append("InSub: {0}".format(category['InSub']))
-                if 'Title' in category:
-                    lines.append("Title: {0}".format(category['Title']))
-                if 'Description' in category:
-                    lines.append("Description: {0}".format(category['Description']))
+                lines.append("Headline: {0}".format(category['Headline']))
+                lines.append("Description: {0}".format(category['Description']))
                 lines.append("--- End Category List ---")
         
         lines.append("--- Start Message List ---")
@@ -604,7 +603,9 @@ def services_to_string(services, line_ending="lf"):
             lines.append("--- Start Message Thread ---")
             lines.append("Thread: {0}".format(thread['Thread']))
             if 'Category' in thread:
-                lines.append("Category: {0}".format(thread['Category']))
+                lines.append("Category: {0}".format(', '.join(thread['Category'])))
+            if 'Forum' in thread:
+                lines.append("Forum: {0}".format(', '.join(thread['Forum'])))
             if 'Title' in thread:
                 lines.append("Title: {0}".format(thread['Title']))
             for message in thread['Messages']:
