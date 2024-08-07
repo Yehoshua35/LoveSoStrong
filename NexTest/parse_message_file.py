@@ -83,6 +83,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
     current_thread = None
     current_category = None
     categorization_values = []
+    category_ids = set()
     post_id = 1
 
     def parse_include_files(file_list):
@@ -183,6 +184,8 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print(f"Line {line_number}: {line} (Ending include categories section)")
                 if current_service:
                     current_service['Categories'].extend(parse_include_categories(include_files))
+                    for category in current_service['Categories']:
+                        category_ids.add(category['ID'])
                 continue
             elif in_include_categories:
                 include_files.append(line)
@@ -225,7 +228,10 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 if current_category:
                     if 'Kind' in current_category and categorization_values and current_category['Kind'] not in categorization_values:
                         raise ValueError(f"Invalid 'Kind' value '{current_category['Kind']}' on line {line_number}. Expected one of {categorization_values}.")
+                    if current_category.get('InSub', 0) != 0 and current_category['InSub'] not in category_ids:
+                        raise ValueError(f"InSub value '{current_category['InSub']}' on line {line_number} does not match any existing ID values.")
                     current_service['Categories'].append(current_category)
+                    category_ids.add(current_category['ID'])
                 current_category = None
                 if verbose:
                     print(f"Line {line_number}: {line} (Ending category list)")
@@ -265,6 +271,17 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     current_service['Categorization'] = [category.strip() for category in value.split(",")]
                     if verbose:
                         print(f"Line {line_number}: Categorization set to {current_service['Categorization']}")
+                elif in_category_list:
+                    if key == "Kind":
+                        current_category['Kind'] = value
+                    elif key == "ID":
+                        current_category['ID'] = validate_non_negative_integer(value, "ID", line_number)
+                    elif key == "InSub":
+                        current_category['InSub'] = validate_non_negative_integer(value, "InSub", line_number)
+                    elif key == "Title":
+                        current_category['Title'] = value
+                    elif key == "Description":
+                        current_category['Description'] = value
                 elif line == "--- Start User List ---":
                     in_user_list = True
                     if verbose:
@@ -465,8 +482,8 @@ def display_services(services):
             print(f"  Kind: {category.get('Kind', '')}")
             print(f"  ID: {category['ID']}")
             print(f"  InSub: {category['InSub']}")
-            print(f"  Label: {category['Label']}")
-            print(f"  Description: {category['Description'].strip()}")
+            print(f"  Title: {category.get('Title', '')}")
+            print(f"  Description: {category.get('Description', '').strip()}")
             print("")
         print("User List:")
         for user_id, user_info in service['Users'].items():
@@ -507,3 +524,82 @@ def save_to_json_file(services, json_filename):
     """ Save the services data structure to a JSON file """
     json_data = json.dumps(services, indent=2)
     save_compressed_file(json_data, json_filename)
+
+def services_to_string(services):
+    """ Convert the services data structure back to the original text format """
+    lines = []
+    for service in services:
+        lines.append("--- Start Archive Service ---")
+        lines.append(f"Entry: {service['Entry']}")
+        lines.append(f"Service: {service['Service']}")
+        
+        lines.append("--- Start User List ---")
+        for user_id, user_info in service['Users'].items():
+            lines.append("--- Start User Info ---")
+            lines.append(f"User: {user_id}")
+            lines.append(f"Name: {user_info['Name']}")
+            lines.append(f"Handle: {user_info['Handle']}")
+            if 'Location' in user_info:
+                lines.append(f"Location: {user_info['Location']}")
+            if 'Joined' in user_info:
+                lines.append(f"Joined: {user_info['Joined']}")
+            if 'Birthday' in user_info:
+                lines.append(f"Birthday: {user_info['Birthday']}")
+            if 'Bio' in user_info:
+                lines.append("Bio:")
+                lines.append("--- Start Bio Body ---")
+                lines.extend(user_info['Bio'].split("\n"))
+                lines.append("--- End Bio Body ---")
+            lines.append("--- End User Info ---")
+        lines.append("--- End User List ---")
+        
+        if 'Categorization' in service and service['Categorization']:
+            lines.append("--- Start Categorization List ---")
+            lines.append(f"Categories: {', '.join(service['Categorization'])}")
+            lines.append("--- End Categorization List ---")
+        
+        if 'Categories' in service and service['Categories']:
+            for category in service['Categories']:
+                lines.append("--- Start Category List ---")
+                if 'Kind' in category:
+                    lines.append(f"Kind: {category['Kind']}")
+                lines.append(f"ID: {category['ID']}")
+                lines.append(f"InSub: {category['InSub']}")
+                if 'Title' in category:
+                    lines.append(f"Title: {category['Title']}")
+                if 'Description' in category:
+                    lines.append(f"Description: {category['Description']}")
+                lines.append("--- End Category List ---")
+        
+        lines.append("--- Start Message List ---")
+        lines.append(f"Interactions: {', '.join(service['Interactions'])}")
+        for thread in service['MessageThreads']:
+            lines.append("--- Start Message Thread ---")
+            lines.append(f"Thread: {thread['Thread']}")
+            if 'Category' in thread:
+                lines.append(f"Category: {thread['Category']}")
+            if 'Title' in thread:
+                lines.append(f"Title: {thread['Title']}")
+            for message in thread['Messages']:
+                lines.append("--- Start Message Post ---")
+                lines.append(f"Author: {message['Author']}")
+                lines.append(f"Time: {message['Time']}")
+                lines.append(f"Date: {message['Date']}")
+                lines.append(f"Type: {message['Type']}")
+                lines.append(f"Post: {message['Post']}")
+                lines.append(f"Nested: {message['Nested']}")
+                lines.append("Message:")
+                lines.append("--- Start Message Body ---")
+                lines.extend(message['Message'].split("\n"))
+                lines.append("--- End Message Body ---")
+                lines.append("--- End Message Post ---")
+            lines.append("--- End Message Thread ---")
+        lines.append("--- End Message List ---")
+        
+        lines.append("--- End Archive Service ---")
+    return "\n".join(lines)
+
+def save_services_to_file(services, filename):
+    """ Save the services data structure to a file in the original text format """
+    data = services_to_string(services)
+    save_compressed_file(data, filename)
