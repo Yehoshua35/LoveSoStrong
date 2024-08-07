@@ -107,7 +107,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
     current_message = None
     current_thread = None
     current_category = None
-    categorization_values = {}
+    categorization_values = {'Categories': [], 'Forums': []}
     category_ids = {'Categories': set(), 'Forums': set()}
     post_id = 1
 
@@ -255,7 +255,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     current_category['Type'] = kind_split[0].strip()
                     current_category['Level'] = kind_split[1].strip()
                     if current_category['Type'] not in categorization_values:
-                        raise ValueError("Invalid 'Type' value '{0}' on line {1}. Expected one of {2}.".format(current_category['Type'], line_number, categorization_values))
+                        raise ValueError("Invalid 'Type' value '{0}' on line {1}. Expected one of {2}.".format(current_category['Type'], line_number, categorization_values.keys()))
                     if current_category['InSub'] != 0 and current_category['InSub'] not in category_ids[current_category['Type']]:
                         raise ValueError("InSub value '{0}' on line {1} does not match any existing ID values.".format(current_category['InSub'], line_number))
                     current_service['Categories'].append(current_category)
