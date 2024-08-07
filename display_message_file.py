@@ -1,6 +1,9 @@
 import argparse
 import sys
-from parse_message_file import parse_file, display_services, to_json, from_json, load_from_json_file, save_to_json_file
+from parse_message_file import (
+    parse_file, display_services, to_json, from_json,
+    load_from_json_file, save_to_json_file, services_to_string, save_services_to_file
+)
 
 def main():
     parser = argparse.ArgumentParser(description="Parse and display message file content.")
@@ -11,6 +14,7 @@ def main():
     parser.add_argument("--to-json", "-j", help="Convert the parsed data to JSON and save to a file")
     parser.add_argument("--from-json", "-J", help="Load the services data structure from a JSON file")
     parser.add_argument("--json-string", "-s", type=str, help="JSON string to parse if --from-json is specified")
+    parser.add_argument("--to-original", "-o", help="Convert the parsed data back to the original format and save to a file")
     
     args = parser.parse_args()
 
@@ -36,6 +40,9 @@ def main():
                 if args.to_json:
                     save_to_json_file(services, args.to_json)
                     print(f"Saved JSON to {args.to_json}")
+                elif args.to_original:
+                    save_services_to_file(services, args.to_original)
+                    print(f"Saved original format to {args.to_original}")
                 else:
                     display_services(services)
     except Exception as e:
