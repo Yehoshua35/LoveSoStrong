@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import json
 import gzip
 import bz2
+import sys
+import io
 
 try:
     import lzma
@@ -19,6 +21,8 @@ except ImportError:
     except ImportError:
         from StringIO import StringIO
 
+PY2 = sys.version_info[0] == 2
+
 def open_compressed_file(filename):
     """ Open a file, trying various compression methods if available. """
     if filename.endswith('.gz'):
@@ -31,7 +35,7 @@ def open_compressed_file(filename):
         else:
             raise ImportError("lzma module is not available")
     else:
-        return open(filename, 'r', encoding='utf-8')
+        return io.open(filename, 'r', encoding='utf-8')
 
 def save_compressed_file(data, filename):
     """ Save data to a file, using various compression methods if specified. """
@@ -48,7 +52,7 @@ def save_compressed_file(data, filename):
         else:
             raise ImportError("lzma module is not available")
     else:
-        with open(filename, 'w', encoding='utf-8') as file:
+        with io.open(filename, 'w', encoding='utf-8') as file:
             file.write(data)
 
 def parse_line(line):
