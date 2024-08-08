@@ -547,7 +547,7 @@ def display_services(services):
             print("  ID: {0}".format(category['ID']))
             print("  InSub: {0}".format(category['InSub']))
             print("  Headline: {0}".format(category['Headline']))
-            print("  Description: {0}".format(category['Description'].strip()))
+            print("  Description: {0}".format(category['Description'].strip().replace("\n", "\n    ")))
             print("")
         print("User List:")
         for user_id, user_info in service['Users'].items():
@@ -562,7 +562,7 @@ def display_services(services):
             print("")
         print("Message Threads:")
         for idx, thread in enumerate(service['MessageThreads']):
-            print("  --- Message Thread {0} ---".format(idx+1))
+            print("  --- Message Thread {0} ---".format(idx + 1))
             if thread['Title']:
                 print("    Title: {0}".format(thread['Title']))
             if 'Category' in thread:
@@ -575,7 +575,9 @@ def display_services(services):
                 print("    State: {0}".format(thread['State']))
             for message in thread['Messages']:
                 print("    {0} ({1} on {2}): [{3}] Post ID: {4} Nested: {5}".format(
-                    message['Author'], message['Time'], message['Date'], message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply'), message['Post'], message['Nested']))
+                    message['Author'], message['Time'], message['Date'],
+                    message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply'),
+                    message['Post'], message['Nested']))
                 print("      {0}".format(message['Message'].strip().replace("\n", "\n      ")))
             print("")
 
