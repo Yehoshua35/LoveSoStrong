@@ -59,9 +59,7 @@ def parse_line(line):
     """ Parse a line in the format 'var: value' and return the key and value. """
     parts = line.split(":", 1)
     if len(parts) == 2:
-        key = parts[0].strip()
-        value = parts[1].strip()
-        return key, value
+        return parts[0].strip(), parts[1].strip()
     return None, None
 
 def validate_non_negative_integer(value, variable_name, line_number):
@@ -86,21 +84,23 @@ def parse_string(data, validate_only=False, verbose=False):
 def parse_lines(lines, validate_only=False, verbose=False):
     services = []
     current_service = None
-    in_user_list = False
-    in_message_list = False
-    in_message_thread = False
-    in_user_info = False
-    in_message_post = False
-    in_bio_body = False
-    in_message_body = False
-    in_comment_section = False
-    in_include_service = False
-    in_include_users = False
-    in_include_messages = False
-    in_category_list = False
-    in_description_body = False
-    in_include_categories = False
-    in_categorization_list = False
+    in_section = {
+        'user_list': False,
+        'message_list': False,
+        'message_thread': False,
+        'user_info': False,
+        'message_post': False,
+        'bio_body': False,
+        'message_body': False,
+        'comment_section': False,
+        'include_service': False,
+        'include_users': False,
+        'include_messages': False,
+        'category_list': False,
+        'description_body': False,
+        'include_categories': False,
+        'categorization_list': False
+    }
     include_files = []
     user_id = None
     current_bio = None
@@ -145,66 +145,66 @@ def parse_lines(lines, validate_only=False, verbose=False):
         for line_number, line in enumerate(lines, 1):
             line = line.strip()
             if line == "--- Include Service Start ---":
-                in_include_service = True
+                in_section['include_service'] = True
                 include_files = []
                 if verbose:
                     print("Line {0}: {1} (Starting include service section)".format(line_number, line))
                 continue
             elif line == "--- Include Service End ---":
-                in_include_service = False
+                in_section['include_service'] = False
                 if verbose:
                     print("Line {0}: {1} (Ending include service section)".format(line_number, line))
                 services.extend(parse_include_files(include_files))
                 continue
-            elif in_include_service:
+            elif in_section['include_service']:
                 include_files.append(line)
                 if verbose:
                     print("Line {0}: {1} (Including file for service)".format(line_number, line))
                 continue
             elif line == "--- Include Users Start ---":
-                in_include_users = True
+                in_section['include_users'] = True
                 include_files = []
                 if verbose:
                     print("Line {0}: {1} (Starting include users section)".format(line_number, line))
                 continue
             elif line == "--- Include Users End ---":
-                in_include_users = False
+                in_section['include_users'] = False
                 if verbose:
                     print("Line {0}: {1} (Ending include users section)".format(line_number, line))
                 if current_service:
                     current_service['Users'].update(parse_include_users(include_files))
                 continue
-            elif in_include_users:
+            elif in_section['include_users']:
                 include_files.append(line)
                 if verbose:
                     print("Line {0}: {1} (Including file for users)".format(line_number, line))
                 continue
             elif line == "--- Include Messages Start ---":
-                in_include_messages = True
+                in_section['include_messages'] = True
                 include_files = []
                 if verbose:
                     print("Line {0}: {1} (Starting include messages section)".format(line_number, line))
                 continue
             elif line == "--- Include Messages End ---":
-                in_include_messages = False
+                in_section['include_messages'] = False
                 if verbose:
                     print("Line {0}: {1} (Ending include messages section)".format(line_number, line))
                 if current_service:
                     current_service['MessageThreads'].extend(parse_include_messages(include_files))
                 continue
-            elif in_include_messages:
+            elif in_section['include_messages']:
                 include_files.append(line)
                 if verbose:
                     print("Line {0}: {1} (Including file for messages)".format(line_number, line))
                 continue
             elif line == "--- Include Categories Start ---":
-                in_include_categories = True
+                in_section['include_categories'] = True
                 include_files = []
                 if verbose:
                     print("Line {0}: {1} (Starting include categories section)".format(line_number, line))
                 continue
             elif line == "--- Include Categories End ---":
-                in_include_categories = False
+                in_section['include_categories'] = False
                 if verbose:
                     print("Line {0}: {1} (Ending include categories section)".format(line_number, line))
                 if current_service:
@@ -215,7 +215,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         category['Level'] = kind_split[1].strip() if len(kind_split) > 1 else ""
                         category_ids[category['Type']].add(category['ID'])
                 continue
-            elif in_include_categories:
+            elif in_section['include_categories']:
                 include_files.append(line)
                 if verbose:
                     print("Line {0}: {1} (Including file for categories)".format(line_number, line))
@@ -232,27 +232,27 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print("Line {0}: {1} (Ending archive service)".format(line_number, line))
                 continue
             elif line == "--- Start Comment Section ---":
-                in_comment_section = True
+                in_section['comment_section'] = True
                 if verbose:
                     print("Line {0}: {1} (Starting comment section)".format(line_number, line))
                 continue
             elif line == "--- End Comment Section ---":
-                in_comment_section = False
+                in_section['comment_section'] = False
                 if verbose:
                     print("Line {0}: {1} (Ending comment section)".format(line_number, line))
                 continue
-            elif in_comment_section:
+            elif in_section['comment_section']:
                 if verbose:
                     print("Line {0}: {1} (Comment)".format(line_number, line))
                 continue
             elif line == "--- Start Category List ---":
-                in_category_list = True
+                in_section['category_list'] = True
                 current_category = {}
                 if verbose:
                     print("Line {0}: {1} (Starting category list)".format(line_number, line))
                 continue
             elif line == "--- End Category List ---":
-                in_category_list = False
+                in_section['category_list'] = False
                 if current_category:
                     kind_split = current_category.get('Kind', '').split(",")
                     current_category['Type'] = kind_split[0].strip() if len(kind_split) > 0 else ""
@@ -268,13 +268,13 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print("Line {0}: {1} (Ending category list)".format(line_number, line))
                 continue
             elif line == "--- Start Categorization List ---":
-                in_categorization_list = True
+                in_section['categorization_list'] = True
                 current_service['Categorization'] = {}
                 if verbose:
                     print("Line {0}: {1} (Starting categorization list)".format(line_number, line))
                 continue
             elif line == "--- End Categorization List ---":
-                in_categorization_list = False
+                in_section['categorization_list'] = False
                 if verbose:
                     print("Line {0}: {1} (Ending categorization list)".format(line_number, line))
                 categorization_values = current_service['Categorization']
@@ -293,7 +293,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     current_service['Categorization']['Forums'] = [forum.strip() for forum in value.split(",")]
                     if verbose:
                         print("Line {0}: Forums set to {1}".format(line_number, current_service['Categorization']['Forums']))
-                elif in_category_list:
+                elif in_section['category_list']:
                     if key == "Kind":
                         current_category['Kind'] = value
                     elif key == "ID":
@@ -305,74 +305,74 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     elif key == "Description":
                         current_category['Description'] = value
                 elif line == "--- Start User List ---":
-                    in_user_list = True
+                    in_section['user_list'] = True
                     if verbose:
                         print("Line {0}: {1} (Starting user list)".format(line_number, line))
                     continue
                 elif line == "--- End User List ---":
-                    in_user_list = False
+                    in_section['user_list'] = False
                     if verbose:
                         print("Line {0}: {1} (Ending user list)".format(line_number, line))
                     continue
                 elif line == "--- Start User Info ---":
-                    in_user_info = True
+                    in_section['user_info'] = True
                     if verbose:
                         print("Line {0}: {1} (Starting user info)".format(line_number, line))
                     continue
                 elif line == "--- End User Info ---":
-                    in_user_info = False
+                    in_section['user_info'] = False
                     user_id = None
                     if verbose:
                         print("Line {0}: {1} (Ending user info)".format(line_number, line))
                     continue
                 elif line == "--- Start Message List ---":
-                    in_message_list = True
+                    in_section['message_list'] = True
                     if verbose:
                         print("Line {0}: {1} (Starting message list)".format(line_number, line))
                     continue
                 elif line == "--- End Message List ---":
-                    in_message_list = False
+                    in_section['message_list'] = False
                     if verbose:
                         print("Line {0}: {1} (Ending message list)".format(line_number, line))
                     continue
                 elif line == "--- Start Message Thread ---":
-                    in_message_thread = True
+                    in_section['message_thread'] = True
                     current_thread = {'Title': '', 'Messages': []}
                     post_id = 1
                     if verbose:
                         print("Line {0}: {1} (Starting message thread)".format(line_number, line))
                     continue
                 elif line == "--- End Message Thread ---":
-                    in_message_thread = False
+                    in_section['message_thread'] = False
                     current_service['MessageThreads'].append(current_thread)
                     current_thread = None
                     if verbose:
                         print("Line {0}: {1} (Ending message thread)".format(line_number, line))
                     continue
                 elif line == "--- Start Message Post ---":
-                    in_message_post = True
+                    in_section['message_post'] = True
                     current_message = {}
                     if verbose:
                         print("Line {0}: {1} (Starting message post)".format(line_number, line))
                     continue
                 elif line == "--- End Message Post ---":
-                    in_message_post = False
+                    in_section['message_post'] = False
                     if current_message:
                         current_thread['Messages'].append(current_message)
                     current_message = None
                     if verbose:
                         print("Line {0}: {1} (Ending message post)".format(line_number, line))
                     continue
-                elif in_message_list and key == "Interactions":
+                elif in_section['message_list'] and key == "Interactions":
                     current_service['Interactions'] = [interaction.strip() for interaction in value.split(",")]
                     if verbose:
                         print("Line {0}: Interactions set to {1}".format(line_number, current_service['Interactions']))
-                elif in_message_list and key == "Status":
+                elif in_section['message_list'] and key == "Status":
                     current_service['Status'] = [status.strip() for status in value.split(",")]
                     if verbose:
                         print("Line {0}: Status set to {1}".format(line_number, current_service['Status']))
 
-                if in_user_list and in_user_info:
+                if in_section['user_list'] and in_section['user_info']:
                     if key == "User":
                         user_id = validate_non_negative_integer(value, "User", line_number)
                         current_service['Users'][user_id] = {'Bio': ""}
@@ -406,21 +406,21 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     elif line == "--- Start Bio Body ---":
                         if user_id is not None:
                             current_bio = []
-                            in_bio_body = True
+                            in_section['bio_body'] = True
                             if verbose:
                                 print("Line {0}: Starting bio body".format(line_number))
                     elif line == "--- End Bio Body ---":
                         if user_id is not None and current_bio is not None:
                             current_service['Users'][user_id]['Bio'] = "\n".join(current_bio)
                             current_bio = None
-                            in_bio_body = False
+                            in_section['bio_body'] = False
                             if verbose:
                                 print("Line {0}: Ending bio body".format(line_number))
-                    elif in_bio_body and current_bio is not None:
+                    elif in_section['bio_body'] and current_bio is not None:
                         current_bio.append(line)
                         if verbose:
                             print("Line {0}: Adding to bio body: {1}".format(line_number, line))
-                elif in_message_list and in_message_thread:
+                elif in_section['message_list'] and in_section['message_thread']:
                     if key == "Thread":
                         current_thread['Thread'] = validate_non_negative_integer(value, "Thread", line_number)
                         if verbose:
@@ -482,16 +482,16 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     elif line == "--- Start Message Body ---":
                         if current_message is not None:
                             current_message['Message'] = []
-                            in_message_body = True
+                            in_section['message_body'] = True
                             if verbose:
                                 print("Line {0}: Starting message body".format(line_number))
                     elif line == "--- End Message Body ---":
                         if current_message is not None and 'Message' in current_message:
                             current_message['Message'] = "\n".join(current_message['Message'])
-                            in_message_body = False
+                            in_section['message_body'] = False
                             if verbose:
                                 print("Line {0}: Ending message body".format(line_number))
-                    elif in_message_body and current_message is not None and 'Message' in current_message:
+                    elif in_section['message_body'] and current_message is not None and 'Message' in current_message:
                         current_message['Message'].append(line)
                         if verbose:
                             print("Line {0}: Adding to message body: {1}".format(line_number, line))
@@ -690,7 +690,7 @@ def remove_user(service, user_id):
 def add_category(service, kind, category_type, category_level, category_id, insub, headline, description):
     """ Add a category to the service """
     category = {
-        'Kind': f"{kind}, {category_level}",
+        'Kind': "{0}, {1}".format(kind, category_level),
         'ID': category_id,
         'InSub': insub,
         'Headline': headline,
