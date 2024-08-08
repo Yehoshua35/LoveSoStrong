@@ -99,7 +99,8 @@ def parse_lines(lines, validate_only=False, verbose=False):
         'category_list': False,
         'description_body': False,
         'include_categories': False,
-        'categorization_list': False
+        'categorization_list': False,
+        'info_body': False
     }
     include_files = []
     user_id = None
@@ -107,6 +108,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
     current_message = None
     current_thread = None
     current_category = None
+    current_info = None
     categorization_values = {'Categories': [], 'Forums': []}
     category_ids = {'Categories': set(), 'Forums': set()}
     post_id = 1
@@ -279,6 +281,21 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print("Line {0}: {1} (Ending categorization list)".format(line_number, line))
                 categorization_values = current_service['Categorization']
                 continue
+            elif line == "--- Start Info Body ---":
+                in_section['info_body'] = True
+                if current_service:
+                    current_info = []
+                    if verbose:
+                        print("Line {0}: {1} (Starting info body)".format(line_number, line))
+                continue
+            elif line == "--- End Info Body ---":
+                in_section['info_body'] = False
+                if current_service and current_info is not None:
+                    current_service['Info'] = "\n".join(current_info)
+                    current_info = None
+                    if verbose:
+                        print("Line {0}: {1} (Ending info body)".format(line_number, line))
+                continue
             elif current_service is not None:
                 key, value = parse_line(line)
                 if key == "Entry":
@@ -371,8 +388,12 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     current_service['Status'] = [status.strip() for status in value.split(",")]
                     if verbose:
                         print("Line {0}: Status set to {1}".format(line_number, current_service['Status']))
-
-                if in_section['user_list'] and in_section['user_info']:
+                elif key == "Info":
+                    current_info = []
+                    in_section['info_body'] = True
+                    if verbose:
+                        print("Line {0}: {1} (Starting info body)".format(line_number, line))
+                elif in_section['user_list'] and in_section['user_info']:
                     if key == "User":
                         user_id = validate_non_negative_integer(value, "User", line_number)
                         current_service['Users'][user_id] = {'Bio': ""}
@@ -510,6 +531,8 @@ def display_services(services):
     for service in services:
         print("Service Entry: {0}".format(service['Entry']))
         print("Service: {0}".format(service['Service']))
+        if 'Info' in service and service['Info']:
+            print("Info: {0}".format(service['Info'].strip().replace("\n", "\n      ")))
         print("Interactions: {0}".format(', '.join(service['Interactions'])))
         print("Status: {0}".format(', '.join(service.get('Status', []))))
         if 'Categorization' in service and service['Categorization']:
@@ -534,7 +557,8 @@ def display_services(services):
             print("    Location: {0}".format(user_info.get('Location', '')))
             print("    Joined: {0}".format(user_info.get('Joined', '')))
             print("    Birthday: {0}".format(user_info.get('Birthday', '')))
-            print("    Bio: {0}".format(user_info.get('Bio', '').strip()))
+            print("    Bio:")
+            print("      {0}".format(user_info.get('Bio', '').strip().replace("\n", "\n      ")))
             print("")
         print("Message Threads:")
         for idx, thread in enumerate(service['MessageThreads']):
@@ -552,7 +576,7 @@ def display_services(services):
             for message in thread['Messages']:
                 print("    {0} ({1} on {2}): [{3}] Post ID: {4} Nested: {5}".format(
                     message['Author'], message['Time'], message['Date'], message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply'), message['Post'], message['Nested']))
-                print("    {0}".format(message['Message'].strip()))
+                print("      {0}".format(message['Message'].strip().replace("\n", "\n      ")))
             print("")
 
 def to_json(services):
@@ -580,6 +604,11 @@ def services_to_string(services, line_ending="lf"):
         lines.append("--- Start Archive Service ---")
         lines.append("Entry: {0}".format(service['Entry']))
         lines.append("Service: {0}".format(service['Service']))
+        if 'Info' in service:
+            lines.append("Info:")
+            lines.append("--- Start Info Body ---")
+            lines.extend(["    " + line for line in service['Info'].split("\n")])
+            lines.append("--- End Info Body ---")
         
         lines.append("--- Start User List ---")
         for user_id, user_info in service['Users'].items():
@@ -596,7 +625,7 @@ def services_to_string(services, line_ending="lf"):
             if 'Bio' in user_info:
                 lines.append("Bio:")
                 lines.append("--- Start Bio Body ---")
-                lines.extend(user_info['Bio'].split("\n"))
+                lines.extend(["    " + line for line in user_info['Bio'].split("\n")])
                 lines.append("--- End Bio Body ---")
             lines.append("--- End User Info ---")
         lines.append("--- End User List ---")
@@ -614,7 +643,10 @@ def services_to_string(services, line_ending="lf"):
                 lines.append("ID: {0}".format(category['ID']))
                 lines.append("InSub: {0}".format(category['InSub']))
                 lines.append("Headline: {0}".format(category['Headline']))
-                lines.append("Description: {0}".format(category['Description']))
+                lines.append("Description:")
+                lines.append("--- Start Description Body ---")
+                lines.extend(["    " + line for line in category['Description'].split("\n")])
+                lines.append("--- End Description Body ---")
                 lines.append("--- End Category List ---")
         
         lines.append("--- Start Message List ---")
@@ -643,7 +675,7 @@ def services_to_string(services, line_ending="lf"):
                 lines.append("Nested: {0}".format(message['Nested']))
                 lines.append("Message:")
                 lines.append("--- Start Message Body ---")
-                lines.extend(message['Message'].split("\n"))
+                lines.extend(["    " + line for line in message['Message'].split("\n")])
                 lines.append("--- End Message Body ---")
                 lines.append("--- End Message Post ---")
             lines.append("--- End Message Thread ---")
@@ -668,7 +700,8 @@ def init_empty_service(entry, service_name):
         'MessageThreads': [],
         'Categories': [],
         'Interactions': [],
-        'Categorization': {}
+        'Categorization': {},
+        'Info': ''
     }
 
 def add_user(service, user_id, name, handle, location='', joined='', birthday='', bio=''):

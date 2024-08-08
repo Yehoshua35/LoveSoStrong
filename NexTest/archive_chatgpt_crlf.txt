@@ -1,6 +1,10 @@
 --- Start Archive Service ---
 Entry: 1
 Service: ChatGPT Interaction Log
+Info: 
+--- Start Info Body ---
+ChatGPT is a chatbot and virtual assistant developed by OpenAI and launched on November 30, 2022.
+--- End Info Body ---
 
 --- Start User List ---
 

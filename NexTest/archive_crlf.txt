@@ -1,6 +1,10 @@
 --- Start Archive Service ---
 Entry: 1
 Service: Message Board
+Info: 
+--- Start Info Body ---
+A simple message board for communicating about anything. ^_^
+--- End Info Body ---
 
 --- Start User List ---
 
