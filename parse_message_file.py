@@ -507,6 +507,9 @@ def display_services(services):
                 print("{0}: {1}".format(category_type, ', '.join(category_levels)))
         print("Category List:")
         for category in service['Categories']:
+            kind_split = category.get('Kind', '').split(",")
+            category['Type'] = kind_split[0].strip()
+            category['Level'] = kind_split[1].strip()
             print("  Type: {0}, Level: {1}".format(category['Type'], category['Level']))
             print("  ID: {0}".format(category['ID']))
             print("  InSub: {0}".format(category['InSub']))
@@ -668,7 +671,8 @@ def remove_user(service, user_id):
 def add_category(service, kind, category_type, category_level, category_id, insub, headline, description):
     """ Add a category to the service """
     category = {
-        'Kind': '{0}, {1}'.format(kind, category_level),
+        'Type': kind,
+        'Level': category_level,
         'ID': category_id,
         'InSub': insub,
         'Headline': headline,
@@ -733,3 +737,40 @@ def add_service(services, entry, service_name):
 def remove_service(services, entry):
     """ Remove an existing service from the list of services """
     services[:] = [service for service in services if service['Entry'] != entry]
+
+# Sample code to test the functions
+if __name__ == "__main__":
+    # Initialize an empty list of services
+    services = []
+
+    # Add a new service
+    new_service = add_service(services, entry=1, service_name="Message Board")
+
+    # Add users
+    add_user(new_service, user_id=1, name="Cool Dude 2k", handle="@cooldude2k", location="Somewhere", joined="Jul 1, 2024", birthday="Jul 1, 1987", bio="I'm just a very cool dude! ^_^")
+    add_user(new_service, user_id=2, name="Kazuki Suzuki", handle="@kazuki.suzuki", location="Anywhere", joined="Jul 1, 2024", birthday="Jun 1, 1987", bio="Hello it's just me Kazuki. :P")
+
+    # Add categories
+    add_category(new_service, kind="Categories", category_type="Category", category_level="Main Category", category_id=1, insub=0, headline="Game Maker 2k", description="Just talk about anything.")
+    add_category(new_service, kind="Forums", category_type="Forum", category_level="Main Forum", category_id=1, insub=0, headline="General Discussion", description="Just talk about anything.")
+
+    # Add message thread
+    add_message_thread(new_service, thread_id=1, title="Hello, World!", category="Game Maker 2k", forum="General Discussion")
+
+    # Add message posts
+    add_message_post(new_service, thread_id=1, author="@kazuki.suzuki", time="8:00 AM", date="Jul 1, 2024", msg_type="Post", post_id=1, nested=0, message="Hello, World! ^_^")
+    add_message_post(new_service, thread_id=1, author="@cooldude2k", time="10:00 AM", date="Jul 1, 2024", msg_type="Reply", post_id=2, nested=1, message="Why did you say 'Hello, World!' O_o")
+    add_message_post(new_service, thread_id=1, author="@kazuki.suzuki", time="12:00 PM", date="Jul 1, 2024", msg_type="Reply", post_id=3, nested=2, message="I don't know.\nI thought it would be cool. ^_^")
+    add_message_post(new_service, thread_id=1, author="@cooldude2k", time="2:00 PM", date="Jul 1, 2024", msg_type="Reply", post_id=4, nested=3, message="What ever dude! <_<")
+
+    # Add another service
+    another_service = add_service(services, entry=2, service_name="Another Board")
+
+    # Display the services
+    display_services(services)
+
+    # Remove a service
+    remove_service(services, entry=1)
+
+    # Display the services again
+    display_services(services)
