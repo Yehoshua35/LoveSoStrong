@@ -60,11 +60,14 @@ Just talk about anything.
 --- End Categorization List ---
 
 --- Start Message List ---
-Interactions: Post, Reply
+Interactions: Topic, Post, Reply
+Status: Pinned, Hot, Hot Pinned
 
 --- Start Message Thread ---
 Thread: 1
 Title: Hello, World!
+Type: Topic
+State: Pinned
 Category: Game Maker 2k
 Forum: General Discussion
 
@@ -72,7 +75,7 @@ Forum: General Discussion
 Author: @kazuki.suzuki
 Time: 8:00 AM
 Date: Jul 1, 2024
-Type: Post
+SubType: Post
 Post: 1
 Nested: 0
 Message:
@@ -85,7 +88,7 @@ Hello, World! ^_^
 Author: @cooldude2k
 Time: 10:00 AM
 Date: Jul 1, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -98,7 +101,7 @@ Why did you say "Hello, World!" O_o
 Author: @kazuki.suzuki
 Time: 12:00 PM
 Date: Jul 1, 2024
-Type: Reply
+SubType: Reply
 Post: 3
 Nested: 2
 Message:
@@ -112,7 +115,7 @@ I thought it would be cool. ^_^
 Author: @cooldude2k
 Time: 2:00 PM
 Date: Jul 1, 2024
-Type: Reply
+SubType: Reply
 Post: 4
 Nested: 3
 Message:

@@ -14,7 +14,7 @@ add_category(new_service, kind="Categories", category_type="Category", category_
 add_category(new_service, kind="Forums", category_type="Forum", category_level="Main Forum", category_id=1, insub=0, headline="General Discussion", description="Just talk about anything.")
 
 # Add message thread
-add_message_thread(new_service, thread_id=1, title="Hello, World!", category="Game Maker 2k", forum="General Discussion")
+add_message_thread(new_service, thread_id=1, title="Hello, World!", category="Game Maker 2k", forum="General Discussion", thread_type="Topic", state="Pinned")
 
 # Add message posts
 add_message_post(new_service, thread_id=1, author="@kazuki.suzuki", time="8:00 AM", date="Jul 1, 2024", msg_type="Post", post_id=1, nested=0, message="Hello, World! ^_^")

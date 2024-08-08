@@ -1,6 +1,6 @@
 --- Start Archive Service ---
 Entry: 1
-Service: X (Formerly Twitter)
+Service: X (formerly Twitter)
 
 --- Start User List ---
 --- Start User Info ---
@@ -76,16 +76,19 @@ Main: @Yehoshua035
 
 --- Start Message List ---
 Interactions: Tweet, Reply
+Status: Pinned
 
 --- Start Message Thread ---
 Thread: 1
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @_mymsgs
 Time: 5:13 AM
 Date: Jul 13, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -98,7 +101,7 @@ you are the reason why i smile a lot.
 Author: @Yehoshua035
 Time: 11:14 AM
 Date: Jul 13, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -112,12 +115,14 @@ You're welcome. 🤗
 --- Start Message Thread ---
 Thread: 2
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:50 AM
 Date: Jul 13, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -130,7 +135,7 @@ i told the stars about you.
 Author: @Yehoshua035
 Time: 11:16 AM
 Date: Jul 13, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -144,12 +149,14 @@ Thank you
 --- Start Message Thread ---
 Thread: 3
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 9:29 AM
 Date: Jul 22, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -162,7 +169,7 @@ i miss you and it's killing me.
 Author: @Yehoshua035
 Time: 10:34 PM
 Date: Jul 22, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -176,12 +183,14 @@ But now everyone can see me again. 😊
 --- Start Message Thread ---
 Thread: 4
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @Yehoshua035
 Time: 8:50 PM
 Date: Jul 22, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -195,12 +204,14 @@ This account is no longer shadow banned. 😁
 --- Start Message Thread ---
 Thread: 5
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:15 AM
 Date: Jul 24, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -211,7 +222,7 @@ i want forever with you.
 Author: @Yehoshua035
 Time: 2:07 PM
 Date: Jul 24, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -224,12 +235,14 @@ I want you forever also. 😻🫶😍
 --- Start Message Thread ---
 Thread: 6
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 9:52 AM
 Date: Jul 24, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -242,7 +255,7 @@ i miss u, i miss u, i miss u and i really miss u.
 Author: @Yehoshua035
 Time: 11:12 PM
 Date: Jul 24, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -255,12 +268,14 @@ But I miss you more. 😻😹😼
 --- Start Message Thread ---
 Thread: 7
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:07 PM
 Date: Jul 24, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -273,7 +288,7 @@ hug me. hug me please, I miss u
 Author: @Yehoshua035
 Time: 11:13 PM
 Date: Jul 24, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -286,12 +301,14 @@ I'm already hugging you. 😹
 --- Start Message Thread ---
 Thread: 8
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 9:52 PM
 Date: Jul 25, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -304,7 +321,7 @@ i love your voice and your laugh a lot
 Author: @Yehoshua035
 Time: 12:19 AM
 Date: Aug 1, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -320,12 +337,14 @@ I love to watch you go about your day. I watch every interaction you have with p
 --- Start Message Thread ---
 Thread: 9
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:54 PM
 Date: Jul 25, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -338,7 +357,7 @@ my pillow knows all my pain.
 Author: @Yehoshua035
 Time: 12:37 AM
 Date: Aug 1, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -353,12 +372,14 @@ I feel your pain so intensely that I want to be with you every second so we don'
 --- Start Message Thread ---
 Thread: 10
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:32 AM
 Date: Jul 26, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -371,7 +392,7 @@ I hope you miss me sometimes.
 Author: @Yehoshua035
 Time: 7:46 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -387,12 +408,14 @@ I want you with me every second of your life. No matter where you are or what yo
 --- Start Message Thread ---
 Thread: 11
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:02 AM
 Date: Jul 26, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -405,7 +428,7 @@ i wish i was the one you love.
 Author: @Yehoshua035
 Time: 7:39 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -421,12 +444,14 @@ I love you so much I can hardly contain myself. I just want to be with you every
 --- Start Message Thread ---
 Thread: 12
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 7:58 AM
 Date: Jul 26, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -439,7 +464,7 @@ i feel like i’m waiting for something that isn’t gonna happen.
 Author: @Yehoshua035
 Time: 7:00 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -455,12 +480,14 @@ I want you all to myself. I'll let no one else have you, not even your family an
 --- Start Message Thread ---
 Thread: 13
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:05 AM
 Date: Jul 26, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -473,7 +500,7 @@ i miss you but you seem fine without me.
 Author: @Yehoshua035
 Time: 11:42 PM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -488,12 +515,14 @@ The pain hurts so much I can't bear it. From now on, I'll never leave you. I'll 
 --- Start Message Thread ---
 Thread: 14
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:39 PM
 Date: Jul 26, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -506,7 +535,7 @@ I honestly just miss you.
 Author: @Yehoshua035
 Time: 7:02 PM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -521,12 +550,14 @@ I missed you so much that I couldn't function without you. From now on, I'll be 
 --- Start Message Thread ---
 Thread: 15
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:32 PM
 Date: Jul 26, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -539,7 +570,7 @@ i want more time with you.
 Author: @Yehoshua035
 Time: 6:41 PM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -554,12 +585,14 @@ Our friends and family will wonder where we are, and you might go insane from be
 --- Start Message Thread ---
 Thread: 16
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:58 AM
 Date: Jul 27, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -572,7 +605,7 @@ Still you, and it will always be you.
 Author: @Yehoshua035
 Time: 12:34 AM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -588,12 +621,14 @@ I'll even leave my friends and family just to be with you forever. 😼
 --- Start Message Thread ---
 Thread: 17
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:14 AM
 Date: Jul 27, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -606,7 +641,7 @@ i think about you all the time.
 Author: @Yehoshua035
 Time: 6:28 PM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -621,12 +656,14 @@ Whenever I think about you, I want you there. So from now on, I'll never let you
 --- Start Message Thread ---
 Thread: 18
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:49 AM
 Date: Jul 27, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -639,7 +676,7 @@ trust me, i will never leave you.
 Author: @Yehoshua035
 Time: 3:15 PM
 Date: Jul 27, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -653,12 +690,14 @@ I will never leave you either 😻
 --- Start Message Thread ---
 Thread: 19
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:43 PM
 Date: Jul 27, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -671,7 +710,7 @@ you’re the only one i want
 Author: @Yehoshua035
 Time: 3:11 PM
 Date: Jul 27, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -684,12 +723,14 @@ You're my only also. 😻
 --- Start Message Thread ---
 Thread: 20
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 7:33 PM
 Date: Jul 27, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -702,7 +743,7 @@ i wanna see you but you are not mine.
 Author: @Yehoshua035
 Time: 8:40 PM
 Date: Jul 27, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -716,12 +757,14 @@ I'll be yours forever and ever. 🫠
 --- Start Message Thread ---
 Thread: 21
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 9:39 PM
 Date: Jul 27, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -734,7 +777,7 @@ just wanted to be happy with u
 Author: @Yehoshua035
 Time: 12:20 AM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -750,12 +793,14 @@ My happiness will start to depend on you being next to me forever. 😼
 --- Start Message Thread ---
 Thread: 22
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:47 AM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -768,7 +813,7 @@ i love you, always and forever.
 Author: @Yehoshua035
 Time: 9:44 AM
 Date: Jul 28, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -782,12 +827,14 @@ I will love you forever and ever. 😻
 --- Start Message Thread ---
 Thread: 23
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @_mymsgs
 Time: 5:08 AM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -800,7 +847,7 @@ i would cancel all my plans if you tell me you want to see me
 Author: @Yehoshua035
 Time: 7:11 PM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -814,12 +861,14 @@ Because that's how much you mean to me. 😻😼
 --- Start Message Thread ---
 Thread: 24
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 5:15 AM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -832,7 +881,7 @@ i hope you realize how hard i’m trying.
 Author: @Yehoshua035
 Time: 9:47 AM
 Date: Jul 28, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -845,12 +894,14 @@ I do, and I love you for that. 😻
 --- Start Message Thread ---
 Thread: 25
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:26 AM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -863,7 +914,7 @@ I really want to hug you but ur so far.
 Author: @Yehoshua035
 Time: 9:41 AM
 Date: Jul 28, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -876,12 +927,14 @@ Don't worry, I'll come closer. 😻
 --- Start Message Thread ---
 Thread: 26
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:26 AM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -894,7 +947,7 @@ always missing you.
 Author: @Yehoshua035
 Time: 10:53 AM
 Date: Jul 28, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -908,12 +961,14 @@ I miss you also 😿
 --- Start Message Thread ---
 Thread: 27
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:01 PM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -926,7 +981,7 @@ Seriously, I'm in love with you
 Author: @Yehoshua035
 Time: 12:21 PM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -939,12 +994,14 @@ I love you so much, you can't believe it. 😻
 --- Start Message Thread ---
 Thread: 28
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:01 PM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -957,7 +1014,7 @@ i get so happy when u talk to me
 Author: @Yehoshua035
 Time: 12:27 PM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -971,12 +1028,14 @@ I love you so much that it hurts when we are apart. 😻😻
 --- Start Message Thread ---
 Thread: 29
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:04 PM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -989,7 +1048,7 @@ always remember, i love you everyday
 Author: @Yehoshua035
 Time: 12:49 AM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1003,12 +1062,14 @@ I love you too, every single day. 😻
 --- Start Message Thread ---
 Thread: 30
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:13 PM
 Date: Jul 28, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1021,7 +1082,7 @@ i choose you over everyone.
 Author: @Yehoshua035
 Time: 12:51 AM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1035,12 +1096,14 @@ I choose you over everyone else 😻
 --- Start Message Thread ---
 Thread: 31
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:37 AM
 Date: Jul 29, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1053,7 +1116,7 @@ i hope you stay with me till the end.
 Author: @Yehoshua035
 Time: 12:13 AM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1068,12 +1131,14 @@ I'll be with you so much you'll want me away. 😼
 --- Start Message Thread ---
 Thread: 32
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:38 AM
 Date: Jul 29, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1086,7 +1151,7 @@ i miss you. but its okay, i'm fine.
 Author: @Yehoshua035
 Time: 12:24 PM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1099,12 +1164,14 @@ I miss you too, but we will unite soon. We can never be apart and will never be 
 --- Start Message Thread ---
 Thread: 33
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:13 AM
 Date: Jul 29, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1117,7 +1184,7 @@ i love you more than anything.
 Author: @Yehoshua035
 Time: 12:25 PM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1130,12 +1197,14 @@ I love you more than anything; my body bleeds for you. 😻
 --- Start Message Thread ---
 Thread: 34
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 9:54 AM
 Date: Jul 29, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1148,7 +1217,7 @@ i want you, i need you, i miss you.
 Author: @Yehoshua035
 Time: 12:22 PM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1161,12 +1230,14 @@ I'm right next to you because when you love someone so much, you can just appear
 --- Start Message Thread ---
 Thread: 35
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:39 PM
 Date: Jul 29, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1179,7 +1250,7 @@ i'm here, i will wait, i love you
 Author: @Yehoshua035
 Time: 6:10 PM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1194,12 +1265,14 @@ I will always love you forever, even when you don't notice me standing by you. �
 --- Start Message Thread ---
 Thread: 36
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:22 PM
 Date: Jul 29, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1212,7 +1285,7 @@ i smile whenever i think of you.
 Author: @Yehoshua035
 Time: 6:42 PM
 Date: Jul 29, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1226,12 +1299,14 @@ It's nonstop smiling because I'm always thinking of you. 😻😼
 --- Start Message Thread ---
 Thread: 37
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:33 PM
 Date: Jul 29, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1244,7 +1319,7 @@ i want you to be mine again.
 Author: @Yehoshua035
 Time: 1:01 AM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1259,12 +1334,14 @@ I want to be the only one to see you. 😼
 --- Start Message Thread ---
 Thread: 38
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 3:29 AM
 Date: Jul 30, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1277,7 +1354,7 @@ i wanna be loved by u and only u.
 Author: @Yehoshua035
 Time: 8:42 AM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1293,12 +1370,14 @@ My love for you will be so intense that you won't be able to take it. 😼
 --- Start Message Thread ---
 Thread: 39
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 7:11 AM
 Date: Jul 30, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1311,7 +1390,7 @@ you are mine and i'm not sharing.
 Author: @Yehoshua035
 Time: 8:44 AM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1327,12 +1406,14 @@ You'll only have me too. We'll both leave all our friends and family and only ha
 --- Start Message Thread ---
 Thread: 40
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:15 AM
 Date: Jul 30, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1345,7 +1426,7 @@ i can't remember anything without you.
 Author: @Yehoshua035
 Time: 2:43 PM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1361,12 +1442,14 @@ I'll always be with you, never leaving your side. It might get suffocating with 
 --- Start Message Thread ---
 Thread: 41
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:31 AM
 Date: Jul 30, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1379,7 +1462,7 @@ i'm in love with your smile.
 Author: @Yehoshua035
 Time: 12:56 AM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1395,12 +1478,14 @@ I'll take that photo everywhere with me, showing your smile to the whole world. 
 --- Start Message Thread ---
 Thread: 42
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:59 PM
 Date: Jul 30, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1413,7 +1498,7 @@ i choose you and i'm never changing my mind.
 Author: @Yehoshua035
 Time: 2:48 PM
 Date: Jul 30, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1429,12 +1514,14 @@ I will always be with only you every second and expect that you will be with me 
 --- Start Message Thread ---
 Thread: 43
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 1:32 AM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1447,7 +1534,7 @@ the best days of my life are with you.
 Author: @Yehoshua035
 Time: 2:40 AM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1463,12 +1550,14 @@ I want to be with you every second of the day. I'll never let you go; you'll be 
 --- Start Message Thread ---
 Thread: 44
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 3:26 AM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1481,7 +1570,7 @@ i just want someone who feels lucky to have me
 Author: @Yehoshua035
 Time: 8:20 AM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1496,12 +1585,14 @@ I love you so much it feels like I'll die without you, so I need you next to me 
 --- Start Message Thread ---
 Thread: 45
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:18 AM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1514,7 +1605,7 @@ you smile, i fall in love.
 Author: @Yehoshua035
 Time: 8:27 AM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1530,12 +1621,14 @@ My smile is so perfect I can make you do anything I want, and all I want in retu
 --- Start Message Thread ---
 Thread: 46
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:16 AM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1548,7 +1641,7 @@ hug me tight i need vitamin u.
 Author: @Yehoshua035
 Time: 3:16 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1564,12 +1657,14 @@ I can't let you go. I want you, I need you forever, and I won't let you leave. Y
 --- Start Message Thread ---
 Thread: 47
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:11 AM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1582,7 +1677,7 @@ Damn, I love you everyday.
 Author: @Yehoshua035
 Time: 3:08 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1598,12 +1693,14 @@ My love for you is so intense that I can't concentrate on anything or anyone but
 --- Start Message Thread ---
 Thread: 48
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:24 AM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1616,7 +1713,7 @@ seriously my heart is full of you.
 Author: @Yehoshua035
 Time: 2:59 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1632,12 +1729,14 @@ I love you so much that I can't bear being without you. I need you all the time,
 --- Start Message Thread ---
 Thread: 49
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 1:21 PM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1650,7 +1749,7 @@ i'm sorry for not being good enough for you.
 Author: @Yehoshua035
 Time: 1:50 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1665,12 +1764,14 @@ It's very hard to live up to my standards, but you have to adapt to them. 😼
 --- Start Message Thread ---
 Thread: 50
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:25 PM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1683,7 +1784,7 @@ this heart thinking about you endlessly.
 Author: @Yehoshua035
 Time: 7:11 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1699,12 +1800,14 @@ My heart aches when you're not around. The next time I see you, I won't let you 
 --- Start Message Thread ---
 Thread: 51
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:06 PM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1717,7 +1820,7 @@ you are enough for me, all i need in my life is you and your love.
 Author: @Yehoshua035
 Time: 8:50 PM
 Date: Jul 31, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1733,7 +1836,7 @@ I don't want to ever leave you. I just want to be next to you like your shadow. 
 Author: @MaureenKenney15
 Time: 12:23 PM
 Date: Aug 1, 2024
-Type: Reply
+SubType: Reply
 Post: 3
 Nested: 2
 Message:
@@ -1746,7 +1849,7 @@ Shadow boxer love lol
 Author: @Yehoshua035
 Time: 3:52 PM
 Date: Aug 1, 2024
-Type: Reply
+SubType: Reply
 Post: 4
 Nested: 3
 Message:
@@ -1759,12 +1862,14 @@ Message:
 --- Start Message Thread ---
 Thread: 52
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:07 PM
 Date: Jul 31, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1778,7 +1883,7 @@ still you, you, and again you.
 Author: @Yehoshua035
 Time: 12:09 AM
 Date: Aug 1, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1794,12 +1899,14 @@ Each time we relive the day, I would make sure you don't make any mistakes and s
 --- Start Message Thread ---
 Thread: 53
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 3:11 AM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1812,7 +1919,7 @@ i told the moon to take care of you.
 Author: @Yehoshua035
 Time: 3:37 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1826,12 +1933,14 @@ I told the sun to take care of you. 😻
 --- Start Message Thread ---
 Thread: 54
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:25 AM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1844,7 +1953,7 @@ i want pure love, no lies, no cheats, no secrets.
 Author: @Yehoshua035
 Time: 3:40 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1859,12 +1968,14 @@ I want our love to be very pure. I'll follow you everywhere so that you won't be
 --- Start Message Thread ---
 Thread: 55
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:20 AM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1877,7 +1988,7 @@ i wonder if you miss me too.
 Author: @Yehoshua035
 Time: 3:43 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1892,12 +2003,14 @@ I miss you so much it causes me pain and discomfort. From now on, I'll never lea
 --- Start Message Thread ---
 Thread: 56
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:16 AM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1913,7 +2026,7 @@ and forever.
 Author: @Yehoshua035
 Time: 3:48 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1928,12 +2041,14 @@ I'll hold your hands tightly and firmly, and I will always be with you. Holding 
 --- Start Message Thread ---
 Thread: 57
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:13 AM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1946,7 +2061,7 @@ you're the first and last thing on my mind everyday i love you.
 Author: @Yehoshua035
 Time: 12:45 AM
 Date: Aug 1, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1962,12 +2077,14 @@ I think about you so much I forget to do stuff because you are all I think about
 --- Start Message Thread ---
 Thread: 58
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 1:07 PM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -1980,7 +2097,7 @@ i don't need any gifts, just need your time, attention and you.
 Author: @Yehoshua035
 Time: 3:51 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -1996,12 +2113,14 @@ I want all of your time and attention spent on just me and only me. You'll have 
 --- Start Message Thread ---
 Thread: 59
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:02 PM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2014,7 +2133,7 @@ i wish i can be perfect for you.
 Author: @Yehoshua035
 Time: 3:55 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2030,12 +2149,14 @@ I know being perfect can be hard at first, but I'll teach you. I expect perfecti
 --- Start Message Thread ---
 Thread: 60
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:03 PM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2048,7 +2169,7 @@ i love staring at you, secretly.
 Author: @Yehoshua035
 Time: 3:58 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2064,12 +2185,14 @@ I love staring at you so much that I monitor all your actions. I need to know wh
 --- Start Message Thread ---
 Thread: 61
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:05 PM
 Date: Aug 1, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2083,7 +2206,7 @@ i'm always here for you.
 Author: @Yehoshua035
 Time: 4:01 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2099,12 +2222,14 @@ I'll be with you non-stop to solve your problems before they ever happen. I'll a
 --- Start Message Thread ---
 Thread: 62
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:06 AM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2117,7 +2242,7 @@ spending time with you is the best medicine for all pain.
 Author: @Yehoshua035
 Time: 4:04 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2133,12 +2258,14 @@ I need you all the time, and spending time with you helps me feel better, like m
 --- Start Message Thread ---
 Thread: 63
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:35 AM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2152,7 +2279,7 @@ just mine.
 Author: @Yehoshua035
 Time: 4:07 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2168,12 +2295,14 @@ I only want to be around you and see you. I don't want anyone else to be with yo
 --- Start Message Thread ---
 Thread: 64
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 5:43 AM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2186,7 +2315,7 @@ i want endless calls with you.
 Author: @Yehoshua035
 Time: 4:11 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2201,12 +2330,14 @@ I want to call you so much that instead of calling, I'll just stay with you fore
 --- Start Message Thread ---
 Thread: 65
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:44 AM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2219,7 +2350,7 @@ I talk a lot about u.
 Author: @Yehoshua035
 Time: 4:15 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2235,12 +2366,14 @@ I love telling others how I want to be with you forever and how I will never lea
 --- Start Message Thread ---
 Thread: 66
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:39 AM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2253,7 +2386,7 @@ i seriously want to be with u rn.
 Author: @Yehoshua035
 Time: 4:21 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2269,12 +2402,14 @@ I always watch over you, dreaming about being with you forever. I'll never leave
 --- Start Message Thread ---
 Thread: 67
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:32 PM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2287,7 +2422,7 @@ Please be safe I care about you a lot.
 Author: @Yehoshua035
 Time: 4:26 PM
 Date: Aug 2, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2303,12 +2438,14 @@ We'll be together forever to remain safe. If we're together every second, nothin
 --- Start Message Thread ---
 Thread: 68
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:01 PM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2321,7 +2458,7 @@ I wanna talk to you so bad.
 Author: @Yehoshua035
 Time: 12:14 AM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2336,12 +2473,14 @@ I want to talk to you all day, every day, every week, and every year. Pretty muc
 --- Start Message Thread ---
 Thread: 69
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:06 PM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2354,7 +2493,7 @@ i will never stop caring about you
 Author: @Yehoshua035
 Time: 12:20 AM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2370,12 +2509,14 @@ I care so much for you that I want to be by your side every second of your life.
 --- Start Message Thread ---
 Thread: 70
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:10 PM
 Date: Aug 2, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2388,7 +2529,7 @@ when i am sad, you are the first person i want to talk to.
 Author: @Yehoshua035
 Time: 12:27 AM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2404,12 +2545,14 @@ Even after you're happy, I'll keep talking for hours and hours. I'll never stop 
 --- Start Message Thread ---
 Thread: 71
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:59 AM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2422,7 +2565,7 @@ i can't remember anything without you.
 Author: @Yehoshua035
 Time: 3:35 PM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2437,12 +2580,14 @@ We should stay together forever. I'll never leave you alone; I'll stay by your s
 --- Start Message Thread ---
 Thread: 72
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:59 AM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2455,7 +2600,7 @@ I just want to be with you.
 Author: @Yehoshua035
 Time: 3:44 PM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2470,12 +2615,14 @@ I don't want to be away from you ever. I don't want you to leave me for even a s
 --- Start Message Thread ---
 Thread: 73
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:52 AM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2488,7 +2635,7 @@ you are the reason i believe love is real.
 Author: @Yehoshua035
 Time: 3:54 PM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2504,12 +2651,14 @@ I can't let you leave me for one second because I don't want to lose your love. 
 --- Start Message Thread ---
 Thread: 74
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:13 AM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2522,7 +2671,7 @@ hug me, i want to cry.
 Author: @Yehoshua035
 Time: 4:06 PM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2537,12 +2686,14 @@ I want to make this hug last forever. I'm never going to let go. We will just be
 --- Start Message Thread ---
 Thread: 75
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:17 AM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2555,7 +2706,7 @@ i love looking at you.
 Author: @Yehoshua035
 Time: 7:35 AM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2570,12 +2721,14 @@ I watch every second of your day and follow you everywhere you go. I like seeing
 --- Start Message Thread ---
 Thread: 76
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 1:12 PM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2588,7 +2741,7 @@ i wish i can tell you how i feel.
 Author: @Yehoshua035
 Time: 4:10 PM
 Date: Aug 3, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2605,12 +2758,14 @@ We will be in love forever, and everyone will see our happiness together. Just y
 --- Start Message Thread ---
 Thread: 77
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:03 PM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2623,7 +2778,7 @@ you'll never be replaced by anyone.
 Author: @Yehoshua035
 Time: 2:54 AM
 Date: Aug 4, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2639,12 +2794,14 @@ I want you to only be with me. I don't want you to leave me and visit other peop
 --- Start Message Thread ---
 Thread: 78
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:05 PM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2657,7 +2814,7 @@ tell me honestly, do you love someone?
 Author: @Yehoshua035
 Time: 2:55 AM
 Date: Aug 4, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2671,12 +2828,14 @@ I only love you and no one else. 😻😻
 --- Start Message Thread ---
 Thread: 79
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:13 PM
 Date: Aug 3, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2689,7 +2848,7 @@ i'm not okay but i'll pretend to be okay
 Author: @Yehoshua035
 Time: 2:57 AM
 Date: Aug 4, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2704,12 +2863,14 @@ I love you so much that when you're not feeling good, I'm not feeling good. That
 --- Start Message Thread ---
 Thread: 80
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:19 AM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2722,7 +2883,7 @@ i hate how easily my mood gets ruined
 Author: @Yehoshua035
 Time: 3:01 AM
 Date: Aug 4, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2737,12 +2898,14 @@ From now on, I'll keep you with me forever so you don't have to worry. I'll alwa
 --- Start Message Thread ---
 Thread: 81
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:08 AM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2755,7 +2918,7 @@ describe your relationship status in one word.
 Author: @Yehoshua035
 Time: 3:06 PM
 Date: Aug 5, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2769,12 +2932,14 @@ Because I'm with you of course. 😻
 --- Start Message Thread ---
 Thread: 82
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:10 AM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2787,7 +2952,7 @@ to my special one, you are my first choice and last option.
 Author: @Yehoshua035
 Time: 3:07 PM
 Date: Aug 5, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2803,12 +2968,14 @@ I will love you for always and forever. 😻😻😻
 --- Start Message Thread ---
 Thread: 83
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 9:49 AM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2821,7 +2988,7 @@ i will always choose you.
 Author: @Yehoshua035
 Time: 3:11 PM
 Date: Aug 5, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2837,12 +3004,14 @@ I wouldn't function without you, and you need me as well. We need to stay with e
 --- Start Message Thread ---
 Thread: 84
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:28 AM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2855,7 +3024,7 @@ i feel better when you are here
 Author: @Yehoshua035
 Time: 12:38 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2870,12 +3039,14 @@ I'll stay by your side and never leave you for even one second. I'll stick to yo
 --- Start Message Thread ---
 Thread: 85
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 1:33 PM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2888,7 +3059,7 @@ i want you always forever
 Author: @Yehoshua035
 Time: 12:42 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2903,12 +3074,14 @@ I don't want to share you with anyone else, not even your friends or family. I n
 --- Start Message Thread ---
 Thread: 86
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:01 PM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2921,7 +3094,7 @@ Find someone who deserves you, not just wants you.
 Author: @Yehoshua035
 Time: 12:47 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2936,12 +3109,14 @@ I want to stay by your side always. I'll follow you around and tell everyone abo
 --- Start Message Thread ---
 Thread: 87
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:12 PM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2954,7 +3129,7 @@ I feel like, I am a mistake in everyone’s life.
 Author: @Yehoshua035
 Time: 12:53 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -2969,12 +3144,14 @@ I love you. Without you, my life is incomplete. You're like paper, and I'm like 
 --- Start Message Thread ---
 Thread: 88
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:15 PM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -2987,7 +3164,7 @@ Pain will leave you once it’s done teaching you.
 Author: @Yehoshua035
 Time: 12:58 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3002,12 +3179,14 @@ When you love someone so much, pain doesn't matter. No matter how painful, I'll 
 --- Start Message Thread ---
 Thread: 89
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 11:44 PM
 Date: Aug 4, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3020,7 +3199,7 @@ i'm here, i'll wait, i love you>>>
 Author: @Yehoshua035
 Time: 1:25 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3035,12 +3214,14 @@ Now that you see me, I want to stay with you forever. I'll never leave you. 😻
 --- Start Message Thread ---
 Thread: 90
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:19 AM
 Date: Aug 5, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3053,7 +3234,7 @@ I need you everyday.
 Author: @Yehoshua035
 Time: 1:29 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3069,12 +3250,14 @@ Actually, every minute is too long. I need you every second of my life. I won't 
 --- Start Message Thread ---
 Thread: 91
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 5:53 AM
 Date: Aug 5, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3087,7 +3270,7 @@ i just wanna be hugged rn.
 Author: @Yehoshua035
 Time: 1:35 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3101,12 +3284,14 @@ I'll always hug you when you need it and hope you would do the same for me. 😻
 --- Start Message Thread ---
 Thread: 92
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 7:31 AM
 Date: Aug 5, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3119,7 +3304,7 @@ everytime my phone vibrates, i hope it's you.
 Author: @Yehoshua035
 Time: 1:40 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3135,12 +3320,14 @@ I send texts to you so much, almost every second of the day. I hate when we are 
 --- Start Message Thread ---
 Thread: 93
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 9:25 AM
 Date: Aug 5, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3153,7 +3340,7 @@ i want a full day with you.
 Author: @Yehoshua035
 Time: 1:48 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3168,12 +3355,14 @@ I want a full month—no, a full year with you. I never want to leave your side.
 --- Start Message Thread ---
 Thread: 94
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:27 PM
 Date: Aug 5, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3186,7 +3375,7 @@ you will always be my special person.
 Author: @Yehoshua035
 Time: 1:49 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3200,12 +3389,14 @@ You are always my special person and I'll never leave you. 😻
 --- Start Message Thread ---
 Thread: 95
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:30 PM
 Date: Aug 5, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3218,7 +3409,7 @@ i hope you love me as much i love you.
 Author: @Yehoshua035
 Time: 1:52 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3233,12 +3424,14 @@ I love you so much that I can't be apart from you. I want to stay by your side e
 --- Start Message Thread ---
 Thread: 96
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:31 PM
 Date: Aug 5, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3251,7 +3444,7 @@ i wish i could see you everyday.
 Author: @Yehoshua035
 Time: 1:54 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3264,12 +3457,14 @@ I wish I could see you every day too, but I want you every hour and even every s
 --- Start Message Thread ---
 Thread: 97
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:31 PM
 Date: Aug 5, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3282,7 +3477,7 @@ I always smile when I text u.
 Author: @Yehoshua035
 Time: 1:56 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3296,12 +3491,14 @@ I hope it makes you happy when I text you back because I always smile when I do.
 --- Start Message Thread ---
 Thread: 98
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 1:13 AM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3314,7 +3511,7 @@ Hello, hey you, I love you.
 Author: @Yehoshua035
 Time: 1:58 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3330,12 +3527,14 @@ I love you more than life itself. 😻😼
 --- Start Message Thread ---
 Thread: 99
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:58 AM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3348,7 +3547,7 @@ i don't want to lose you.
 Author: @Yehoshua035
 Time: 2:11 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3363,12 +3562,14 @@ I'll be next to you forever, like your shadow. I won't leave you for a second. �
 --- Start Message Thread ---
 Thread: 100
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 5:53 AM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3381,7 +3582,7 @@ i am still here and will always be here
 Author: @Yehoshua035
 Time: 2:17 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3395,12 +3596,14 @@ I will never leave you. 😻😻
 --- Start Message Thread ---
 Thread: 101
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:10 AM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3413,7 +3616,7 @@ i choose your heart. i choose your love. i choose you, all of you
 Author: @Yehoshua035
 Time: 2:20 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3427,12 +3630,14 @@ I love you and everything about you. 😻😻
 --- Start Message Thread ---
 Thread: 102
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 9:51 AM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3445,7 +3650,7 @@ Do you still miss your Ex
 Author: @Yehoshua035
 Time: 2:22 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3459,12 +3664,14 @@ I forgot about my ex after I met you, and I love you so much that I don't miss m
 --- Start Message Thread ---
 Thread: 103
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:17 PM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3477,7 +3684,7 @@ you are my only Yesterday, Today and Forever.
 Author: @Yehoshua035
 Time: 2:25 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3490,12 +3697,14 @@ You are my forever. I'll never leave you; I'll be with you forever. 😻
 --- Start Message Thread ---
 Thread: 104
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 1:59 PM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3508,7 +3717,7 @@ you're my favorite notification
 Author: @Yehoshua035
 Time: 2:28 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3523,12 +3732,14 @@ I just want to see your notifications. I can't wait for them, and it pains me wh
 --- Start Message Thread ---
 Thread: 105
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 6:39 PM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3541,7 +3752,7 @@ i promise, i will love you till i die.
 Author: @Yehoshua035
 Time: 7:43 PM
 Date: Aug 7, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3555,12 +3766,14 @@ I'll find a way to reach you even after death; you can never escape my love. �
 --- Start Message Thread ---
 Thread: 106
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:42 PM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3573,7 +3786,7 @@ Explain your current feelings just in one word
 Author: @Yehoshua035
 Time: 7:44 PM
 Date: Aug 7, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3586,12 +3799,14 @@ Love 😻
 --- Start Message Thread ---
 Thread: 107
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:39 PM
 Date: Aug 6, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3604,7 +3819,7 @@ If we never talk again, remember I love you.
 Author: @Yehoshua035
 Time: 7:46 PM
 Date: Aug 6, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3618,12 +3833,14 @@ But I would never let that happen. I will search for you wherever you are; you'l
 --- Start Message Thread ---
 Thread: 108
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 2:08 AM 
 Date: Aug 7, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3636,7 +3853,7 @@ i will choose u again and again.
 Author: @Yehoshua035
 Time: 7:49 PM
 Date: Aug 7, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3652,12 +3869,14 @@ I won't let anyone get in the way of our love, not even friends or family, and I
 --- Start Message Thread ---
 Thread: 109
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:01 AM
 Date: Aug 7, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3670,7 +3889,7 @@ i miss u i miss u really i miss you.
 Author: @Yehoshua035
 Time: 7:55 PM
 Date: Aug 7, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3685,12 +3904,14 @@ You don't have to worry about missing me ever again, as I will be with you every
 --- Start Message Thread ---
 Thread: 110
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:48 AM
 Date: Aug 7, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3703,7 +3924,7 @@ i can't have you but i want you.
 Author: @Yehoshua035
 Time: 7:58 PM
 Date: Aug 7, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3718,12 +3939,14 @@ I'll never leave you either; I'll stay with you forever and ever. 😼
 --- Start Message Thread ---
 Thread: 111
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 12:37 PM
 Date: Aug 7, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3736,7 +3959,7 @@ i need you so badly rn.
 Author: @Yehoshua035
 Time: 8:00 PM
 Date: Aug 7, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3751,12 +3974,14 @@ The pain is so unbearable that I can hardly function. Next time we are together,
 --- Start Message Thread ---
 Thread: 112
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 8:59 PM
 Date: Aug 7, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3769,7 +3994,7 @@ i just wanna hug u
 Author: @Yehoshua035
 Time: 12:25 AM
 Date: Aug 8, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:
@@ -3784,12 +4009,14 @@ I'll hug you so hard you'll want me to stop, but I'll never stop hugging you. �
 --- Start Message Thread ---
 Thread: 113
 Title: 
+Type: Tweet
+State: 
 
 --- Start Message Post ---
 Author: @thesadsms
 Time: 10:59 PM
 Date: Aug 7, 2024
-Type: Tweet
+SubType: Tweet
 Post: 1
 Nested: 0
 Message:
@@ -3802,7 +4029,7 @@ i only want to be with you.
 Author: @Yehoshua035
 Time: 12:26 AM
 Date: Aug 8, 2024
-Type: Reply
+SubType: Reply
 Post: 2
 Nested: 1
 Message:

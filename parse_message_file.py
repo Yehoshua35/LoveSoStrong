@@ -367,6 +367,10 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     current_service['Interactions'] = [interaction.strip() for interaction in value.split(",")]
                     if verbose:
                         print("Line {0}: Interactions set to {1}".format(line_number, current_service['Interactions']))
+                elif in_message_list and key == "Status":
+                    current_service['Status'] = [status.strip() for status in value.split(",")]
+                    if verbose:
+                        print("Line {0}: Status set to {1}".format(line_number, current_service['Status']))
 
                 if in_user_list and in_user_info:
                     if key == "User":
@@ -433,6 +437,14 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         current_thread['Title'] = value
                         if verbose:
                             print("Line {0}: Title set to {1}".format(line_number, value))
+                    elif key == "Type":
+                        current_thread['Type'] = value
+                        if verbose:
+                            print("Line {0}: Type set to {1}".format(line_number, value))
+                    elif key == "State":
+                        current_thread['State'] = value
+                        if verbose:
+                            print("Line {0}: State set to {1}".format(line_number, value))
                     elif key == "Author":
                         current_message['Author'] = value
                         if verbose:
@@ -445,13 +457,10 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         current_message['Date'] = value
                         if verbose:
                             print("Line {0}: Date set to {1}".format(line_number, value))
-                    elif key == "Type":
-                        message_type = value
-                        if message_type not in current_service['Interactions']:
-                            raise ValueError("Unexpected message type '{0}' found on line {1}. Expected one of {2}".format(message_type, line_number, current_service['Interactions']))
-                        current_message['Type'] = message_type
+                    elif key == "SubType":
+                        current_message['SubType'] = value
                         if verbose:
-                            print("Line {0}: Type set to {1}".format(line_number, message_type))
+                            print("Line {0}: SubType set to {1}".format(line_number, value))
                     elif key == "Post":
                         post_value = validate_non_negative_integer(value, "Post", line_number)
                         current_message['Post'] = post_value
@@ -502,6 +511,7 @@ def display_services(services):
         print("Service Entry: {0}".format(service['Entry']))
         print("Service: {0}".format(service['Service']))
         print("Interactions: {0}".format(', '.join(service['Interactions'])))
+        print("Status: {0}".format(', '.join(service.get('Status', []))))
         if 'Categorization' in service and service['Categorization']:
             for category_type, category_levels in service['Categorization'].items():
                 print("{0}: {1}".format(category_type, ', '.join(category_levels)))
@@ -535,9 +545,13 @@ def display_services(services):
                 print("    Category: {0}".format(', '.join(thread['Category'])))
             if 'Forum' in thread:
                 print("    Forum: {0}".format(', '.join(thread['Forum'])))
+            if 'Type' in thread:
+                print("    Type: {0}".format(thread['Type']))
+            if 'State' in thread:
+                print("    State: {0}".format(thread['State']))
             for message in thread['Messages']:
                 print("    {0} ({1} on {2}): [{3}] Post ID: {4} Nested: {5}".format(
-                    message['Author'], message['Time'], message['Date'], message['Type'], message['Post'], message['Nested']))
+                    message['Author'], message['Time'], message['Date'], message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply'), message['Post'], message['Nested']))
                 print("    {0}".format(message['Message'].strip()))
             print("")
 
@@ -605,6 +619,7 @@ def services_to_string(services, line_ending="lf"):
         
         lines.append("--- Start Message List ---")
         lines.append("Interactions: {0}".format(', '.join(service['Interactions'])))
+        lines.append("Status: {0}".format(', '.join(service.get('Status', []))))
         for thread in service['MessageThreads']:
             lines.append("--- Start Message Thread ---")
             lines.append("Thread: {0}".format(thread['Thread']))
@@ -614,12 +629,16 @@ def services_to_string(services, line_ending="lf"):
                 lines.append("Forum: {0}".format(', '.join(thread['Forum'])))
             if 'Title' in thread:
                 lines.append("Title: {0}".format(thread['Title']))
+            if 'Type' in thread:
+                lines.append("Type: {0}".format(thread['Type']))
+            if 'State' in thread:
+                lines.append("State: {0}".format(thread['State']))
             for message in thread['Messages']:
                 lines.append("--- Start Message Post ---")
                 lines.append("Author: {0}".format(message['Author']))
                 lines.append("Time: {0}".format(message['Time']))
                 lines.append("Date: {0}".format(message['Date']))
-                lines.append("Type: {0}".format(message['Type']))
+                lines.append("SubType: {0}".format(message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply')))
                 lines.append("Post: {0}".format(message['Post']))
                 lines.append("Nested: {0}".format(message['Nested']))
                 lines.append("Message:")
@@ -687,13 +706,15 @@ def remove_category(service, category_id):
     """ Remove a category from the service """
     service['Categories'] = [category for category in service['Categories'] if category['ID'] != category_id]
 
-def add_message_thread(service, thread_id, title='', category='', forum=''):
+def add_message_thread(service, thread_id, title='', category='', forum='', thread_type='', state=''):
     """ Add a message thread to the service """
     thread = {
         'Thread': thread_id,
         'Title': title,
         'Category': category.split(',') if category else [],
         'Forum': forum.split(',') if forum else [],
+        'Type': thread_type,
+        'State': state,
         'Messages': []
     }
     service['MessageThreads'].append(thread)
@@ -710,7 +731,7 @@ def add_message_post(service, thread_id, author, time, date, msg_type, post_id, 
                 'Author': author,
                 'Time': time,
                 'Date': date,
-                'Type': msg_type,
+                'SubType': msg_type,
                 'Post': post_id,
                 'Nested': nested,
                 'Message': message
