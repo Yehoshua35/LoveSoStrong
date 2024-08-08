@@ -228,7 +228,8 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print("Line {0}: {1} (Starting new archive service)".format(line_number, line))
                 continue
             elif line == "--- End Archive Service ---":
-                services.append(current_service)
+                if current_service:
+                    services.append(current_service)
                 current_service = None
                 if verbose:
                     print("Line {0}: {1} (Ending archive service)".format(line_number, line))
@@ -435,10 +436,10 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     post_id = current_message['Post']
                 elif key == "Nested":
                     current_message['Nested'] = validate_non_negative_integer(value, "Nested", line_number)
-                    if current_message['Nested'] != 0:
-                        if current_message['Nested'] > post_id:
-                            raise ValueError("Nested value '{0}' on line {1} does not match any existing Post values in the current thread. Existing Post IDs: {2}".format(
-                                current_message['Nested'], line_number, post_id))
+                    nested_value = current_message['Nested']
+                    if nested_value > 0 and nested_value not in [msg['Post'] for msg in current_thread['Messages']]:
+                        raise ValueError("Nested value '{0}' on line {1} does not match any existing Post values in the current thread.".format(
+                            nested_value, line_number))
                 elif key == "Author":
                     current_message['Author'] = value
                 elif key == "Time":
