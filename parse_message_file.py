@@ -223,7 +223,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print("Line {0}: {1} (Including file for categories)".format(line_number, line))
                 continue
             elif line == "--- Start Archive Service ---":
-                current_service = {'Users': {}, 'MessageThreads': [], 'Categories': [], 'Interactions': [], 'Categorization': {}}
+                current_service = {'Users': {}, 'MessageThreads': [], 'Categories': [], 'Interactions': [], 'Categorization': {}, 'Info': ''}
                 if verbose:
                     print("Line {0}: {1} (Starting new archive service)".format(line_number, line))
                 continue
@@ -691,7 +691,7 @@ def save_services_to_file(services, filename, line_ending="lf"):
     data = services_to_string(services, line_ending)
     save_compressed_file(data, filename)
 
-def init_empty_service(entry, service_name):
+def init_empty_service(entry, service_name, info=''):
     """ Initialize an empty service structure """
     return {
         'Entry': entry,
@@ -701,7 +701,7 @@ def init_empty_service(entry, service_name):
         'Categories': [],
         'Interactions': [],
         'Categorization': {},
-        'Info': ''
+        'Info': info  # Add Info to service structure
     }
 
 def add_user(service, user_id, name, handle, location='', joined='', birthday='', bio=''):
@@ -781,9 +781,9 @@ def remove_message_post(service, thread_id, post_id):
             return
     raise ValueError("Thread ID {0} not found in service".format(thread_id))
 
-def add_service(services, entry, service_name):
+def add_service(services, entry, service_name, info=''):
     """ Add a new service to the list of services """
-    new_service = init_empty_service(entry, service_name)
+    new_service = init_empty_service(entry, service_name, info)
     services.append(new_service)
     return new_service
 
