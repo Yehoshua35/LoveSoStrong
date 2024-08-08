@@ -243,9 +243,104 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 if verbose:
                     print("Line {0}: {1} (Ending comment section)".format(line_number, line))
                 continue
-            elif in_section['comment_section']:
+            elif line == "--- Start User List ---":
+                in_section['user_list'] = True
                 if verbose:
-                    print("Line {0}: {1} (Comment)".format(line_number, line))
+                    print("Line {0}: {1} (Starting user list)".format(line_number, line))
+                continue
+            elif line == "--- End User List ---":
+                in_section['user_list'] = False
+                if verbose:
+                    print("Line {0}: {1} (Ending user list)".format(line_number, line))
+                continue
+            elif line == "--- Start User Info ---":
+                in_section['user_info'] = True
+                current_user = {}
+                if verbose:
+                    print("Line {0}: {1} (Starting user info)".format(line_number, line))
+                continue
+            elif line == "--- End User Info ---":
+                if current_user:
+                    current_service['Users'][current_user['User']] = current_user
+                in_section['user_info'] = False
+                current_user = None
+                if verbose:
+                    print("Line {0}: {1} (Ending user info)".format(line_number, line))
+                continue
+            elif line == "--- Start Bio Body ---":
+                in_section['bio_body'] = True
+                current_bio = []
+                if verbose:
+                    print("Line {0}: {1} (Starting bio body)".format(line_number, line))
+                continue
+            elif line == "--- End Bio Body ---":
+                current_user['Bio'] = '\n'.join(current_bio)
+                in_section['bio_body'] = False
+                current_bio = None
+                if verbose:
+                    print("Line {0}: {1} (Ending bio body)".format(line_number, line))
+                continue
+            elif line == "--- Start Message List ---":
+                in_section['message_list'] = True
+                if verbose:
+                    print("Line {0}: {1} (Starting message list)".format(line_number, line))
+                continue
+            elif line == "--- End Message List ---":
+                in_section['message_list'] = False
+                if verbose:
+                    print("Line {0}: {1} (Ending message list)".format(line_number, line))
+                continue
+            elif line == "--- Start Message Thread ---":
+                in_section['message_thread'] = True
+                current_thread = {'Messages': []}
+                post_id = 1
+                if verbose:
+                    print("Line {0}: {1} (Starting message thread)".format(line_number, line))
+                continue
+            elif line == "--- End Message Thread ---":
+                if current_thread:
+                    current_service['MessageThreads'].append(current_thread)
+                in_section['message_thread'] = False
+                current_thread = None
+                if verbose:
+                    print("Line {0}: {1} (Ending message thread)".format(line_number, line))
+                continue
+            elif line == "--- Start Message Post ---":
+                in_section['message_post'] = True
+                current_message = {}
+                if verbose:
+                    print("Line {0}: {1} (Starting message post)".format(line_number, line))
+                continue
+            elif line == "--- End Message Post ---":
+                if current_message:
+                    current_thread['Messages'].append(current_message)
+                in_section['message_post'] = False
+                current_message = None
+                if verbose:
+                    print("Line {0}: {1} (Ending message post)".format(line_number, line))
+                continue
+            elif line == "--- Start Message Body ---":
+                in_section['message_body'] = True
+                current_message_body = []
+                if verbose:
+                    print("Line {0}: {1} (Starting message body)".format(line_number, line))
+                continue
+            elif line == "--- End Message Body ---":
+                current_message['Message'] = '\n'.join(current_message_body)
+                in_section['message_body'] = False
+                current_message_body = None
+                if verbose:
+                    print("Line {0}: {1} (Ending message body)".format(line_number, line))
+                continue
+            elif line == "--- Start Categorization List ---":
+                in_section['categorization_list'] = True
+                if verbose:
+                    print("Line {0}: {1} (Starting categorization list)".format(line_number, line))
+                continue
+            elif line == "--- End Categorization List ---":
+                in_section['categorization_list'] = False
+                if verbose:
+                    print("Line {0}: {1} (Ending categorization list)".format(line_number, line))
                 continue
             elif line == "--- Start Category List ---":
                 in_section['category_list'] = True
@@ -254,461 +349,240 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     print("Line {0}: {1} (Starting category list)".format(line_number, line))
                 continue
             elif line == "--- End Category List ---":
-                in_section['category_list'] = False
                 if current_category:
+                    current_service['Categories'].append(current_category)
                     kind_split = current_category.get('Kind', '').split(",")
                     current_category['Type'] = kind_split[0].strip() if len(kind_split) > 0 else ""
                     current_category['Level'] = kind_split[1].strip() if len(kind_split) > 1 else ""
-                    if current_category['Type'] not in categorization_values:
-                        raise ValueError("Invalid 'Type' value '{0}' on line {1}. Expected one of {2}.".format(current_category['Type'], line_number, categorization_values.keys()))
-                    if current_category['InSub'] != 0 and current_category['InSub'] not in category_ids[current_category['Type']]:
-                        raise ValueError("InSub value '{0}' on line {1} does not match any existing ID values.".format(current_category['InSub'], line_number))
-                    current_service['Categories'].append(current_category)
                     category_ids[current_category['Type']].add(current_category['ID'])
+                in_section['category_list'] = False
                 current_category = None
                 if verbose:
                     print("Line {0}: {1} (Ending category list)".format(line_number, line))
                 continue
-            elif line == "--- Start Categorization List ---":
-                in_section['categorization_list'] = True
-                current_service['Categorization'] = {}
+            elif line == "--- Start Description Body ---":
+                in_section['description_body'] = True
+                current_description = []
                 if verbose:
-                    print("Line {0}: {1} (Starting categorization list)".format(line_number, line))
+                    print("Line {0}: {1} (Starting description body)".format(line_number, line))
                 continue
-            elif line == "--- End Categorization List ---":
-                in_section['categorization_list'] = False
+            elif line == "--- End Description Body ---":
+                current_category['Description'] = '\n'.join(current_description)
+                in_section['description_body'] = False
+                current_description = None
                 if verbose:
-                    print("Line {0}: {1} (Ending categorization list)".format(line_number, line))
-                categorization_values = current_service['Categorization']
+                    print("Line {0}: {1} (Ending description body)".format(line_number, line))
                 continue
             elif line == "--- Start Info Body ---":
                 in_section['info_body'] = True
-                if current_service:
-                    current_info = []
-                    if verbose:
-                        print("Line {0}: {1} (Starting info body)".format(line_number, line))
+                current_info = []
+                if verbose:
+                    print("Line {0}: {1} (Starting info body)".format(line_number, line))
                 continue
             elif line == "--- End Info Body ---":
+                current_service['Info'] = '\n'.join(current_info)
                 in_section['info_body'] = False
-                if current_service and current_info is not None:
-                    current_service['Info'] = "\n".join(current_info)
-                    current_info = None
-                    if verbose:
-                        print("Line {0}: {1} (Ending info body)".format(line_number, line))
+                current_info = None
+                if verbose:
+                    print("Line {0}: {1} (Ending info body)".format(line_number, line))
                 continue
-            elif current_service is not None:
+
+            if in_section['bio_body']:
+                current_bio.append(line)
+                if verbose:
+                    print("Line {0}: {1} (Appending to bio body)".format(line_number, line))
+            elif in_section['message_body']:
+                current_message_body.append(line)
+                if verbose:
+                    print("Line {0}: {1} (Appending to message body)".format(line_number, line))
+            elif in_section['description_body']:
+                current_description.append(line)
+                if verbose:
+                    print("Line {0}: {1} (Appending to description body)".format(line_number, line))
+            elif in_section['info_body']:
+                current_info.append(line)
+                if verbose:
+                    print("Line {0}: {1} (Appending to info body)".format(line_number, line))
+            elif in_section['comment_section']:
+                if verbose:
+                    print("Line {0}: {1} (Inside comment section)".format(line_number, line))
+            else:
                 key, value = parse_line(line)
                 if key == "Entry":
                     current_service['Entry'] = validate_non_negative_integer(value, "Entry", line_number)
                 elif key == "Service":
                     current_service['Service'] = value
-                elif key == "Categories":
-                    current_service['Categorization']['Categories'] = [category.strip() for category in value.split(",")]
-                    if verbose:
-                        print("Line {0}: Categories set to {1}".format(line_number, current_service['Categorization']['Categories']))
-                elif key == "Forums":
-                    current_service['Categorization']['Forums'] = [forum.strip() for forum in value.split(",")]
-                    if verbose:
-                        print("Line {0}: Forums set to {1}".format(line_number, current_service['Categorization']['Forums']))
-                elif in_section['category_list']:
-                    if key == "Kind":
-                        current_category['Kind'] = value
-                    elif key == "ID":
-                        current_category['ID'] = validate_non_negative_integer(value, "ID", line_number)
-                    elif key == "InSub":
-                        current_category['InSub'] = validate_non_negative_integer(value, "InSub", line_number)
-                    elif key == "Headline":
-                        current_category['Headline'] = value
-                    elif key == "Description":
-                        current_category['Description'] = value
-                elif line == "--- Start User List ---":
-                    in_section['user_list'] = True
-                    if verbose:
-                        print("Line {0}: {1} (Starting user list)".format(line_number, line))
-                    continue
-                elif line == "--- End User List ---":
-                    in_section['user_list'] = False
-                    if verbose:
-                        print("Line {0}: {1} (Ending user list)".format(line_number, line))
-                    continue
-                elif line == "--- Start User Info ---":
-                    in_section['user_info'] = True
-                    if verbose:
-                        print("Line {0}: {1} (Starting user info)".format(line_number, line))
-                    continue
-                elif line == "--- End User Info ---":
-                    in_section['user_info'] = False
-                    user_id = None
-                    if verbose:
-                        print("Line {0}: {1} (Ending user info)".format(line_number, line))
-                    continue
-                elif line == "--- Start Message List ---":
-                    in_section['message_list'] = True
-                    if verbose:
-                        print("Line {0}: {1} (Starting message list)".format(line_number, line))
-                    continue
-                elif line == "--- End Message List ---":
-                    in_section['message_list'] = False
-                    if verbose:
-                        print("Line {0}: {1} (Ending message list)".format(line_number, line))
-                    continue
-                elif line == "--- Start Message Thread ---":
-                    in_section['message_thread'] = True
-                    current_thread = {'Title': '', 'Messages': []}
-                    post_id = 1
-                    if verbose:
-                        print("Line {0}: {1} (Starting message thread)".format(line_number, line))
-                    continue
-                elif line == "--- End Message Thread ---":
-                    in_section['message_thread'] = False
-                    current_service['MessageThreads'].append(current_thread)
-                    current_thread = None
-                    if verbose:
-                        print("Line {0}: {1} (Ending message thread)".format(line_number, line))
-                    continue
-                elif line == "--- Start Message Post ---":
-                    in_section['message_post'] = True
-                    current_message = {}
-                    if verbose:
-                        print("Line {0}: {1} (Starting message post)".format(line_number, line))
-                    continue
-                elif line == "--- End Message Post ---":
-                    in_section['message_post'] = False
-                    if current_message:
-                        current_thread['Messages'].append(current_message)
-                    current_message = None
-                    if verbose:
-                        print("Line {0}: {1} (Ending message post)".format(line_number, line))
-                    continue
-                elif in_section['message_list'] and key == "Interactions":
-                    current_service['Interactions'] = [interaction.strip() for interaction in value.split(",")]
-                    if verbose:
-                        print("Line {0}: Interactions set to {1}".format(line_number, current_service['Interactions']))
-                elif in_section['message_list'] and key == "Status":
-                    current_service['Status'] = [status.strip() for status in value.split(",")]
-                    if verbose:
-                        print("Line {0}: Status set to {1}".format(line_number, current_service['Status']))
+                elif key == "Interactions":
+                    current_service['Interactions'] = [x.strip() for x in value.split(",") if x.strip()]
+                elif key == "Status":
+                    current_service['Status'] = [x.strip() for x in value.split(",") if x.strip()]
+                elif key == "Category":
+                    current_thread['Category'] = value
+                elif key == "Forum":
+                    current_thread['Forum'] = value
+                elif key == "Type":
+                    current_thread['Type'] = value if value else "Topic"
+                elif key == "State":
+                    current_thread['State'] = value
+                elif key == "Thread":
+                    current_thread['Thread'] = validate_non_negative_integer(value, "Thread", line_number)
+                elif key == "Title":
+                    current_thread['Title'] = value
+                elif key == "SubType":
+                    current_message['SubType'] = value if value else "Post" if current_message['Nested'] == 0 else "Reply"
+                elif key == "Post":
+                    current_message['Post'] = validate_non_negative_integer(value, "Post", line_number)
+                    post_id = current_message['Post']
+                elif key == "Nested":
+                    current_message['Nested'] = validate_non_negative_integer(value, "Nested", line_number)
+                    if current_message['Nested'] != 0:
+                        if current_message['Nested'] > post_id:
+                            raise ValueError("Nested value '{0}' on line {1} does not match any existing Post values in the current thread. Existing Post IDs: {2}".format(
+                                current_message['Nested'], line_number, post_id))
+                elif key == "Author":
+                    current_message['Author'] = value
+                elif key == "Time":
+                    current_message['Time'] = value
+                elif key == "Date":
+                    current_message['Date'] = value
+                elif key == "User":
+                    current_user['User'] = validate_non_negative_integer(value, "User", line_number)
+                elif key == "Name":
+                    current_user['Name'] = value
+                elif key == "Handle":
+                    current_user['Handle'] = value
+                elif key == "Location":
+                    current_user['Location'] = value
+                elif key == "Joined":
+                    current_user['Joined'] = value
+                elif key == "Birthday":
+                    current_user['Birthday'] = value
+                elif key == "Bio":
+                    current_user['Bio'] = ""
+                elif key == "Categorization":
+                    categorization_values = {'Categories': [], 'Forums': []}
+                    for item in value.split(","):
+                        if item.strip().startswith("Category"):
+                            categorization_values['Categories'].append(item.strip())
+                        elif item.strip().startswith("Forum"):
+                            categorization_values['Forums'].append(item.strip())
+                    current_service['Categorization'] = categorization_values
+                elif key == "Kind":
+                    current_category['Kind'] = value
+                elif key == "ID":
+                    current_category['ID'] = validate_non_negative_integer(value, "ID", line_number)
+                elif key == "InSub":
+                    current_category['InSub'] = validate_non_negative_integer(value, "InSub", line_number)
+                    category_type = current_category.get('Type', '')
+                    if category_type and current_category['InSub'] > 0 and current_category['InSub'] not in category_ids[category_type]:
+                        raise ValueError("InSub value '{0}' on line {1} does not match any existing ID values in the current thread.".format(
+                            current_category['InSub'], line_number))
+                elif key == "Headline":
+                    current_category['Headline'] = value
+                elif key == "Description":
+                    current_category['Description'] = ""
                 elif key == "Info":
-                    current_info = []
-                    in_section['info_body'] = True
+                    current_service['Info'] = ""
+                else:
                     if verbose:
-                        print("Line {0}: {1} (Starting info body)".format(line_number, line))
-                elif in_section['user_list'] and in_section['user_info']:
-                    if key == "User":
-                        user_id = validate_non_negative_integer(value, "User", line_number)
-                        current_service['Users'][user_id] = {'Bio': ""}
-                        if verbose:
-                            print("Line {0}: User ID set to {1}".format(line_number, user_id))
-                    elif key == "Name":
-                        if user_id is not None:
-                            current_service['Users'][user_id]['Name'] = value
-                            if verbose:
-                                print("Line {0}: Name set to {1}".format(line_number, value))
-                    elif key == "Handle":
-                        if user_id is not None:
-                            current_service['Users'][user_id]['Handle'] = value
-                            if verbose:
-                                print("Line {0}: Handle set to {1}".format(line_number, value))
-                    elif key == "Location":
-                        if user_id is not None:
-                            current_service['Users'][user_id]['Location'] = value
-                            if verbose:
-                                print("Line {0}: Location set to {1}".format(line_number, value))
-                    elif key == "Joined":
-                        if user_id is not None:
-                            current_service['Users'][user_id]['Joined'] = value
-                            if verbose:
-                                print("Line {0}: Joined date set to {1}".format(line_number, value))
-                    elif key == "Birthday":
-                        if user_id is not None:
-                            current_service['Users'][user_id]['Birthday'] = value
-                            if verbose:
-                                print("Line {0}: Birthday set to {1}".format(line_number, value))
-                    elif line == "--- Start Bio Body ---":
-                        if user_id is not None:
-                            current_bio = []
-                            in_section['bio_body'] = True
-                            if verbose:
-                                print("Line {0}: Starting bio body".format(line_number))
-                    elif line == "--- End Bio Body ---":
-                        if user_id is not None and current_bio is not None:
-                            current_service['Users'][user_id]['Bio'] = "\n".join(current_bio)
-                            current_bio = None
-                            in_section['bio_body'] = False
-                            if verbose:
-                                print("Line {0}: Ending bio body".format(line_number))
-                    elif in_section['bio_body'] and current_bio is not None:
-                        current_bio.append(line)
-                        if verbose:
-                            print("Line {0}: Adding to bio body: {1}".format(line_number, line))
-                elif in_section['message_list'] and in_section['message_thread']:
-                    if key == "Thread":
-                        current_thread['Thread'] = validate_non_negative_integer(value, "Thread", line_number)
-                        if verbose:
-                            print("Line {0}: Thread ID set to {1}".format(line_number, value))
-                    elif key == "Category":
-                        current_thread['Category'] = [category.strip() for category in value.split(",")]
-                        if verbose:
-                            print("Line {0}: Category set to {1}".format(line_number, current_thread['Category']))
-                    elif key == "Forum":
-                        current_thread['Forum'] = [forum.strip() for forum in value.split(",")]
-                        if verbose:
-                            print("Line {0}: Forum set to {1}".format(line_number, current_thread['Forum']))
-                    elif key == "Title":
-                        current_thread['Title'] = value
-                        if verbose:
-                            print("Line {0}: Title set to {1}".format(line_number, value))
-                    elif key == "Type":
-                        current_thread['Type'] = value
-                        if verbose:
-                            print("Line {0}: Type set to {1}".format(line_number, value))
-                    elif key == "State":
-                        current_thread['State'] = value
-                        if verbose:
-                            print("Line {0}: State set to {1}".format(line_number, value))
-                    elif key == "Author":
-                        current_message['Author'] = value
-                        if verbose:
-                            print("Line {0}: Author set to {1}".format(line_number, value))
-                    elif key == "Time":
-                        current_message['Time'] = value
-                        if verbose:
-                            print("Line {0}: Time set to {1}".format(line_number, value))
-                    elif key == "Date":
-                        current_message['Date'] = value
-                        if verbose:
-                            print("Line {0}: Date set to {1}".format(line_number, value))
-                    elif key == "SubType":
-                        current_message['SubType'] = value
-                        if verbose:
-                            print("Line {0}: SubType set to {1}".format(line_number, value))
-                    elif key == "Post":
-                        post_value = validate_non_negative_integer(value, "Post", line_number)
-                        current_message['Post'] = post_value
-                        if 'post_ids' not in current_thread:
-                            current_thread['post_ids'] = set()
-                        current_thread['post_ids'].add(post_value)
-                        if verbose:
-                            print("Line {0}: Post ID set to {1}".format(line_number, post_value))
-                    elif key == "Nested":
-                        nested_value = validate_non_negative_integer(value, "Nested", line_number)
-                        if nested_value != 0 and nested_value not in current_thread.get('post_ids', set()):
-                            raise ValueError(
-                                "Nested value '{0}' on line {1} does not match any existing Post values in the current thread. Existing Post IDs: {2}".format(
-                                    nested_value, line_number, list(current_thread.get('post_ids', set())))
-                            )
-                        current_message['Nested'] = nested_value
-                        if verbose:
-                            print("Line {0}: Nested set to {1}".format(line_number, nested_value))
-                    elif line == "--- Start Message Body ---":
-                        if current_message is not None:
-                            current_message['Message'] = []
-                            in_section['message_body'] = True
-                            if verbose:
-                                print("Line {0}: Starting message body".format(line_number))
-                    elif line == "--- End Message Body ---":
-                        if current_message is not None and 'Message' in current_message:
-                            current_message['Message'] = "\n".join(current_message['Message'])
-                            in_section['message_body'] = False
-                            if verbose:
-                                print("Line {0}: Ending message body".format(line_number))
-                    elif in_section['message_body'] and current_message is not None and 'Message' in current_message:
-                        current_message['Message'].append(line)
-                        if verbose:
-                            print("Line {0}: Adding to message body: {1}".format(line_number, line))
-    except Exception as e:
+                        print("Line {0}: {1} (Unknown or empty line)".format(line_number, line))
+
         if validate_only:
-            return False, "Error: {0}".format(str(e)), lines[line_number - 1]
+            return True, None
+
+        return services, None
+
+    except ValueError as e:
+        if validate_only:
+            return False, str(e)
         else:
-            raise
+            print("Error:", e)
+            return [], str(e)
 
-    if validate_only:
-        return True, "", ""
+def parse_string_with_validation(data, verbose=False):
+    return parse_string(data, validate_only=True, verbose=verbose)
 
-    return services
+def parse_file_with_validation(filename, verbose=False):
+    return parse_file(filename, validate_only=True, verbose=verbose)
 
 def display_services(services):
     for service in services:
         print("Service Entry: {0}".format(service['Entry']))
         print("Service: {0}".format(service['Service']))
-        if 'Info' in service and service['Info']:
-            print("Info: {0}".format(service['Info'].strip().replace("\n", "\n      ")))
-        print("Interactions: {0}".format(', '.join(service['Interactions'])))
-        print("Status: {0}".format(', '.join(service.get('Status', []))))
-        if 'Categorization' in service and service['Categorization']:
-            for category_type, category_levels in service['Categorization'].items():
-                print("{0}: {1}".format(category_type, ', '.join(category_levels)))
-        print("Category List:")
-        for category in service['Categories']:
-            kind_split = category.get('Kind', '').split(",")
-            category['Type'] = kind_split[0].strip() if len(kind_split) > 0 else ""
-            category['Level'] = kind_split[1].strip() if len(kind_split) > 1 else ""
-            print("  Type: {0}, Level: {1}".format(category['Type'], category['Level']))
-            print("  ID: {0}".format(category['ID']))
-            print("  InSub: {0}".format(category['InSub']))
-            print("  Headline: {0}".format(category['Headline']))
-            print("  Description: {0}".format(category['Description'].strip().replace("\n", "\n    ")))
-            print("")
-        print("User List:")
-        for user_id, user_info in service['Users'].items():
-            print("  User ID: {0}".format(user_id))
-            print("    Name: {0}".format(user_info['Name']))
-            print("    Handle: {0}".format(user_info['Handle']))
-            print("    Location: {0}".format(user_info.get('Location', '')))
-            print("    Joined: {0}".format(user_info.get('Joined', '')))
-            print("    Birthday: {0}".format(user_info.get('Birthday', '')))
-            print("    Bio:")
-            print("      {0}".format(user_info.get('Bio', '').strip().replace("\n", "\n      ")))
-            print("")
-        print("Message Threads:")
-        for idx, thread in enumerate(service['MessageThreads']):
-            print("  --- Message Thread {0} ---".format(idx + 1))
-            if thread['Title']:
-                print("    Title: {0}".format(thread['Title']))
-            if 'Category' in thread:
-                print("    Category: {0}".format(', '.join(thread['Category'])))
-            if 'Forum' in thread:
-                print("    Forum: {0}".format(', '.join(thread['Forum'])))
-            if 'Type' in thread:
-                print("    Type: {0}".format(thread['Type']))
-            if 'State' in thread:
-                print("    State: {0}".format(thread['State']))
-            for message in thread['Messages']:
-                print("    {0} ({1} on {2}): [{3}] Post ID: {4} Nested: {5}".format(
-                    message['Author'], message['Time'], message['Date'],
-                    message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply'),
-                    message['Post'], message['Nested']))
-                print("      {0}".format(message['Message'].strip().replace("\n", "\n      ")))
-            print("")
-
-def to_json(services):
-    """ Convert the services data structure to JSON """
-    return json.dumps(services, indent=2)
-
-def from_json(json_str):
-    """ Convert a JSON string back to the services data structure """
-    return json.loads(json_str)
-
-def load_from_json_file(json_filename):
-    """ Load the services data structure from a JSON file """
-    with open_compressed_file(json_filename) as file:
-        return json.load(file)
-
-def save_to_json_file(services, json_filename):
-    """ Save the services data structure to a JSON file """
-    json_data = json.dumps(services, indent=2)
-    save_compressed_file(json_data, json_filename)
-
-def services_to_string(services, line_ending="lf"):
-    """ Convert the services data structure back to the original text format """
-    lines = []
-    for service in services:
-        lines.append("--- Start Archive Service ---")
-        lines.append("Entry: {0}".format(service['Entry']))
-        lines.append("Service: {0}".format(service['Service']))
-        if 'Info' in service:
-            lines.append("Info:")
-            lines.append("--- Start Info Body ---")
-            lines.extend(["    " + line for line in service['Info'].split("\n")])
-            lines.append("--- End Info Body ---")
-        
-        lines.append("--- Start User List ---")
-        for user_id, user_info in service['Users'].items():
-            lines.append("--- Start User Info ---")
-            lines.append("User: {0}".format(user_id))
-            lines.append("Name: {0}".format(user_info['Name']))
-            lines.append("Handle: {0}".format(user_info['Handle']))
-            if 'Location' in user_info:
-                lines.append("Location: {0}".format(user_info['Location']))
-            if 'Joined' in user_info:
-                lines.append("Joined: {0}".format(user_info['Joined']))
-            if 'Birthday' in user_info:
-                lines.append("Birthday: {0}".format(user_info['Birthday']))
-            if 'Bio' in user_info:
-                lines.append("Bio:")
-                lines.append("--- Start Bio Body ---")
-                lines.extend(["    " + line for line in user_info['Bio'].split("\n")])
-                lines.append("--- End Bio Body ---")
-            lines.append("--- End User Info ---")
-        lines.append("--- End User List ---")
-        
-        if 'Categorization' in service and service['Categorization']:
-            lines.append("--- Start Categorization List ---")
-            for category_type, category_levels in service['Categorization'].items():
-                lines.append("{0}: {1}".format(category_type, ', '.join(category_levels)))
-            lines.append("--- End Categorization List ---")
-        
+        if 'Info' in service and service['Info'].strip():
+            print("Info: {0}".format(service['Info']))
+        if 'Interactions' in service and service['Interactions']:
+            print("Interactions: {0}".format(", ".join(service['Interactions'])))
+        if 'Status' in service and service['Status']:
+            print("Status: {0}".format(", ".join(service['Status'])))
+        if 'Categorization' in service:
+            categories = service['Categorization'].get('Categories', [])
+            forums = service['Categorization'].get('Forums', [])
+            print("Categories: {0}".format(", ".join(categories)))
+            print("Forums: {0}".format(", ".join(forums)))
         if 'Categories' in service and service['Categories']:
+            print("Category List:")
             for category in service['Categories']:
-                lines.append("--- Start Category List ---")
-                lines.append("Kind: {0}, {1}".format(category['Type'], category['Level']))
-                lines.append("ID: {0}".format(category['ID']))
-                lines.append("InSub: {0}".format(category['InSub']))
-                lines.append("Headline: {0}".format(category['Headline']))
-                lines.append("Description:")
-                lines.append("--- Start Description Body ---")
-                lines.extend(["    " + line for line in category['Description'].split("\n")])
-                lines.append("--- End Description Body ---")
-                lines.append("--- End Category List ---")
-        
-        lines.append("--- Start Message List ---")
-        lines.append("Interactions: {0}".format(', '.join(service['Interactions'])))
-        lines.append("Status: {0}".format(', '.join(service.get('Status', []))))
-        for thread in service['MessageThreads']:
-            lines.append("--- Start Message Thread ---")
-            lines.append("Thread: {0}".format(thread['Thread']))
-            if 'Category' in thread:
-                lines.append("Category: {0}".format(', '.join(thread['Category'])))
-            if 'Forum' in thread:
-                lines.append("Forum: {0}".format(', '.join(thread['Forum'])))
-            if 'Title' in thread:
-                lines.append("Title: {0}".format(thread['Title']))
-            if 'Type' in thread:
-                lines.append("Type: {0}".format(thread['Type']))
-            if 'State' in thread:
-                lines.append("State: {0}".format(thread['State']))
-            for message in thread['Messages']:
-                lines.append("--- Start Message Post ---")
-                lines.append("Author: {0}".format(message['Author']))
-                lines.append("Time: {0}".format(message['Time']))
-                lines.append("Date: {0}".format(message['Date']))
-                lines.append("SubType: {0}".format(message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply')))
-                lines.append("Post: {0}".format(message['Post']))
-                lines.append("Nested: {0}".format(message['Nested']))
-                lines.append("Message:")
-                lines.append("--- Start Message Body ---")
-                lines.extend(["    " + line for line in message['Message'].split("\n")])
-                lines.append("--- End Message Body ---")
-                lines.append("--- End Message Post ---")
-            lines.append("--- End Message Thread ---")
-        lines.append("--- End Message List ---")
-        
-        lines.append("--- End Archive Service ---")
-    
-    line_sep = {"lf": "\n", "cr": "\r", "crlf": "\r\n"}
-    return line_sep.get(line_ending, "\n").join(lines)
+                print("  Type: {0}, Level: {1}".format(category['Type'], category['Level']))
+                print("  ID: {0}".format(category['ID']))
+                print("  InSub: {0}".format(category['InSub']))
+                print("  Headline: {0}".format(category['Headline']))
+                print("  Description: {0}".format(category['Description']))
+        if 'Users' in service and service['Users']:
+            print("User List:")
+            for user_id, user_info in service['Users'].items():
+                print("  User ID: {0}".format(user_id))
+                print("    Name: {0}".format(user_info['Name']))
+                print("    Handle: {0}".format(user_info['Handle']))
+                print("    Location: {0}".format(user_info['Location']))
+                print("    Joined: {0}".format(user_info['Joined']))
+                print("    Birthday: {0}".format(user_info['Birthday']))
+                print("    Bio:")
+                for line in user_info['Bio'].splitlines():
+                    print("      {0}".format(line))
+        if 'MessageThreads' in service and service['MessageThreads']:
+            print("Message Threads:")
+            for thread in service['MessageThreads']:
+                print("  --- Message Thread {0} ---".format(thread['Thread']))
+                if 'Title' in thread:
+                    print("    Title: {0}".format(thread['Title']))
+                if 'Category' in thread:
+                    print("    Category: {0}".format(thread['Category']))
+                if 'Forum' in thread:
+                    print("    Forum: {0}".format(thread['Forum']))
+                if 'Type' in thread:
+                    print("    Type: {0}".format(thread['Type']))
+                if 'State' in thread:
+                    print("    State: {0}".format(thread['State']))
+                for message in thread['Messages']:
+                    print("    {0} ({1} on {2}): [{3}] Post ID: {4} Nested: {5}".format(
+                        message['Author'], message['Time'], message['Date'], message['SubType'],
+                        message['Post'], message['Nested']
+                    ))
+                    for line in message['Message'].splitlines():
+                        print("      {0}".format(line))
+        print("")
 
-def save_services_to_file(services, filename, line_ending="lf"):
-    """ Save the services data structure to a file in the original text format """
-    data = services_to_string(services, line_ending)
-    save_compressed_file(data, filename)
-
-def init_empty_service(entry, service_name, info=''):
-    """ Initialize an empty service structure """
-    return {
+def add_service(services, entry, service_name, info=""):
+    service = {
         'Entry': entry,
         'Service': service_name,
+        'Info': info,
         'Users': {},
         'MessageThreads': [],
         'Categories': [],
         'Interactions': [],
-        'Categorization': {},
-        'Info': info  # Add Info to service structure
+        'Categorization': {}
     }
+    services.append(service)
+    return service
 
-def add_user(service, user_id, name, handle, location='', joined='', birthday='', bio=''):
-    """ Add a user to the service """
+def remove_service(services, entry):
+    services[:] = [service for service in services if service['Entry'] != entry]
+
+def add_user(service, user_id, name, handle, location, joined, birthday, bio):
     service['Users'][user_id] = {
+        'User': user_id,
         'Name': name,
         'Handle': handle,
         'Location': location,
@@ -718,48 +592,26 @@ def add_user(service, user_id, name, handle, location='', joined='', birthday=''
     }
 
 def remove_user(service, user_id):
-    """ Remove a user from the service """
     if user_id in service['Users']:
         del service['Users'][user_id]
 
-def add_category(service, kind, category_type, category_level, category_id, insub, headline, description):
-    """ Add a category to the service """
-    category = {
-        'Kind': "{0}, {1}".format(kind, category_level),
-        'ID': category_id,
-        'InSub': insub,
-        'Headline': headline,
-        'Description': description
-    }
-    service['Categories'].append(category)
-    if category_type not in service['Categorization']:
-        service['Categorization'][category_type] = []
-    if category_level not in service['Categorization'][category_type]:
-        service['Categorization'][category_type].append(category_level)
-
-def remove_category(service, category_id):
-    """ Remove a category from the service """
-    service['Categories'] = [category for category in service['Categories'] if category['ID'] != category_id]
-
-def add_message_thread(service, thread_id, title='', category='', forum='', thread_type='', state=''):
-    """ Add a message thread to the service """
+def add_message_thread(service, thread_id, title, category="", forum="", thread_type="Topic", state=""):
     thread = {
         'Thread': thread_id,
         'Title': title,
-        'Category': category.split(',') if category else [],
-        'Forum': forum.split(',') if forum else [],
+        'Category': category,
+        'Forum': forum,
         'Type': thread_type,
         'State': state,
         'Messages': []
     }
     service['MessageThreads'].append(thread)
+    return thread
 
 def remove_message_thread(service, thread_id):
-    """ Remove a message thread from the service """
-    service['MessageThreads'] = [thread for thread in service['MessageThreads'] if thread['Thread'] != thread_id]
+    service['MessageThreads'][:] = [thread for thread in service['MessageThreads'] if thread['Thread'] != thread_id]
 
 def add_message_post(service, thread_id, author, time, date, msg_type, post_id, nested, message):
-    """ Add a message post to a thread in the service """
     for thread in service['MessageThreads']:
         if thread['Thread'] == thread_id:
             post = {
@@ -773,22 +625,129 @@ def add_message_post(service, thread_id, author, time, date, msg_type, post_id, 
             }
             thread['Messages'].append(post)
             return
-    raise ValueError("Thread ID {0} not found in service".format(thread_id))
 
 def remove_message_post(service, thread_id, post_id):
-    """ Remove a message post from a thread in the service """
     for thread in service['MessageThreads']:
         if thread['Thread'] == thread_id:
-            thread['Messages'] = [post for post in thread['Messages'] if post['Post'] != post_id]
-            return
-    raise ValueError("Thread ID {0} not found in service".format(thread_id))
+            thread['Messages'][:] = [post for post in thread['Messages'] if post['Post'] != post_id]
 
-def add_service(services, entry, service_name, info=''):
-    """ Add a new service to the list of services """
-    new_service = init_empty_service(entry, service_name, info)
-    services.append(new_service)
-    return new_service
+def add_category(service, kind, category_type, category_level, category_id, insub, headline, description):
+    category = {
+        'Kind': "{}, {}".format(kind, category_type),
+        'ID': category_id,
+        'InSub': insub,
+        'Headline': headline,
+        'Description': description
+    }
+    service['Categories'].append(category)
 
-def remove_service(services, entry):
-    """ Remove an existing service from the list of services """
-    services[:] = [service for service in services if service['Entry'] != entry]
+def remove_category(service, category_id):
+    service['Categories'][:] = [category for category in service['Categories'] if category['ID'] != category_id]
+
+def save_to_json_file(services, filename):
+    with open_compressed_file(filename) as file:
+        json.dump(services, file, indent=4)
+
+def load_from_json_file(filename):
+    with open_compressed_file(filename) as file:
+        return json.load(file)
+
+def to_json(services):
+    return json.dumps(services, indent=4)
+
+def from_json(json_string):
+    return json.loads(json_string)
+
+def convert_to_text(services):
+    lines = []
+    for service in services:
+        lines.append("--- Start Archive Service ---")
+        lines.append("Entry: {}".format(service['Entry']))
+        lines.append("Service: {}".format(service['Service']))
+        if 'Info' in service and service['Info'].strip():
+            lines.append("Info: {}".format(service['Info']))
+            lines.append("--- Start Info Body ---")
+            lines.extend(service['Info'].splitlines())
+            lines.append("--- End Info Body ---")
+        if 'Interactions' in service and service['Interactions']:
+            lines.append("Interactions: {}".format(", ".join(service['Interactions'])))
+        if 'Status' in service and service['Status']:
+            lines.append("Status: {}".format(", ".join(service['Status'])))
+        if 'Categorization' in service:
+            categories = service['Categorization'].get('Categories', [])
+            forums = service['Categorization'].get('Forums', [])
+            lines.append("Categories: {}".format(", ".join(categories)))
+            lines.append("Forums: {}".format(", ".join(forums)))
+        if 'Categories' in service and service['Categories']:
+            lines.append("--- Start Categorization List ---")
+            for category in service['Categories']:
+                lines.append("--- Start Category List ---")
+                lines.append("Kind: {}, {}".format(category['Type'], category['Level']))
+                lines.append("ID: {}".format(category['ID']))
+                lines.append("InSub: {}".format(category['InSub']))
+                lines.append("Headline: {}".format(category['Headline']))
+                lines.append("Description:")
+                lines.append("--- Start Description Body ---")
+                lines.extend(category['Description'].splitlines())
+                lines.append("--- End Description Body ---")
+                lines.append("--- End Category List ---")
+            lines.append("--- End Categorization List ---")
+        if 'Users' in service and service['Users']:
+            lines.append("--- Start User List ---")
+            for user_id, user_info in service['Users'].items():
+                lines.append("--- Start User Info ---")
+                lines.append("User: {}".format(user_id))
+                lines.append("Name: {}".format(user_info['Name']))
+                lines.append("Handle: {}".format(user_info['Handle']))
+                lines.append("Location: {}".format(user_info['Location']))
+                lines.append("Joined: {}".format(user_info['Joined']))
+                lines.append("Birthday: {}".format(user_info['Birthday']))
+                lines.append("Bio:")
+                lines.append("--- Start Bio Body ---")
+                lines.extend(user_info['Bio'].splitlines())
+                lines.append("--- End Bio Body ---")
+                lines.append("--- End User Info ---")
+            lines.append("--- End User List ---")
+        if 'MessageThreads' in service and service['MessageThreads']:
+            lines.append("--- Start Message List ---")
+            for thread in service['MessageThreads']:
+                lines.append("--- Start Message Thread ---")
+                lines.append("Thread: {}".format(thread['Thread']))
+                if 'Title' in thread:
+                    lines.append("Title: {}".format(thread['Title']))
+                if 'Category' in thread:
+                    lines.append("Category: {}".format(thread['Category']))
+                if 'Forum' in thread:
+                    lines.append("Forum: {}".format(thread['Forum']))
+                if 'Type' in thread:
+                    lines.append("Type: {}".format(thread['Type']))
+                if 'State' in thread:
+                    lines.append("State: {}".format(thread['State']))
+                for message in thread['Messages']:
+                    lines.append("--- Start Message Post ---")
+                    lines.append("Author: {}".format(message['Author']))
+                    lines.append("Time: {}".format(message['Time']))
+                    lines.append("Date: {}".format(message['Date']))
+                    lines.append("SubType: {}".format(message['SubType']))
+                    lines.append("Post: {}".format(message['Post']))
+                    lines.append("Nested: {}".format(message['Nested']))
+                    lines.append("Message:")
+                    lines.append("--- Start Message Body ---")
+                    lines.extend(message['Message'].splitlines())
+                    lines.append("--- End Message Body ---")
+                    lines.append("--- End Message Post ---")
+                lines.append("--- End Message Thread ---")
+            lines.append("--- End Message List ---")
+        lines.append("--- End Archive Service ---")
+    return '\n'.join(lines)
+
+def save_to_txt_file(services, filename, line_ending='lf'):
+    text_data = convert_to_text(services)
+    if line_ending == 'crlf':
+        text_data = text_data.replace('\n', '\r\n')
+    elif line_ending == 'cr':
+        text_data = text_data.replace('\n', '\r')
+    save_compressed_file(text_data, filename)
+
+def load_from_txt_file(filename, validate_only=False, verbose=False):
+    return parse_file(filename, validate_only, verbose)
