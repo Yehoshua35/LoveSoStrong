@@ -243,6 +243,10 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 if verbose:
                     print("Line {0}: {1} (Ending comment section)".format(line_number, line))
                 continue
+            elif in_section['comment_section']:
+                if verbose:
+                    print("Line {0}: {1} (Comment)".format(line_number, line))
+                continue
             elif line == "--- Start Category List ---":
                 in_section['category_list'] = True
                 current_category = {}
