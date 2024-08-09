@@ -243,10 +243,6 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 if verbose:
                     print("Line {0}: {1} (Ending comment section)".format(line_number, line))
                 continue
-            elif in_section['comment_section']:
-                if verbose:
-                    print("Line {0}: {1} (Comment)".format(line_number, line))
-                continue
             elif line == "--- Start Category List ---":
                 in_section['category_list'] = True
                 current_category = {}
@@ -295,6 +291,12 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     current_info = None
                     if verbose:
                         print("Line {0}: {1} (Ending info body)".format(line_number, line))
+                continue
+            elif in_section['info_body']:
+                if current_service and current_info is not None:
+                    current_info.append(line)
+                if verbose:
+                    print("Line {0}: {1}".format(line_number, line))
                 continue
             elif current_service is not None:
                 key, value = parse_line(line)
@@ -516,16 +518,17 @@ def parse_lines(lines, validate_only=False, verbose=False):
                         current_message['Message'].append(line)
                         if verbose:
                             print("Line {0}: Adding to message body: {1}".format(line_number, line))
+
+        if validate_only:
+            return True, "", ""
+
+        return services
+
     except Exception as e:
         if validate_only:
             return False, "Error: {0}".format(str(e)), lines[line_number - 1]
         else:
             raise
-
-    if validate_only:
-        return True, "", ""
-
-    return services
 
 def display_services(services):
     for service in services:
