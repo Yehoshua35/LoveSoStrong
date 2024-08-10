@@ -2,8 +2,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import argparse
 import sys
 from parse_message_file import (
-    parse_file, display_services, to_json, from_json,
-    load_from_json_file, save_to_json_file, services_to_string, save_services_to_file
+    parse_file, display_services, to_json, from_json, to_xml, from_xml,
+    load_from_json_file, save_to_json_file, load_from_xml_file, save_to_xml_file,
+    services_to_string, save_services_to_file
 )
 
 def main():
@@ -15,6 +16,9 @@ def main():
     parser.add_argument("--to-json", "-j", help="Convert the parsed data to JSON and save to a file")
     parser.add_argument("--from-json", "-J", help="Load the services data structure from a JSON file")
     parser.add_argument("--json-string", "-s", type=str, help="JSON string to parse if --from-json is specified")
+    parser.add_argument("--to-xml", "-x", help="Convert the parsed data to XML and save to a file")
+    parser.add_argument("--from-xml", "-X", help="Load the services data structure from an XML file")
+    parser.add_argument("--xml-string", "-S", type=str, help="XML string to parse if --from-xml is specified")
     parser.add_argument("--to-original", "-o", help="Convert the parsed data back to the original format and save to a file")
     parser.add_argument("--line-ending", "-l", choices=["lf", "cr", "crlf"], default="lf", help="Specify the line ending format for the output file")
     
@@ -26,6 +30,12 @@ def main():
                 services = from_json(args.json_string)
             else:
                 services = load_from_json_file(args.from_json)
+            display_services(services)
+        elif args.from_xml:
+            if args.xml_string:
+                services = from_xml(args.xml_string)
+            else:
+                services = load_from_xml_file(args.from_xml)
             display_services(services)
         else:
             if args.validate_only:
@@ -42,6 +52,9 @@ def main():
                 if args.to_json:
                     save_to_json_file(services, args.to_json)
                     print("Saved JSON to {0}".format(args.to_json))
+                elif args.to_xml:
+                    save_to_xml_file(services, args.to_xml)
+                    print("Saved XML to {0}".format(args.to_xml))
                 elif args.to_original:
                     save_services_to_file(services, args.to_original, line_ending=args.line_ending)
                     print("Saved original format to {0}".format(args.to_original))
