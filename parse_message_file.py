@@ -1,4 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
 import json
 import gzip
 import bz2
@@ -22,6 +24,14 @@ except ImportError:
         from StringIO import StringIO
 
 PY2 = sys.version_info[0] == 2
+
+# Compatibility for different string types between Python 2 and 3
+try:
+    unicode_type = unicode
+    str_type = basestring
+except NameError:
+    unicode_type = str
+    str_type = str
 
 def open_compressed_file(filename):
     """ Open a file, trying various compression methods if available. """
@@ -600,6 +610,136 @@ def load_from_json_file(json_filename):
     """ Load the services data structure from a JSON file """
     with open_compressed_file(json_filename) as file:
         return json.load(file)
+
+def to_xml(services):
+    """ Convert the services data structure to an XML string """
+    root = ET.Element("Services")
+    
+    for service in services:
+        service_elem = ET.SubElement(root, "Service")
+        for key, value in service.items():
+            if isinstance(value, list):
+                list_elem = ET.SubElement(service_elem, key)
+                for item in value:
+                    if isinstance(item, dict):
+                        item_elem = ET.SubElement(list_elem, key[:-1])  # singular form
+                        for subkey, subvalue in item.items():
+                            sub_elem = ET.SubElement(item_elem, subkey)
+                            sub_elem.text = unicode_type(subvalue)
+                    else:
+                        item_elem = ET.SubElement(list_elem, key[:-1])
+                        item_elem.text = unicode_type(item)
+            elif isinstance(value, dict):
+                dict_elem = ET.SubElement(service_elem, key)
+                for subkey, subvalue in value.items():
+                    sub_elem = ET.SubElement(dict_elem, subkey)
+                    if isinstance(subvalue, list):
+                        for sub_item in subvalue:
+                            sub_item_elem = ET.SubElement(sub_elem, subkey[:-1])
+                            sub_item_elem.text = unicode_type(sub_item)
+                    else:
+                        sub_elem.text = unicode_type(subvalue)
+            else:
+                elem = ET.SubElement(service_elem, key)
+                elem.text = unicode_type(value)
+    
+    # Convert to string
+    xml_str = ET.tostring(root, encoding='utf-8')
+    if PY2:
+        xml_str = xml_str.decode('utf-8')  # Convert bytes to str in Python 2
+    # Make the XML string pretty
+    xml_str = minidom.parseString(xml_str).toprettyxml(indent="  ")
+    return xml_str
+
+def from_xml(xml_str):
+    """ Convert an XML string back to the services data structure """
+    services = []
+    root = ET.fromstring(xml_str)
+    
+    for service_elem in root.findall('Service'):
+        service = {}
+        for child in service_elem:
+            if list(child):  # If there are nested elements
+                if child.tag in service:
+                    service[child.tag].append(parse_xml_element(child))
+                else:
+                    service[child.tag] = [parse_xml_element(child)]
+            else:
+                service[child.tag] = child.text
+        services.append(service)
+    
+    return services
+
+def parse_xml_element(element):
+    """ Helper function to parse XML elements into a dictionary """
+    result = {}
+    for child in element:
+        if list(child):
+            result[child.tag] = parse_xml_element(child)
+        else:
+            result[child.tag] = child.text
+    return result
+
+def open_compressed_file(filename):
+    """ Open a file, trying various compression methods if available. """
+    if filename.endswith('.gz'):
+        import gzip
+        return gzip.open(filename, 'rt', encoding='utf-8') if not PY2 else gzip.open(filename, 'r')
+    elif filename.endswith('.bz2'):
+        import bz2
+        return bz2.open(filename, 'rt', encoding='utf-8') if not PY2 else bz2.open(filename, 'r')
+    elif filename.endswith('.xz') or filename.endswith('.lzma'):
+        try:
+            import lzma
+        except ImportError:
+            from backports import lzma
+        return lzma.open(filename, 'rt', encoding='utf-8') if not PY2 else lzma.open(filename, 'r')
+    else:
+        return open(filename, 'r', encoding='utf-8') if not PY2 else open(filename, 'r')
+
+def save_compressed_file(data, filename):
+    """ Save data to a file, using various compression methods if specified. """
+    if filename.endswith('.gz'):
+        import gzip
+        with gzip.open(filename, 'wt', encoding='utf-8') if not PY2 else gzip.open(filename, 'w') as file:
+            if PY2:
+                file.write(data.encode('utf-8'))
+            else:
+                file.write(data)
+    elif filename.endswith('.bz2'):
+        import bz2
+        with bz2.open(filename, 'wt', encoding='utf-8') if not PY2 else bz2.open(filename, 'w') as file:
+            if PY2:
+                file.write(data.encode('utf-8'))
+            else:
+                file.write(data)
+    elif filename.endswith('.xz') or filename.endswith('.lzma'):
+        try:
+            import lzma
+        except ImportError:
+            from backports import lzma
+        with lzma.open(filename, 'wt', encoding='utf-8') if not PY2 else lzma.open(filename, 'w') as file:
+            if PY2:
+                file.write(data.encode('utf-8'))
+            else:
+                file.write(data)
+    else:
+        with open(filename, 'w', encoding='utf-8') if not PY2 else open(filename, 'w') as file:
+            if PY2:
+                file.write(data.encode('utf-8'))
+            else:
+                file.write(data)
+
+def load_from_xml_file(xml_filename):
+    """ Load the services data structure from an XML file """
+    with open_compressed_file(xml_filename) as file:
+        xml_str = file.read()
+    return from_xml(xml_str)
+
+def save_to_xml_file(services, xml_filename):
+    """ Save the services data structure to an XML file """
+    xml_str = to_xml(services)
+    save_compressed_file(xml_str, xml_filename)
 
 def save_to_json_file(services, json_filename):
     """ Save the services data structure to a JSON file """
