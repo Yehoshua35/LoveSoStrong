@@ -948,54 +948,92 @@ def add_message_thread(service, thread_id, title='', category='', forum='', thre
     }
     service['MessageThreads'].append(thread)
 
-def add_message_post(thread, author, time, date, msg_type, post_id, nested, message, polls=None):
-    """ Add a message post to a thread in the service """
-    post = {
-        'Author': author,
-        'Time': time,
-        'Date': date,
-        'SubType': msg_type,
-        'Post': post_id,
-        'Nested': nested,
-        'Message': message,
-        'Polls': polls if polls else []
-    }
-    thread['Messages'].append(post)
+def add_message_post(service, thread_id, author, time, date, subtype, post_id, nested, message):
+    thread = next((t for t in service['MessageThreads'] if t['Thread'] == thread_id), None)
+    if thread is not None:
+        new_post = {
+            'Author': author,
+            'Time': time,
+            'Date': date,
+            'SubType': subtype,
+            'Post': post_id,
+            'Nested': nested,
+            'Message': message
+        }
+        thread['Messages'].append(new_post)
+    else:
+        raise ValueError("Thread ID {0} not found in service.".format(thread_id))
 
-def add_poll(post, num, question, answers, results, percentage, votes):
-    """ Add a poll to a message post """
-    poll = {
-        'Num': num,
-        'Question': question,
-        'Answers': answers.split(', ') if isinstance(answers, str) else answers,
-        'Results': results.split(', ') if isinstance(results, str) else results,
-        'Percentage': percentage.split(', ') if isinstance(percentage, str) else percentage,
-        'Votes': votes
-    }
-    post['Polls'].append(poll)
+def add_poll(service, thread_id, post_id, poll_num, question, answers, results, percentages, votes):
+    thread = next((t for t in service['MessageThreads'] if t['Thread'] == thread_id), None)
+    if thread is not None:
+        message = next((m for m in thread['Messages'] if m['Post'] == post_id), None)
+        if message is not None:
+            if 'Polls' not in message:
+                message['Polls'] = []
+            new_poll = {
+                'Num': poll_num,
+                'Question': question,
+                'Answers': answers,
+                'Results': results,
+                'Percentage': percentages,
+                'Votes': votes
+            }
+            message['Polls'].append(new_poll)
+        else:
+            raise ValueError("Post ID {0} not found in thread {1}.".format(post_id, thread_id))
+    else:
+        raise ValueError("Thread ID {0} not found in service.".format(thread_id))
 
 def remove_user(service, user_id):
-    """ Remove a user from the service """
-    service['Users'].pop(user_id, None)
+    if user_id in service['Users']:
+        del service['Users'][user_id]
+    else:
+        raise ValueError("User ID {0} not found in service.".format(user_id))
 
 def remove_category(service, category_id):
-    """ Remove a category from the service """
-    service['Categories'] = [category for category in service['Categories'] if category['ID'] != category_id]
+    category = next((c for c in service['Categories'] if c['ID'] == category_id), None)
+    if category:
+        service['Categories'].remove(category)
+    else:
+        raise ValueError("Category ID {0} not found in service.".format(category_id))
 
 def remove_message_thread(service, thread_id):
-    """ Remove a message thread from the service """
-    service['MessageThreads'] = [thread for thread in service['MessageThreads'] if thread['Thread'] != thread_id]
+    thread = next((t for t in service['MessageThreads'] if t['Thread'] == thread_id), None)
+    if thread:
+        service['MessageThreads'].remove(thread)
+    else:
+        raise ValueError("Thread ID {0} not found in service.".format(thread_id))
 
-def remove_message_post(thread, post_id):
-    """ Remove a message post from a thread in the service """
-    thread['Messages'] = [post for post in thread['Messages'] if post['Post'] != post_id]
+def remove_message_post(service, thread_id, post_id):
+    thread = next((t for t in service['MessageThreads'] if t['Thread'] == thread_id), None)
+    if thread is not None:
+        message = next((m for m in thread['Messages'] if m['Post'] == post_id), None)
+        if message is not None:
+            thread['Messages'].remove(message)
+        else:
+            raise ValueError("Post ID {0} not found in thread {1}.".format(post_id, thread_id))
+    else:
+        raise ValueError("Thread ID {0} not found in service.".format(thread_id))
 
-def add_service(services, entry, service_name, info=''):
-    """ Add a new service to the list of services """
-    new_service = init_empty_service(entry, service_name, info)
+def add_service(services, entry, service_name, info=None):
+    new_service = {
+        'Entry': entry,
+        'Service': service_name,
+        'Info': info if info else '',
+        'Interactions': [],
+        'Status': [],
+        'Categorization': {'Categories': [], 'Forums': []},
+        'Categories': [],
+        'Users': {},
+        'MessageThreads': []
+    }
     services.append(new_service)
-    return new_service
+    return new_service  # Return the newly created service
 
 def remove_service(services, entry):
-    """ Remove an existing service from the list of services """
-    services[:] = [service for service in services if service['Entry'] != entry]
+    service = next((s for s in services if s['Entry'] == entry), None)
+    if service:
+        services.remove(service)
+    else:
+        raise ValueError("Service entry {0} not found.".format(entry))

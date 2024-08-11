@@ -1,4 +1,5 @@
 from parse_message_file import *
+
 # Initialize an empty list of services
 services = []
 
@@ -17,10 +18,10 @@ add_category(new_service, kind="Forums", category_type="Forum", category_level="
 add_message_thread(new_service, thread_id=1, title="Hello, World!", category="Game Maker 2k", forum="General Discussion", thread_type="Topic", state="Pinned")
 
 # Add message posts
-add_message_post(new_service, thread_id=1, author="@kazuki.suzuki", time="8:00 AM", date="Jul 1, 2024", msg_type="Post", post_id=1, nested=0, message="Hello, World! ^_^")
-add_message_post(new_service, thread_id=1, author="@cooldude2k", time="10:00 AM", date="Jul 1, 2024", msg_type="Reply", post_id=2, nested=1, message="Why did you say 'Hello, World!' O_o")
-add_message_post(new_service, thread_id=1, author="@kazuki.suzuki", time="12:00 PM", date="Jul 1, 2024", msg_type="Reply", post_id=3, nested=2, message="I don't know.\nI thought it would be cool. ^_^")
-add_message_post(new_service, thread_id=1, author="@cooldude2k", time="2:00 PM", date="Jul 1, 2024", msg_type="Reply", post_id=4, nested=3, message="What ever dude! <_<")
+add_message_post(new_service, thread_id=1, author="@kazuki.suzuki", time="8:00 AM", date="Jul 1, 2024", subtype="Post", post_id=1, nested=0, message="Hello, World! ^_^")
+add_message_post(new_service, thread_id=1, author="@cooldude2k", time="10:00 AM", date="Jul 1, 2024", subtype="Reply", post_id=2, nested=1, message="Why did you say 'Hello, World!' O_o")
+add_message_post(new_service, thread_id=1, author="@kazuki.suzuki", time="12:00 PM", date="Jul 1, 2024", subtype="Reply", post_id=3, nested=2, message="I don't know.\nI thought it would be cool. ^_^")
+add_message_post(new_service, thread_id=1, author="@cooldude2k", time="2:00 PM", date="Jul 1, 2024", subtype="Reply", post_id=4, nested=3, message="What ever dude! <_<")
 
 # Add another service
 another_service = add_service(services, entry=2, service_name="Another Board", info="Another simple message board.")
