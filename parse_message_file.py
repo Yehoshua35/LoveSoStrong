@@ -72,15 +72,15 @@ def parse_line(line):
         return parts[0].strip(), parts[1].strip()
     return None, None
 
-def validate_non_negative_integer(value, variable_name, line_number):
-    """ Validate and convert a value to a non-negative integer. """
+def validate_non_negative_integer(value, key, line_number):
+    """ Utility to validate that a given value is a non-negative integer """
     try:
         int_value = int(value)
         if int_value < 0:
-            raise ValueError
+            raise ValueError("Negative value '{0}' for key '{1}' on line {2}".format(value, key, line_number))
         return int_value
-    except ValueError:
-        raise ValueError("{0} on line {1} should be a non-negative integer, but got '{2}'.".format(variable_name, line_number, value))
+    except ValueError as e:
+        raise ValueError("Invalid integer '{0}' for key '{1}' on line {2}".format(value, key, line_number))
 
 def parse_file(filename, validate_only=False, verbose=False):
     with open_compressed_file(filename) as file:
@@ -110,7 +110,9 @@ def parse_lines(lines, validate_only=False, verbose=False):
         'description_body': False,
         'include_categories': False,
         'categorization_list': False,
-        'info_body': False
+        'info_body': False,
+        'poll_list': False,
+        'poll_body': False,
     }
     include_files = []
     user_id = None
@@ -119,6 +121,8 @@ def parse_lines(lines, validate_only=False, verbose=False):
     current_thread = None
     current_category = None
     current_info = None
+    current_poll = None
+    current_polls = []
     categorization_values = {'Categories': [], 'Forums': []}
     category_ids = {'Categories': set(), 'Forums': set()}
     post_id = 1
@@ -311,6 +315,42 @@ def parse_lines(lines, validate_only=False, verbose=False):
                     current_info.append(line)
                 if verbose:
                     print("Line {0}: {1}".format(line_number, line))
+                continue
+            elif line == "--- Start Poll List ---":
+                in_section['poll_list'] = True
+                current_polls = []
+                if verbose:
+                    print("Line {0}: {1} (Starting poll list)".format(line_number, line))
+                continue
+            elif line == "--- End Poll List ---":
+                in_section['poll_list'] = False
+                if current_message:
+                    current_message['Polls'] = current_polls
+                if verbose:
+                    print("Line {0}: {1} (Ending poll list)".format(line_number, line))
+                continue
+            elif in_section['poll_list'] and line == "--- Start Poll Body ---":
+                in_section['poll_body'] = True
+                current_poll = {}
+                if verbose:
+                    print("Line {0}: {1} (Starting poll body)".format(line_number, line))
+                continue
+            elif in_section['poll_body'] and line == "--- End Poll Body ---":
+                in_section['poll_body'] = False
+                if current_poll is not None:
+                    current_polls.append(current_poll)
+                    current_poll = None
+                if verbose:
+                    print("Line {0}: {1} (Ending poll body)".format(line_number, line))
+                continue
+            elif in_section['poll_body']:
+                key, value = parse_line(line)
+                if key and current_poll is not None:
+                    if key in ['Answers', 'Results', 'Percentage']:
+                        # Split the string by comma and strip any extra spaces
+                        current_poll[key] = [item.strip() for item in value.split(',')]
+                    else:
+                        current_poll[key] = value
                 continue
             elif current_service is not None:
                 key, value = parse_line(line)
@@ -548,35 +588,38 @@ def display_services(services):
     for service in services:
         print("Service Entry: {0}".format(service['Entry']))
         print("Service: {0}".format(service['Service']))
+        
         if 'Info' in service and service['Info']:
             print("Info: {0}".format(service['Info'].strip().replace("\n", "\n      ")))
+        
         print("Interactions: {0}".format(', '.join(service['Interactions'])))
         print("Status: {0}".format(', '.join(service.get('Status', []))))
+        
         if 'Categorization' in service and service['Categorization']:
             for category_type, category_levels in service['Categorization'].items():
-                print("{0}: {1}".format(category_type, ', '.join(category_levels)))
+                print("{0}: {0}".format(category_type, ', '.join(category_levels)))
+        
         print("Category List:")
         for category in service['Categories']:
-            kind_split = category.get('Kind', '').split(",")
-            category['Type'] = kind_split[0].strip() if len(kind_split) > 0 else ""
-            category['Level'] = kind_split[1].strip() if len(kind_split) > 1 else ""
-            print("  Type: {0}, Level: {1}".format(category['Type'], category['Level']))
+            print("  Type: {0}, Level: {1}".format(category.get('Type', 'N/A'), category.get('Level', 'N/A')))
             print("  ID: {0}".format(category['ID']))
             print("  InSub: {0}".format(category['InSub']))
             print("  Headline: {0}".format(category['Headline']))
             print("  Description: {0}".format(category['Description'].strip().replace("\n", "\n    ")))
             print("")
+        
         print("User List:")
         for user_id, user_info in service['Users'].items():
             print("  User ID: {0}".format(user_id))
             print("    Name: {0}".format(user_info['Name']))
             print("    Handle: {0}".format(user_info['Handle']))
-            print("    Location: {0}".format(user_info.get('Location', '')))
-            print("    Joined: {0}".format(user_info.get('Joined', '')))
-            print("    Birthday: {0}".format(user_info.get('Birthday', '')))
+            print("    Location: {0}".format(user_info.get('Location', 'N/A')))
+            print("    Joined: {0}".format(user_info.get('Joined', 'N/A')))
+            print("    Birthday: {0}".format(user_info.get('Birthday', 'N/A')))
             print("    Bio:")
             print("      {0}".format(user_info.get('Bio', '').strip().replace("\n", "\n      ")))
             print("")
+        
         print("Message Threads:")
         for idx, thread in enumerate(service['MessageThreads']):
             print("  --- Message Thread {0} ---".format(idx + 1))
@@ -590,12 +633,25 @@ def display_services(services):
                 print("    Type: {0}".format(thread['Type']))
             if 'State' in thread:
                 print("    State: {0}".format(thread['State']))
+            
             for message in thread['Messages']:
                 print("    {0} ({1} on {2}): [{3}] Post ID: {4} Nested: {5}".format(
                     message['Author'], message['Time'], message['Date'],
                     message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply'),
                     message['Post'], message['Nested']))
+                
+                # Indent each line of the message body but keep it at the same level
                 print("      {0}".format(message['Message'].strip().replace("\n", "\n      ")))
+                
+                if 'Polls' in message and message['Polls']:
+                    print("      Polls:")
+                    for poll in message['Polls']:
+                        print("        Poll {0}:".format(poll.get('Num', 'N/A')))
+                        print("          Question: {0}".format(poll.get('Question', 'N/A')))
+                        print("          Answers: {0}".format(", ".join(poll.get('Answers', []))))
+                        print("          Results: {0}".format(", ".join(str(r) for r in poll.get('Results', []))))
+                        print("          Percentage: {0}".format(", ".join("{:.2f}".format(float(p)) for p in poll.get('Percentage', []))))
+                        print("          Votes: {0}".format(poll.get('Votes', 'N/A')))
             print("")
 
 def to_json(services):
@@ -746,91 +802,91 @@ def save_to_json_file(services, json_filename):
     json_data = json.dumps(services, indent=2)
     save_compressed_file(json_data, json_filename)
 
-def services_to_string(services, line_ending="lf"):
-    """ Convert the services data structure back to the original text format """
-    lines = []
+def services_to_string(services):
+    """Convert the services structure into a string format suitable for saving to a file."""
+    output = []
+    
     for service in services:
-        lines.append("--- Start Archive Service ---")
-        lines.append("Entry: {0}".format(service['Entry']))
-        lines.append("Service: {0}".format(service['Service']))
+        output.append("--- Start Archive Service ---")
+        
+        output.append("Entry: {0}".format(service.get('Entry', 'N/A')))
+        output.append("Service: {0}".format(service.get('Service', 'N/A')))
+        
         if 'Info' in service:
-            lines.append("Info:")
-            lines.append("--- Start Info Body ---")
-            lines.extend(["    " + line for line in service['Info'].split("\n")])
-            lines.append("--- End Info Body ---")
+            output.append("Info: {0}".format(service.get('Info', '<No information provided>')))
         
-        lines.append("--- Start User List ---")
-        for user_id, user_info in service['Users'].items():
-            lines.append("--- Start User Info ---")
-            lines.append("User: {0}".format(user_id))
-            lines.append("Name: {0}".format(user_info['Name']))
-            lines.append("Handle: {0}".format(user_info['Handle']))
-            if 'Location' in user_info:
-                lines.append("Location: {0}".format(user_info['Location']))
-            if 'Joined' in user_info:
-                lines.append("Joined: {0}".format(user_info['Joined']))
-            if 'Birthday' in user_info:
-                lines.append("Birthday: {0}".format(user_info['Birthday']))
-            if 'Bio' in user_info:
-                lines.append("Bio:")
-                lines.append("--- Start Bio Body ---")
-                lines.extend(["    " + line for line in user_info['Bio'].split("\n")])
-                lines.append("--- End Bio Body ---")
-            lines.append("--- End User Info ---")
-        lines.append("--- End User List ---")
+        if 'Interactions' in service:
+            output.append("Interactions: {0}".format(", ".join(service['Interactions'])))
         
-        if 'Categorization' in service and service['Categorization']:
-            lines.append("--- Start Categorization List ---")
-            for category_type, category_levels in service['Categorization'].items():
-                lines.append("{0}: {1}".format(category_type, ', '.join(category_levels)))
-            lines.append("--- End Categorization List ---")
+        if 'Status' in service:
+            output.append("Status: {0}".format(", ".join(service['Status'])))
         
         if 'Categories' in service and service['Categories']:
+            output.append("Categories:")
             for category in service['Categories']:
-                lines.append("--- Start Category List ---")
-                lines.append("Kind: {0}, {1}".format(category['Type'], category['Level']))
-                lines.append("ID: {0}".format(category['ID']))
-                lines.append("InSub: {0}".format(category['InSub']))
-                lines.append("Headline: {0}".format(category['Headline']))
-                lines.append("Description:")
-                lines.append("--- Start Description Body ---")
-                lines.extend(["    " + line for line in category['Description'].split("\n")])
-                lines.append("--- End Description Body ---")
-                lines.append("--- End Category List ---")
+                output.append("  Type: {0}, Level: {1}".format(category.get('Type', 'N/A'), category.get('Level', 'N/A')))
+                output.append("  ID: {0}".format(category.get('ID', 'N/A')))
+                output.append("  InSub: {0}".format(category.get('InSub', 'N/A')))
+                output.append("  Headline: {0}".format(category.get('Headline', 'N/A')))
+                output.append("  Description: {0}".format(category.get('Description', '')))
         
-        lines.append("--- Start Message List ---")
-        lines.append("Interactions: {0}".format(', '.join(service['Interactions'])))
-        lines.append("Status: {0}".format(', '.join(service.get('Status', []))))
-        for thread in service['MessageThreads']:
-            lines.append("--- Start Message Thread ---")
-            lines.append("Thread: {0}".format(thread['Thread']))
-            if 'Category' in thread:
-                lines.append("Category: {0}".format(', '.join(thread['Category'])))
-            if 'Forum' in thread:
-                lines.append("Forum: {0}".format(', '.join(thread['Forum'])))
-            if 'Title' in thread:
-                lines.append("Title: {0}".format(thread['Title']))
-            if 'Type' in thread:
-                lines.append("Type: {0}".format(thread['Type']))
-            if 'State' in thread:
-                lines.append("State: {0}".format(thread['State']))
-            for message in thread['Messages']:
-                lines.append("--- Start Message Post ---")
-                lines.append("Author: {0}".format(message['Author']))
-                lines.append("Time: {0}".format(message['Time']))
-                lines.append("Date: {0}".format(message['Date']))
-                lines.append("SubType: {0}".format(message.get('SubType', 'Post' if message['Post'] == 1 or message['Nested'] == 0 else 'Reply')))
-                lines.append("Post: {0}".format(message['Post']))
-                lines.append("Nested: {0}".format(message['Nested']))
-                lines.append("Message:")
-                lines.append("--- Start Message Body ---")
-                lines.extend(["    " + line for line in message['Message'].split("\n")])
-                lines.append("--- End Message Body ---")
-                lines.append("--- End Message Post ---")
-            lines.append("--- End Message Thread ---")
-        lines.append("--- End Message List ---")
+        if 'MessageThreads' in service and service['MessageThreads']:
+            output.append("Message Threads:")
+            for thread in service['MessageThreads']:
+                output.append("  --- Start Message Thread ---")
+                output.append("  Thread: {0}".format(thread.get('Thread', 'N/A')))
+                output.append("  Title: {0}".format(thread.get('Title', 'N/A')))
+                output.append("  Category: {0}".format(", ".join(thread.get('Category', []))))
+                output.append("  Forum: {0}".format(", ".join(thread.get('Forum', []))))
+                output.append("  Type: {0}".format(thread.get('Type', 'N/A')))
+                output.append("  State: {0}".format(thread.get('State', 'N/A')))
+                
+                if 'Messages' in thread and thread['Messages']:
+                    for message in thread['Messages']:
+                        output.append("  --- Start Message Post ---")
+                        output.append("  Author: {0}".format(message.get('Author', 'N/A')))
+                        output.append("  Time: {0}".format(message.get('Time', 'N/A')))
+                        output.append("  Date: {0}".format(message.get('Date', 'N/A')))
+                        output.append("  SubType: {0}".format(message.get('SubType', 'N/A')))
+                        output.append("  Post: {0}".format(message.get('Post', 'N/A')))
+                        output.append("  Nested: {0}".format(message.get('Nested', 'N/A')))
+                        
+                        if 'Message' in message:
+                            output.append("  Message:")
+                            output.append("    {0}".format(message['Message']))
+                        
+                        if 'Polls' in message and message['Polls']:
+                            output.append("  Polls:")
+                            output.append("  --- Start Poll List ---")
+                            for poll in message['Polls']:
+                                output.append("  --- Start Poll Body ---")
+                                output.append("  Num: {0}".format(poll.get('Num', 'N/A')))
+                                output.append("  Question: {0}".format(poll.get('Question', 'N/A')))
+                                output.append("  Answers: {0}".format(", ".join(poll.get('Answers', []))))
+                                output.append("  Results: {0}".format(", ".join(str(r) for r in poll.get('Results', []))))
+                                output.append("  Percentage: {0}".format(", ".join("{:.2f}".format(float(p)) for p in poll.get('Percentage', []))))
+                                output.append("  Votes: {0}".format(poll.get('Votes', 'N/A')))
+                                output.append("  --- End Poll Body ---")
+                            output.append("  --- End Poll List ---")
+                        output.append("  --- End Message Post ---")
+                output.append("  --- End Message Thread ---")
         
-        lines.append("--- End Archive Service ---")
+        if 'Users' in service and service['Users']:
+            output.append("User List:")
+            for user_id, user in service['Users'].items():
+                output.append("  User ID: {0}".format(user_id))
+                output.append("    Name: {0}".format(user.get('Name', 'N/A')))
+                output.append("    Handle: {0}".format(user.get('Handle', 'N/A')))
+                output.append("    Location: {0}".format(user.get('Location', 'N/A')))
+                output.append("    Joined: {0}".format(user.get('Joined', 'N/A')))
+                output.append("    Birthday: {0}".format(user.get('Birthday', 'N/A')))
+                output.append("    Bio:")
+                output.append("      {0}".format(user.get('Bio', '').replace("\n", "\n      ")))
+        
+        output.append("--- End Archive Service ---")
+        output.append("")
+
+    return "\n".join(output)
     
     line_sep = {"lf": "\n", "cr": "\r", "crlf": "\r\n"}
     return line_sep.get(line_ending, "\n").join(lines)
@@ -850,7 +906,7 @@ def init_empty_service(entry, service_name, info=''):
         'Categories': [],
         'Interactions': [],
         'Categorization': {},
-        'Info': info  # Add Info to service structure
+        'Info': info,
     }
 
 def add_user(service, user_id, name, handle, location='', joined='', birthday='', bio=''):
@@ -863,11 +919,6 @@ def add_user(service, user_id, name, handle, location='', joined='', birthday=''
         'Birthday': birthday,
         'Bio': bio
     }
-
-def remove_user(service, user_id):
-    """ Remove a user from the service """
-    if user_id in service['Users']:
-        del service['Users'][user_id]
 
 def add_category(service, kind, category_type, category_level, category_id, insub, headline, description):
     """ Add a category to the service """
@@ -884,10 +935,6 @@ def add_category(service, kind, category_type, category_level, category_id, insu
     if category_level not in service['Categorization'][category_type]:
         service['Categorization'][category_type].append(category_level)
 
-def remove_category(service, category_id):
-    """ Remove a category from the service """
-    service['Categories'] = [category for category in service['Categories'] if category['ID'] != category_id]
-
 def add_message_thread(service, thread_id, title='', category='', forum='', thread_type='', state=''):
     """ Add a message thread to the service """
     thread = {
@@ -901,34 +948,47 @@ def add_message_thread(service, thread_id, title='', category='', forum='', thre
     }
     service['MessageThreads'].append(thread)
 
+def add_message_post(thread, author, time, date, msg_type, post_id, nested, message, polls=None):
+    """ Add a message post to a thread in the service """
+    post = {
+        'Author': author,
+        'Time': time,
+        'Date': date,
+        'SubType': msg_type,
+        'Post': post_id,
+        'Nested': nested,
+        'Message': message,
+        'Polls': polls if polls else []
+    }
+    thread['Messages'].append(post)
+
+def add_poll(post, num, question, answers, results, percentage, votes):
+    """ Add a poll to a message post """
+    poll = {
+        'Num': num,
+        'Question': question,
+        'Answers': answers.split(', ') if isinstance(answers, str) else answers,
+        'Results': results.split(', ') if isinstance(results, str) else results,
+        'Percentage': percentage.split(', ') if isinstance(percentage, str) else percentage,
+        'Votes': votes
+    }
+    post['Polls'].append(poll)
+
+def remove_user(service, user_id):
+    """ Remove a user from the service """
+    service['Users'].pop(user_id, None)
+
+def remove_category(service, category_id):
+    """ Remove a category from the service """
+    service['Categories'] = [category for category in service['Categories'] if category['ID'] != category_id]
+
 def remove_message_thread(service, thread_id):
     """ Remove a message thread from the service """
     service['MessageThreads'] = [thread for thread in service['MessageThreads'] if thread['Thread'] != thread_id]
 
-def add_message_post(service, thread_id, author, time, date, msg_type, post_id, nested, message):
-    """ Add a message post to a thread in the service """
-    for thread in service['MessageThreads']:
-        if thread['Thread'] == thread_id:
-            post = {
-                'Author': author,
-                'Time': time,
-                'Date': date,
-                'SubType': msg_type,
-                'Post': post_id,
-                'Nested': nested,
-                'Message': message
-            }
-            thread['Messages'].append(post)
-            return
-    raise ValueError("Thread ID {0} not found in service".format(thread_id))
-
-def remove_message_post(service, thread_id, post_id):
+def remove_message_post(thread, post_id):
     """ Remove a message post from a thread in the service """
-    for thread in service['MessageThreads']:
-        if thread['Thread'] == thread_id:
-            thread['Messages'] = [post for post in thread['Messages'] if post['Post'] != post_id]
-            return
-    raise ValueError("Thread ID {0} not found in service".format(thread_id))
+    thread['Messages'] = [post for post in thread['Messages'] if post['Post'] != post_id]
 
 def add_service(services, entry, service_name, info=''):
     """ Add a new service to the list of services """
