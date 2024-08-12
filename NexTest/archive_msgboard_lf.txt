@@ -10,8 +10,8 @@ Interactions: Post, Reply, Poll
 Status: Active
 
 --- Start Categorization List ---
-Categories: General Discussion, Feedback
-Forums: Introductions, Site Feedback
+Categories: General Discussion, Feedback, Subcategory of Feedback
+Forums: Introductions, Site Feedback, Subforum of Site Feedback
 
 --- Start Category List ---
 Kind: Categories, Main Category
@@ -25,19 +25,8 @@ This category is for general discussions on any topic.
 --- End Category List ---
 
 --- Start Category List ---
-Kind: Forums, Main Forum
-ID: 2
-InSub: 0
-Headline: Introductions
-Description:
---- Start Description Body ---
-A forum for new members to introduce themselves.
---- End Description Body ---
---- End Category List ---
-
---- Start Category List ---
 Kind: Categories, Main Category
-ID: 3
+ID: 2
 InSub: 0
 Headline: Feedback
 Description:
@@ -47,13 +36,46 @@ This category is for feedback on the site and its features.
 --- End Category List ---
 
 --- Start Category List ---
+Kind: Categories, Subcategory
+ID: 3
+InSub: 2
+Headline: Subcategory of Feedback
+Description:
+--- Start Description Body ---
+This is a subcategory under Feedback for more specific discussions.
+--- End Description Body ---
+--- End Category List ---
+
+--- Start Category List ---
 Kind: Forums, Main Forum
 ID: 4
+InSub: 0
+Headline: Introductions
+Description:
+--- Start Description Body ---
+A forum for new members to introduce themselves.
+--- End Description Body ---
+--- End Category List ---
+
+--- Start Category List ---
+Kind: Forums, Main Forum
+ID: 5
 InSub: 0
 Headline: Site Feedback
 Description:
 --- Start Description Body ---
 A forum dedicated to gathering feedback about the site.
+--- End Description Body ---
+--- End Category List ---
+
+--- Start Category List ---
+Kind: Forums, Subforum
+ID: 6
+InSub: 5
+Headline: Subforum of Site Feedback
+Description:
+--- Start Description Body ---
+This is a subforum under Site Feedback for detailed discussions.
 --- End Description Body ---
 --- End Category List ---
 --- End Categorization List ---
