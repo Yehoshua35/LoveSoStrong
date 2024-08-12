@@ -347,7 +347,6 @@ def parse_lines(lines, validate_only=False, verbose=False):
                 key, value = parse_line(line)
                 if key and current_poll is not None:
                     if key in ['Answers', 'Results', 'Percentage']:
-                        # Split the string by comma and strip any extra spaces
                         current_poll[key] = [item.strip() for item in value.split(',')]
                     else:
                         current_poll[key] = value
@@ -583,6 +582,7 @@ def parse_lines(lines, validate_only=False, verbose=False):
             return False, "Error: {0}".format(str(e)), lines[line_number - 1]
         else:
             raise
+
 
 def display_services(services):
     for service in services:
@@ -921,19 +921,19 @@ def add_user(service, user_id, name, handle, location='', joined='', birthday=''
     }
 
 def add_category(service, kind, category_type, category_level, category_id, insub, headline, description):
-    """ Add a category to the service """
     category = {
         'Kind': "{0}, {1}".format(kind, category_level),
+        'Type': category_type,
+        'Level': category_level,
         'ID': category_id,
         'InSub': insub,
         'Headline': headline,
         'Description': description
     }
     service['Categories'].append(category)
-    if category_type not in service['Categorization']:
-        service['Categorization'][category_type] = []
-    if category_level not in service['Categorization'][category_type]:
-        service['Categorization'][category_type].append(category_level)
+    if insub != 0:
+        if not any(cat['ID'] == insub for cat in service['Categories']):
+            raise ValueError("InSub value '{0}' does not match any existing ID in service.".format(insub))
 
 def add_message_thread(service, thread_id, title='', category='', forum='', thread_type='', state=''):
     """ Add a message thread to the service """
