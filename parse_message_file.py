@@ -931,6 +931,10 @@ def add_category(service, kind, category_type, category_level, category_id, insu
         'Description': description
     }
     service['Categories'].append(category)
+    if category_type not in service['Categorization']:
+        service['Categorization'][category_type] = []
+    if category_level not in service['Categorization'][category_type]:
+        service['Categorization'][category_type].append(category_level)
     if insub != 0:
         if not any(cat['ID'] == insub for cat in service['Categories']):
             raise ValueError("InSub value '{0}' does not match any existing ID in service.".format(insub))
