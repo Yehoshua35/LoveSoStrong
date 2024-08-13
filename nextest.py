@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from parse_message_file import *
 
 # Initialize an empty list of services
