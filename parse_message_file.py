@@ -33,6 +33,23 @@ except NameError:
     unicode_type = str
     str_type = str
 
+__program_name__ = "LoveSoStrong";
+__project__ = __program_name__;
+__project_url__ = "https://repo.or.cz/LoveSoStrong.git";
+__version_info__ = (0, 0, 1, "RC 1", 1);
+__version_date_info__ = (2024, 8, 14, "RC 1", 1);
+__version_date__ = str(__version_date_info__[0]) + "." + str(__version_date_info__[1]).zfill(2) + "." + str(__version_date_info__[2]).zfill(2);
+__revision__ = __version_info__[3];
+__revision_id__ = "$Id$";
+if(__version_info__[4] is not None):
+ __version_date_plusrc__ = __version_date__ + "-" + str(__version_date_info__[4]);
+if(__version_info__[4] is None):
+ __version_date_plusrc__ = __version_date__;
+if(__version_info__[3] is not None):
+ __version__ = str(__version_info__[0]) + "." + str(__version_info__[1]) + "." + str(__version_info__[2]) + " " + str(__version_info__[3]);
+if(__version_info__[3] is None):
+ __version__ = str(__version_info__[0]) + "." + str(__version_info__[1]) + "." + str(__version_info__[2]);
+
 def open_compressed_file(filename):
     """ Open a file, trying various compression methods if available. """
     if filename.endswith('.gz'):
