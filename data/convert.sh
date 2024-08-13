@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Loop over all files with the _lf.txt suffix
 for file in *_lf.txt; do
