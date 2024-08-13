@@ -1,134 +1,1 @@
---- Start Archive Service ---
-Entry: 1
-Service: Message Board
-Info: 
---- Start Info Body ---
-A simple message board for communicating about anything. ^_^
---- End Info Body ---
-
---- Start User List ---
-
---- Start User Info ---
-User: 1
-Name: Cool Dude 2k
-Handle: @cooldude2k
-Location: Somewhere
-Joined: Jul 1, 2024
-Birthday: Jul 1, 1987
-Bio:
---- Start Bio Body ---
-I'm just a very cool dude! ^_^
---- End Bio Body ---
---- End User Info ---
-
---- Start User Info ---
-User: 2
-Name: Kazuki Suzuki
-Handle: @kazuki.suzuki
-Location: Anywhere
-Joined: Jul 1, 2024
-Birthday: Jun 1, 1987
-Bio:
---- Start Bio Body ---
-Hello it's just me Kazuki. :P
---- End Bio Body ---
---- End User Info ---
-
---- End User List ---
-
---- Start Categorization List ---
-Categories: Category
-Forums: Fourm, SubFourm
-
---- Start Category List ---
-Kind: Categories, Category
-ID: 1
-InSub: 0
-Headline: Game Maker 2k
-Description:
---- Start Description Body ---
-Just talk about anything.
---- End Description Body ---
---- End Category List ---
-
---- Start Category List ---
-Kind: Forums, Fourm
-ID: 1
-InSub: 0
-Headline: General Discussion
-Description:
---- Start Description Body ---
-Just talk about anything.
---- End Description Body ---
---- End Category List ---
---- End Categorization List ---
-
---- Start Message List ---
-Interactions: Topic, Post, Reply
-Status: Pinned, Hot, Hot Pinned
-
---- Start Message Thread ---
-Thread: 1
-Title: Hello, World!
-Type: Topic
-State: Pinned
-Category: Game Maker 2k
-Forum: General Discussion
-
---- Start Message Post ---
-Author: @kazuki.suzuki
-Time: 8:00 AM
-Date: Jul 1, 2024
-SubType: Post
-Post: 1
-Nested: 0
-Message:
---- Start Message Body ---
-Hello, World! ^_^
---- End Message Body ---
---- End Message Post ---
-
---- Start Message Post ---
-Author: @cooldude2k
-Time: 10:00 AM
-Date: Jul 1, 2024
-SubType: Reply
-Post: 2
-Nested: 1
-Message:
---- Start Message Body ---
-Why did you say "Hello, World!" O_o
---- End Message Body ---
---- End Message Post ---
-
---- Start Message Post ---
-Author: @kazuki.suzuki
-Time: 12:00 PM
-Date: Jul 1, 2024
-SubType: Reply
-Post: 3
-Nested: 2
-Message:
---- Start Message Body ---
-I don't know.
-I thought it would be cool. ^_^
---- End Message Body ---
---- End Message Post ---
-
---- Start Message Post ---
-Author: @cooldude2k
-Time: 2:00 PM
-Date: Jul 1, 2024
-SubType: Reply
-Post: 4
-Nested: 3
-Message:
---- Start Message Body ---
-What ever dude! <_<
---- End Message Body ---
---- End Message Post ---
---- End Message Thread ---
-
---- End Message List ---
-
---- End Archive Service ---
+--- Start Archive Service ---Entry: 1Service: Message BoardInfo: --- Start Info Body ---A simple message board for communicating about anything. ^_^--- End Info Body ------ Start User List ------ Start User Info ---User: 1Name: Cool Dude 2kHandle: @cooldude2kLocation: SomewhereJoined: Jul 1, 2024Birthday: Jul 1, 1987Bio:--- Start Bio Body ---I'm just a very cool dude! ^_^--- End Bio Body ------ End User Info ------ Start User Info ---User: 2Name: Kazuki SuzukiHandle: @kazuki.suzukiLocation: AnywhereJoined: Jul 1, 2024Birthday: Jun 1, 1987Bio:--- Start Bio Body ---Hello it's just me Kazuki. :P--- End Bio Body ------ End User Info ------ End User List ------ Start Categorization List ---Categories: CategoryForums: Fourm, SubFourm--- Start Category List ---Kind: Categories, CategoryID: 1InSub: 0Headline: Game Maker 2kDescription:--- Start Description Body ---Just talk about anything.--- End Description Body ------ End Category List ------ Start Category List ---Kind: Forums, FourmID: 1InSub: 0Headline: General DiscussionDescription:--- Start Description Body ---Just talk about anything.--- End Description Body ------ End Category List ------ End Categorization List ------ Start Message List ---Interactions: Topic, Post, ReplyStatus: Pinned, Hot, Hot Pinned--- Start Message Thread ---Thread: 1Title: Hello, World!Type: TopicState: PinnedCategory: Game Maker 2kForum: General Discussion--- Start Message Post ---Author: @kazuki.suzukiTime: 8:00 AMDate: Jul 1, 2024SubType: PostPost: 1Nested: 0Message:--- Start Message Body ---Hello, World! ^_^--- End Message Body ------ End Message Post ------ Start Message Post ---Author: @cooldude2kTime: 10:00 AMDate: Jul 1, 2024SubType: ReplyPost: 2Nested: 1Message:--- Start Message Body ---Why did you say "Hello, World!" O_o--- End Message Body ------ End Message Post ------ Start Message Post ---Author: @kazuki.suzukiTime: 12:00 PMDate: Jul 1, 2024SubType: ReplyPost: 3Nested: 2Message:--- Start Message Body ---I don't know.I thought it would be cool. ^_^--- End Message Body ------ End Message Post ------ Start Message Post ---Author: @cooldude2kTime: 2:00 PMDate: Jul 1, 2024SubType: ReplyPost: 4Nested: 3Message:--- Start Message Body ---What ever dude! <_<--- End Message Body ------ End Message Post ------ End Message Thread ------ End Message List ------ End Archive Service ---
