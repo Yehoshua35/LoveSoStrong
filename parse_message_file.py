@@ -4,9 +4,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 import json
+import zlib
 import gzip
 import bz2
 import sys
+import os
 import io
 
 try:
@@ -52,6 +54,92 @@ if(__version_info__[3] is not None):
 if(__version_info__[3] is None):
  __version__ = str(__version_info__[0]) + "." + str(__version_info__[1]) + "." + str(__version_info__[2]);
 
+class ZlibFile:
+    def __init__(self, file_path=None, fileobj=None, mode='rb', level=9, wbits=15, encoding=None, errors=None, newline=None):
+        if file_path is None and fileobj is None:
+            raise ValueError("Either file_path or fileobj must be provided")
+        if file_path is not None and fileobj is not None:
+            raise ValueError("Only one of file_path or fileobj should be provided")
+
+        self.file_path = file_path
+        self.fileobj = fileobj
+        self.mode = mode
+        self.level = level
+        self.wbits = wbits
+        self.encoding = encoding
+        self.errors = errors
+        self.newline = newline
+        self._compressed_data = b''
+        self._decompressed_data = b''
+        self._position = 0
+        self._text_mode = 't' in mode
+
+        # Force binary mode for internal handling
+        internal_mode = mode.replace('t', 'b')
+
+        if 'w' in mode or 'a' in mode or 'x' in mode:
+            self.file = open(file_path, internal_mode) if file_path else fileobj
+            self._compressor = zlib.compressobj(level, zlib.DEFLATED, wbits)
+        elif 'r' in mode:
+            if file_path:
+                if os.path.exists(file_path):
+                    self.file = open(file_path, internal_mode)
+                    self._load_file()
+                else:
+                    raise FileNotFoundError("No such file: '{}'".format(file_path))
+            elif fileobj:
+                self.file = fileobj
+                self._load_file()
+        else:
+            raise ValueError("Mode should be 'rb' or 'wb'")
+
+    def write(self, data):
+        """Write data to the file, compressing it in the process."""
+        if 'w' not in self.mode and 'a' not in self.mode and 'x' not in self.mode:
+            raise IOError("File not open for writing")
+
+        if self._text_mode and isinstance(data, str):
+            data = data.encode(self.encoding or 'utf-8', errors=self.errors)
+
+        compressed_data = self._compressor.compress(data)
+        self.file.write(compressed_data)
+
+    def close(self):
+        """Close the file, writing any remaining compressed data."""
+        if 'w' in self.mode or 'a' in self.mode or 'x' in self.mode:
+            self.file.write(self._compressor.flush())
+        self.file.close()
+
+    def _load_file(self):
+        """Load and decompress the file content."""
+        self._compressed_data = self.file.read()
+        self._decompressed_data = zlib.decompress(self._compressed_data, self.wbits)
+        self.file.close()
+
+    def read(self, size=-1):
+        """Read and return the decompressed data."""
+        if size == -1:
+            size = len(self._decompressed_data) - self._position
+        data = self._decompressed_data[self._position:self._position + size]
+        self._position += size
+        return data
+
+    def readline(self):
+        """Read and return a single line from the decompressed data."""
+        newline_pos = self._decompressed_data.find(b'\n', self._position)
+        if newline_pos == -1:
+            return self.read()  # Read until the end of the data
+        line = self._decompressed_data[self._position:newline_pos + 1]
+        self._position = newline_pos + 1
+        return line
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+
+
 def open_compressed_file(filename):
     """ Open a file, trying various compression methods if available. """
     if filename.endswith('.gz'):
@@ -63,6 +151,8 @@ def open_compressed_file(filename):
             return lzma.open(filename, 'rt', encoding='utf-8')
         else:
             raise ImportError("lzma module is not available")
+    elif filename.endswith('.zl') or filename.endswith('.zz'):
+        return ZlibFile(file_path=filename, mode='rb')
     else:
         return io.open(filename, 'r', encoding='utf-8')
 
@@ -80,6 +170,12 @@ def save_compressed_file(data, filename):
                 file.write(data)
         else:
             raise ImportError("lzma module is not available")
+    elif filename.endswith('.zl') or filename.endswith('.zz'):
+        with ZlibFile(file_path=filename, mode='wb') as file:
+            if isinstance(data, str):
+                file.write(data.encode('utf-8'))
+            else:
+                file.write(data)
     else:
         with io.open(filename, 'w', encoding='utf-8') as file:
             file.write(data)
