@@ -698,7 +698,6 @@ def parse_lines(lines, validate_only=False, verbose=False):
         else:
             raise
 
-
 def display_services(services):
     for service in services:
         print("Service Entry: {0}".format(service['Entry']))
@@ -768,6 +767,97 @@ def display_services(services):
                         print("          Percentage: {0}".format(", ".join("{:.2f}".format(float(p)) for p in poll.get('Percentage', []))))
                         print("          Votes: {0}".format(poll.get('Votes', 'N/A')))
             print("")
+
+def save_services_to_file(services, filename, line_ending="lf"):
+    """Save the services data structure to a file with optional compression based on file extension."""
+    output = []
+
+    for service in services:
+        output.append("--- Start Archive Service ---")
+
+        output.append("Entry: {0}".format(service.get('Entry', 'N/A')))
+        output.append("Service: {0}".format(service.get('Service', 'N/A')))
+
+        if 'Info' in service:
+            output.append("Info: {0}".format(service.get('Info', '<No information provided>')))
+
+        if 'Interactions' in service:
+            output.append("Interactions: {0}".format(", ".join(service['Interactions'])))
+
+        if 'Status' in service:
+            output.append("Status: {0}".format(", ".join(service['Status'])))
+
+        if 'Categories' in service and service['Categories']:
+            output.append("Categories:")
+            for category in service['Categories']:
+                output.append("  Type: {0}, Level: {1}".format(category.get('Type', 'N/A'), category.get('Level', 'N/A')))
+                output.append("  ID: {0}".format(category.get('ID', 'N/A')))
+                output.append("  InSub: {0}".format(category.get('InSub', 'N/A')))
+                output.append("  Headline: {0}".format(category.get('Headline', 'N/A')))
+                output.append("  Description: {0}".format(category.get('Description', '')))
+
+        if 'MessageThreads' in service and service['MessageThreads']:
+            output.append("Message Threads:")
+            for thread in service['MessageThreads']:
+                output.append("  --- Start Message Thread ---")
+                output.append("  Thread: {0}".format(thread.get('Thread', 'N/A')))
+                output.append("  Title: {0}".format(thread.get('Title', 'N/A')))
+                output.append("  Category: {0}".format(", ".join(thread.get('Category', []))))
+                output.append("  Forum: {0}".format(", ".join(thread.get('Forum', []))))
+                output.append("  Type: {0}".format(thread.get('Type', 'N/A')))
+                output.append("  State: {0}".format(thread.get('State', 'N/A')))
+
+                if 'Messages' in thread and thread['Messages']:
+                    for message in thread['Messages']:
+                        output.append("  --- Start Message Post ---")
+                        output.append("  Author: {0}".format(message.get('Author', 'N/A')))
+                        output.append("  Time: {0}".format(message.get('Time', 'N/A')))
+                        output.append("  Date: {0}".format(message.get('Date', 'N/A')))
+                        output.append("  SubType: {0}".format(message.get('SubType', 'N/A')))
+                        output.append("  Post: {0}".format(message.get('Post', 'N/A')))
+                        output.append("  Nested: {0}".format(message.get('Nested', 'N/A')))
+
+                        if 'Message' in message:
+                            output.append("  Message:")
+                            output.append("    {0}".format(message['Message']))
+
+                        if 'Polls' in message and message['Polls']:
+                            output.append("  Polls:")
+                            output.append("  --- Start Poll List ---")
+                            for poll in message['Polls']:
+                                output.append("  --- Start Poll Body ---")
+                                output.append("  Num: {0}".format(poll.get('Num', 'N/A')))
+                                output.append("  Question: {0}".format(poll.get('Question', 'N/A')))
+                                output.append("  Answers: {0}".format(", ".join(poll.get('Answers', []))))
+                                output.append("  Results: {0}".format(", ".join(str(r) for r in poll.get('Results', []))))
+                                output.append("  Percentage: {0}".format(", ".join("{:.2f}".format(float(p)) for p in poll.get('Percentage', []))))
+                                output.append("  Votes: {0}".format(poll.get('Votes', 'N/A')))
+                                output.append("  --- End Poll Body ---")
+                            output.append("  --- End Poll List ---")
+                        output.append("  --- End Message Post ---")
+                output.append("  --- End Message Thread ---")
+
+        if 'Users' in service and service['Users']:
+            output.append("User List:")
+            for user_id, user in service['Users'].items():
+                output.append("  User ID: {0}".format(user_id))
+                output.append("    Name: {0}".format(user.get('Name', 'N/A')))
+                output.append("    Handle: {0}".format(user.get('Handle', 'N/A')))
+                output.append("    Location: {0}".format(user.get('Location', 'N/A')))
+                output.append("    Joined: {0}".format(user.get('Joined', 'N/A')))
+                output.append("    Birthday: {0}".format(user.get('Birthday', 'N/A')))
+                output.append("    Bio:")
+                output.append("      {0}".format(user.get('Bio', '').replace("\n", "\n      ")))
+
+        output.append("--- End Archive Service ---")
+        output.append("")
+
+    # Join all output lines with the appropriate line ending
+    data = "\n".join(output)
+
+    # Save the data to the file with the appropriate compression
+    save_compressed_file(data, filename)
+
 
 def to_json(services):
     """ Convert the services data structure to JSON """
